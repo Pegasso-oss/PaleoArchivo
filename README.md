@@ -10,7 +10,6 @@
 
 ## 📸 Capturas de Pantalla
 
-<<<<<<< HEAD
 > **Ambiente de Excavación**: Interfaz optimizada con tonos tierra (`#1a1614`) y detalles en ámbar para una experiencia inmersiva.
 <img width="1230" height="862" alt="Captura2" src="https://github.com/user-attachments/assets/961e63aa-9435-4946-b1ed-23127ef99671" />
 <img width="1279" height="777" alt="Captura1" src="https://github.com/user-attachments/assets/94e5e29e-d4e4-4530-a347-27ca85f6eb6c" />

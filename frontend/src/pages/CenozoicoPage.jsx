@@ -1,33 +1,40 @@
 import React from 'react';
 import EraCard from '../components/EraCard';
+import { motion } from 'framer-motion'; // 1. Importamos la librería de animación
 
-const MesozoicoPage = () => {
+const CenozoicoPage = () => {
   const periodos = [
     {
-      id: 'triasico',
-      name: 'TRIÁSICO',
-      age: '252 - 201 m.a.',
-      image: 'https://www.mundoprehistorico.com/wp-content/uploads/Herrerasaurus-01.jpg',
-      desc: 'El resurgir tras la gran extinción. Aparecen los primeros dinosaurios y mamíferos verdaderos.'
+      id: 'paleogeno',
+      name: 'PALEÓGENO',
+      age: '66 - 23 m.a.',
+      image: 'https://dinosauriacreatures.com/cdn/shop/articles/Paleogeno.jpg?v=1678198294',
+      desc: 'El amanecer de los mamíferos. Tras la extinción de los dinosaurios, la vida se recupera en selvas tropicales.'
     },
     {
-      id: 'jurasico',
-      name: 'JURÁSICO',
-      age: '201 - 145 m.a.',
-      image: 'https://www.papelpintado.com/media/catalog/product/cache/765175cf1e0a4cff0292d295081d4aa3/w/0/w09424_-_small.jpg',
-      desc: 'La edad de oro de los gigantes. El Allosaurus y el Brachiosaurus dominan un mundo húmedo y verde.'
+      id: 'neogeno',
+      name: 'NEÓGENO',
+      age: '23 - 2.5 m.a.',
+      image: 'https://www.mundoprehistorico.com/wp-content/uploads/Phorusrhacos-01.jpg',
+      desc: 'La era de las praderas. Los mamíferos evolucionan a formas gigantes y aparecen los primeros homínidos.'
     },
     {
-      id: 'cretacico',
-      name: 'CRETÁCICO',
-      age: '145 - 66 m.a.',
-      image: 'https://images.unsplash.com/photo-1525877442103-5ddb2089b2bb?auto=format&fit=crop&q=80&w=800',
-      desc: 'El fin de una era. Aparecen las flores y el T-Rex reina antes del impacto del meteorito.'
+      id: 'cuaternario',
+      name: 'CUATERNARIO',
+      age: '2.5 m.a. - Actualidad',
+      image: 'https://geologicalmanblog.wordpress.com/wp-content/uploads/2016/10/glaciaciones.jpg',
+      desc: 'Grandes glaciaciones y el ascenso de los humanos modernos en un mundo de mamuts y tigres dientes de sable.'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0d0c] px-4 py-12">
+    // 2. Cambiamos el <div> principal por <motion.div> y añadimos la animación
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }} // Empieza invisible y 30px abajo
+      animate={{ opacity: 1, y: 0 }}  // Termina visible y en su sitio
+      transition={{ duration: 0.8, ease: "easeOut" }} // Duración de casi 1 segundo para que sea suave
+      className="min-h-screen bg-[#0f0d0c] px-4 py-12"
+    >
       <div className="max-w-6xl mx-auto mb-16">
         <button 
           onClick={() => window.history.back()}
@@ -36,7 +43,7 @@ const MesozoicoPage = () => {
           ← Volver a las eras
         </button>
         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter italic leading-none">
-          PERIODOS DEL <span className="text-amber-600">MESOZOICO</span>
+          PERIODOS DEL <span className="text-amber-600">CENOZOICO</span>
         </h1>
       </div>
 
@@ -44,7 +51,7 @@ const MesozoicoPage = () => {
         {periodos.map((p) => (
           <EraCard 
             key={p.id}
-            id={`mesozoico/${p.id}`} // <--- ESTO CREA LA RUTA /era/mesozoico/jurasico
+            id={`cenozoico/${p.id}`}
             name={p.name}
             age={p.age}
             image={p.image}
@@ -53,8 +60,8 @@ const MesozoicoPage = () => {
           </EraCard>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-export default MesozoicoPage;
+export default CenozoicoPage;

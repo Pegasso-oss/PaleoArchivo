@@ -1,4 +1,3 @@
-// src/pages/LandingPage.jsx
 import React from 'react';
 import EraCard from '../components/EraCard';
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import EraCard from '../components/EraCard';
+import { motion } from 'framer-motion'; // 1. Importamos la librería de animación
 
 const PaleozoicoPage = () => {
   const periodos = [
@@ -48,7 +49,12 @@ const PaleozoicoPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0d0c] px-4 py-12">
+    <motion.div 
+          initial={{ opacity: 0, y: 30 }} // Empieza invisible y 30px abajo
+          animate={{ opacity: 1, y: 0 }}  // Termina visible y en su sitio
+          transition={{ duration: 0.8, ease: "easeOut" }} // Duración de casi 1 segundo para que sea suave
+          className="min-h-screen bg-[#0f0d0c] px-4 py-12"
+        >
       <div className="max-w-6xl mx-auto mb-16">
         <button 
           onClick={() => window.history.back()}
@@ -74,7 +80,7 @@ const PaleozoicoPage = () => {
           </EraCard>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

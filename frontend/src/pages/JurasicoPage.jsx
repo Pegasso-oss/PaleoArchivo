@@ -2,10 +2,16 @@
 import React from 'react';
 import { dinosaurios } from '../data/jurasico'; 
 import DinoCard from '../components/DinoCard'; // Tu componente existente
+import { motion } from 'framer-motion'; // 1. Importamos la librería de animación
 
 const JurasicoPage = () => {
   return (
-    <div className="min-h-screen bg-[#0f0d0c] px-4 py-12">
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }} // Empieza invisible y 30px abajo
+      animate={{ opacity: 1, y: 0 }}  // Termina visible y en su sitio
+      transition={{ duration: 0.8, ease: "easeOut" }} // Duración de casi 1 segundo para que sea suave
+      className="min-h-screen bg-[#0f0d0c] px-4 py-12"
+    >
 
       {/* Header */}
       <div className="max-w-[1240px] mx-auto mb-16"> {/* max-w ajustado al grid */}
@@ -35,7 +41,7 @@ const JurasicoPage = () => {
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

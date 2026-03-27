@@ -6,6 +6,8 @@ export const dinosaurios = [
     dieta: "Carroñero",
     longitud: "5 - 10 cm",
     altura: "1 - 3 cm",
+    estado: "EXTINTO",
+    extincion: "252 m.a.",
     imagen:
       "https://images.newscientist.com/wp-content/uploads/2023/09/27132703/SEI_173479939.jpg",
     descripcion:
@@ -18,6 +20,8 @@ export const dinosaurios = [
     dieta: "Carnívoro",
     longitud: "35 - 50 cm",
     altura: "5 - 10 cm",
+    estado: "EXTINTO",
+    extincion: "485 m.a.",
     imagen:
       "https://media.istockphoto.com/id/1144090474/es/foto/anomalocaris-criatura-prehistórica-del-período-cámbrico.jpg?s=612x612&w=0&k=20&c=9WEQ__lzJlxZIEqe-CWLDFqS5qqhk8WRfe0eWoGXtcE=",
     descripcion:
@@ -30,6 +34,8 @@ export const dinosaurios = [
     dieta: "Detritívoro",
     longitud: "4 - 7 cm",
     altura: "1 - 2 cm",
+    estado: "EXTINTO",
+    extincion: "485 m.a.",
     imagen:
       "https://i.ytimg.com/vi/gabmirMO0dI/sddefault.jpg",
     descripcion:
@@ -42,6 +48,8 @@ export const dinosaurios = [
     dieta: "Filtrador",
     longitud: "5 cm",
     altura: "< 1 cm",
+    estado: "EXTINTO",
+    extincion: "485 m.a.",
     imagen:
       "https://www.mundoprehistorico.com/wp-content/uploads/Pikaia-01.jpg",
     descripcion:

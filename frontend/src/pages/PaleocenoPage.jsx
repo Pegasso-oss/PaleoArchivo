@@ -11,7 +11,7 @@ const PaleocenoPage = () => {
       initial={{ opacity: 0, y: 30 }} 
       animate={{ opacity: 1, y: 0 }} 
       transition={{ duration: 0.8, ease: "easeOut" }} 
-      className="min-h-screen bg-[#0f0d0c] px-4 py-12"
+      className="min-h-screen bg-[#1d1914] px-4 py-12"
     >
       {/* Header */}
       <div className="max-w-[1240px] mx-auto mb-16">

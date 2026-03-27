@@ -6,6 +6,7 @@ export { default as CambricoPage } from './CambricoPage';
 export { default as CenozoicoPage } from './CenozoicoPage';
 export { default as PaleogenoPage } from './PaleogenoPage';
 export { default as PaleocenoPage } from './PaleocenoPage';
+export { default as DinoDetailPage } from './DinoDetailPage';
 
 // Por hacer
 

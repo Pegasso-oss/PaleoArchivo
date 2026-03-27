@@ -32,7 +32,7 @@ const PaleogenoPage = () => {
       initial={{ opacity: 0, y: 30 }} // Empieza invisible y 30px abajo
       animate={{ opacity: 1, y: 0 }}  // Termina visible y en su sitio
       transition={{ duration: 0.8, ease: "easeOut" }} // Duración de casi 1 segundo para que sea suave
-      className="min-h-screen bg-[#0f0d0c] px-4 py-12"
+      className="min-h-screen bg-[#1d1914] px-4 py-12"
     >
       <div className="max-w-6xl mx-auto mb-16">
         <button 

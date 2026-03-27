@@ -1,7 +1,7 @@
 import React from "react";
 // 1. Añadimos Link a los imports
 import { Routes, Route, useLocation, Link } from "react-router-dom"; 
-import { MesozoicoPage, JurasicoPage, PaleozoicoPage, CambricoPage, LandingPage, CenozoicoPage, PaleogenoPage, PaleocenoPage } from "./pages/pages.js";
+import { MesozoicoPage, JurasicoPage, PaleozoicoPage, CambricoPage, LandingPage, CenozoicoPage, PaleogenoPage, PaleocenoPage, DinoDetailPage } from "./pages/pages.js";
 import paleoLogo from "./assets/logo.png";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1614] text-white">
+    <div className="min-h-screen bg-[#1d1914] text-white">
 
       {/* HEADER */}
       <header className="border-b border-slate-800 bg-[#1a1614]">
@@ -63,14 +63,22 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
-          {/* ... tus rutas ... */}
+
+          {/* ... Paleozoico ... */}
           <Route path="/era/paleozoico" element={<PaleozoicoPage/>}/>
           <Route path="/era/paleozoico/cambrico" element={<CambricoPage/>}/>
+
+          {/* ... Mesozoico ... */}
           <Route path="/era/mesozoico" element={<MesozoicoPage/>}/>
           <Route path="/era/mesozoico/jurasico" element={<JurasicoPage/>}/>
+
+          {/* ... Cenozoico ... */}
           <Route path="/era/cenozoico" element={<CenozoicoPage/>}/>
           <Route path="/era/cenozoico/paleogeno" element={<PaleogenoPage/>}/>
           <Route path="/era/cenozoico/paleogeno/paleoceno" element={<PaleocenoPage/>}/>
+          
+          {/* ... Dinosaurio ... */}
+          <Route path="/animal/:id" element={<DinoDetailPage />} />
         </Routes>
       </main>
 

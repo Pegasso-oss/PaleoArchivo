@@ -12,6 +12,8 @@
 
 <img width="1230" height="862" alt="Captura2" src="https://github.com/user-attachments/assets/961e63aa-9435-4946-b1ed-23127ef99671" />
 <img width="1279" height="777" alt="Captura1" src="https://github.com/user-attachments/assets/94e5e29e-d4e4-4530-a347-27ca85f6eb6c" />
+<img width="1254" height="746" alt="Captura 3" src="https://github.com/user-attachments/assets/31468be7-2354-4ae5-98ca-3c37b1a28652" />
+<img width="1246" height="739" alt="Captura 4" src="https://github.com/user-attachments/assets/0e02abae-0c84-4889-aa17-c15ec87a0b1c" />
 
 ## ✨ Características Principales
 

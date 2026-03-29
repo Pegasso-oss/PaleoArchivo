@@ -10,80 +10,74 @@ import {
   FileText,
   Skull,
   ArrowsUpFromLine,
-} from "lucide-react";
+} from "lucide-react"; // Asegúrate de que sea 'lucide-react' si usas esa librería
 
 const DinoDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const dino = allAnimals.find(
     (d) => d.nombre.toLowerCase() === id.toLowerCase(),
   );
 
   if (!dino)
     return (
-      <div className="bg-[#0f0d0c] min-h-screen text-white p-10 font-mono text-xs uppercase tracking-widest">
+      <div className="bg-[#141210] min-h-screen text-white p-10 font-mono text-xs uppercase tracking-widest flex items-center justify-center">
         Cargando archivo...
       </div>
     );
 
   const getTheme = (dieta) => {
-  switch (dieta) {
-    case "Carnívoro":
-      return {
+    const themes = {
+      Carnívoro: {
         text: "text-red-500",
         bg: "bg-red-500/10",
-        border: "border-red-500/30",
-      };
-    case "Herbívoro":
-      return {
+        border: "border-red-500/50",
+      },
+      Herbívoro: {
         text: "text-green-500",
         bg: "bg-green-500/10",
-        border: "border-green-500/30",
-      };
-    case "Omnívoro":
-      return {
+        border: "border-green-500/50",
+      },
+      Omnívoro: {
         text: "text-amber-500",
         bg: "bg-amber-500/10",
-        border: "border-amber-500/30",
-      };
-    case "Insectívoro":
-      return {
+        border: "border-amber-500/50",
+      },
+      Insectívoro: {
         text: "text-orange-500",
         bg: "bg-orange-500/10",
-        border: "border-orange-500/30",
-      };
-    case "Piscívoro":
-      return {
+        border: "border-orange-500/50",
+      },
+      Piscívoro: {
         text: "text-cyan-500",
         bg: "bg-cyan-500/10",
-        border: "border-cyan-500/30",
-      };
-    case "Carroñero":
-      return {
+        border: "border-cyan-500/50",
+      },
+      Carroñero: {
         text: "text-purple-500",
         bg: "bg-purple-500/10",
-        border: "border-purple-500/30",
-      };
-    case "Filtrador":
-      return {
+        border: "border-purple-500/50",
+      },
+      Filtrador: {
         text: "text-blue-500",
         bg: "bg-blue-500/10",
-        border: "border-blue-500/30",
-      };
-    case "Detritívoro":
-      return {
+        border: "border-blue-500/50",
+      },
+      Detritívoro: {
         text: "text-slate-400",
         bg: "bg-slate-400/10",
-        border: "border-slate-400/30",
-      };
-    default:
-      return {
+        border: "border-slate-400/50",
+      },
+    };
+    return (
+      themes[dieta] || {
         text: "text-stone-400",
         bg: "bg-stone-400/10",
-        border: "border-stone-400/30",
-      };
-  }
-};
+        border: "border-stone-400/50",
+      }
+    );
+  };
 
   const theme = getTheme(dino.dieta);
 
@@ -91,34 +85,53 @@ const DinoDetailPage = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-[#1d1914] text-white pb-20 relative"
+      exit={{ opacity: 0 }}
+      className="min-h-screen bg-[#141210] text-white pb-20 relative"
     >
-      {/* 1. BOTÓN VOLVER */}
       <div className="max-w-7xl mx-auto px-4 py-6 lg:pt-10">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-stone-600 hover:text-white transition-colors font-mono text-[10px] tracking-[0.2em] uppercase"
+       <button 
+          onClick={() => window.history.back()} 
+          className="text-amber-500/80 hover:text-amber-500 font-mono text-xs uppercase tracking-[0.3em] mb-8 transition-colors flex items-center gap-2 group"
         >
-          <ChevronLeft size={14} /> VOLVER AL REGISTRO
+          <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span> VOLVER A REGISTROS
         </button>
       </div>
 
-      {/* 2. CONTENEDOR PRINCIPAL: Grid de 2 columnas en PC */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-        {/* --- COLUMNA IZQUIERDA: Información Suelta --- */}
-        <div className="flex flex-col gap-6 lg:gap-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+        {/* IMAGEN */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="order-first lg:order-last relative w-full"
+        >
+          <div
+            className={`absolute -inset-10 ${theme.bg} rounded-full blur-[120px] opacity-30`}
+          ></div>
+          <div
+            className={`relative aspect-video lg:aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] border-4 shadow-none ${theme.border}`}
+          >
+            <img
+              src={dino.imagen}
+              alt={dino.nombre}
+              className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
+            />
+          </div>
+        </motion.div>
+
+        {/* INFO */}
+        <div className="flex flex-col gap-6 lg:gap-8">
           <header>
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-black italic uppercase leading-[0.85] mt-4 tracking-tighter break-words">
+              {dino.nombre}
+            </h1>
             <span
-              className={`font-mono text-[10px] lg:text-xs tracking-[0.4em] uppercase ${theme.text}`}
+              className={`font-mono text-[13px] lg:text-xs tracking-[0.4em] uppercase ${theme.text}`}
             >
               // {dino.subName}
             </span>
-            <h1 className="text-4xl md:text-6xl lg:text-5xl font-black italic uppercase leading-none mt-3 tracking-tighter break-words max-w-full">
-              {dino.nombre}
-            </h1>
           </header>
 
-          <p className="text-stone-300 text-base lg:text-lg leading-relaxed font-light">
+          <p className="text-stone-300 text-base leading-relaxed font-light italic">
             <Info
               size={16}
               className={`inline mr-2.5 mb-1 ${theme.text} opacity-60`}
@@ -126,8 +139,8 @@ const DinoDetailPage = () => {
             {dino.descripcion}
           </p>
 
-          {/* GRID DE DATOS: Cajitas individuales sin tarjeta envolvente */}
-          <div className="grid grid-cols-2 gap-3 lg:gap-4 mt-2">
+          {/* GRID DE DATOS */}
+          <div className="grid grid-cols-2 gap-3 lg:gap-4">
             {[
               {
                 label: "Longitud",
@@ -144,40 +157,41 @@ const DinoDetailPage = () => {
                 val: dino.dieta,
                 icon: <Utensils size={14} />,
                 color: theme.text,
+                isDiet: true,
               },
               {
-                label: "Estado y Registro",
+                label: "Estado",
+                icon: <Skull size={14} />,
                 val: (
-                  <div className="flex flex-col lg:flex-row lg:items-baseline gap-1 lg:gap-2">
+                  <div className="flex flex-col">
                     <span
                       className={
-                        dino.estado === "VIVO"
+                        dino.estado !== "EXTINTO"
                           ? "text-cyan-400"
-                          : "text-red-700"
+                          : "text-red-600 uppercase"
                       }
                     >
                       {dino.estado || "EXTINTO"}
                     </span>
-                    <span className="text-[10px] text-stone-500 font-normal">
-                      {dino.extincion}
+                    <span className="text-[12px] text-stone-500 font-normal">
+                      ||{dino.extincion}||
                     </span>
                   </div>
                 ),
-                icon: <Skull size={14} />,
               },
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-white/[0.03] border border-white/5 p-4 rounded-xl flex flex-col justify-between h-28 lg:h-32"
+                className="bg-white/[0.03] border border-white/5 p-5 rounded-2xl flex flex-col justify-between h-28 transition-colors hover:bg-white/[0.06]"
               >
                 <div className="flex items-center gap-2 text-stone-500 mb-1.5 shrink-0">
                   {item.icon}
-                  <span className="text-[9px] lg:text-[10px] uppercase tracking-[0.2em] font-bold">
+                  <span className="text-[9px] uppercase tracking-[0.2em] font-bold">
                     {item.label}
                   </span>
                 </div>
                 <div
-                  className={`text-lg lg:text-2xl font-mono font-bold ${item.color || "text-white"}`}
+                  className={`text-2xl lg:text-3xl font-mono font-bold ${item.color || "text-white"} ${item.isDiet ? "uppercase" : ""}`}
                 >
                   {item.val}
                 </div>
@@ -185,40 +199,16 @@ const DinoDetailPage = () => {
             ))}
           </div>
 
-          <div className="mt-4">
+          {/* BOTÓN PAPERS (Separado con un borde superior) */}
+          <div className="pt-6">
             <button
-              className={`w-full lg:w-max bg-white/5 hover:bg-white/10 border border-white/10 ${theme.text} px-8 py-4 rounded-xl font-mono text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-3`}
+              className={`w-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 ${theme.text} px-8 py-5 rounded-2xl font-mono text-[14px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-8 shadow-2xl`}
             >
-              <FileText size={14} /> CONSULTAR PAPERS CIENTIFICOS
+              <FileText size={20} />
+              <span>Consultar papers cientificos</span>
             </button>
           </div>
         </div>
-
-        {/* --- COLUMNA DERECHA: Imagen en Landscape (Horizontal) --- */}
-        <motion.div
-          initial={{ x: 40, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="relative w-full self-center" // Centrada verticalmente respecto al texto
-        >
-          {/* El brillo de fondo basado en la dieta */}
-          <div
-            className={`absolute -inset-10 ${theme.bg} rounded-full blur-[120px] opacity-30`}
-          ></div>
-
-          {/* Contenedor con Aspect Ratio fijo para forzar el Landscape */}
-          <div
-            className="relative aspect-video lg:aspect-[5/3] w-full overflow-hidden rounded-[2.5rem] border-2 shadow-2xl shadow-black/60"
-            style={{ borderColor: theme.border.split("-")[1] }}
-          >
-            {" "}
-            {/* Usa el color del tema para el borde */}
-            <img
-              src={dino.imagen}
-              alt={dino.nombre}
-              className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
-            />
-          </div>
-        </motion.div>
       </div>
     </motion.div>
   );

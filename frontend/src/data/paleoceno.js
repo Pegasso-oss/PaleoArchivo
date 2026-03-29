@@ -2,7 +2,8 @@ export const dinosaurios = [
   {
     id: "001",
     nombre: "TITANOBOA",
-    subName: "La Reina de la Selva",
+    subName: "Serpiente Colosal", // Ajustado para un tono más técnico
+    tipo: "squamata", // Orden de las serpientes y lagartos
     dieta: "Carnívoro",
     longitud: "13 metros",
     altura: "1 metro",
@@ -15,6 +16,7 @@ export const dinosaurios = [
     id: "002",
     nombre: "GASTORNIS",
     subName: "Ave del Terror",
+    tipo: "avialae", // Comparten categoría con aves primitivas
     dieta: "Herbívoro",
     longitud: "2 metros",
     altura: "1.8 metros",
@@ -27,6 +29,7 @@ export const dinosaurios = [
     id: "003",
     nombre: "CORYPHODON",
     subName: "Pies Puntiagudos",
+    tipo: "mammalia", // Clasificación base para mamíferos primitivos
     dieta: "Herbívoro",
     longitud: "2.5 metros",
     altura: "1 metro",
@@ -39,6 +42,7 @@ export const dinosaurios = [
     id: "004",
     nombre: "PRISTICHAMPSUS",
     subName: "Cocodrilo de Pezuñas",
+    tipo: "crocodylomorpha", // Grupo de los cocodrilos terrestres y modernos
     dieta: "Carnívoro",
     longitud: "3 metros",
     altura: "0.8 metros",

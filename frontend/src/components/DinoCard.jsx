@@ -17,11 +17,7 @@ const DinoCard = ({ dino }) => {
 
   return (
     <Link to={`/animal/${dino.nombre.toLowerCase()}`} className="block">
-      {/* EL ARREGLO DE LAS SOMBRAS:
-          1. Quitamos cualquier clase 'shadow'.
-          2. Usamos un solo borde base (#3f3833) muy sutil.
-          3. En hover, el borde se ilumina suavemente.
-      */}
+
       <div className="w-[380px] h-[550px] rounded-[2rem] bg-[#1a1816] overflow-hidden flex flex-col border border-[#3f3833] transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/40 hover:bg-[#1f1d1b] group shadow-none">
         
         {/* Imagen con separador */}

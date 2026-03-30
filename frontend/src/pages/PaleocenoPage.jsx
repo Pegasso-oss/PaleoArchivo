@@ -25,7 +25,7 @@ const PaleocenoPage = () => {
         
         <h1 className="text-6xl md:text-8xl font-black text-white italic uppercase tracking-tighter leading-none">
           {/* Aquí el color de la Era: EMERALD */}
-          REGISTROS DEL <span className="text-emerald-500 font-black">PALEÓGENO</span>
+          REGISTROS DEL <span className="text-emerald-500 font-black">PALEÓCENO</span>
         </h1>
         
         <div className="flex items-center gap-4 mt-4">

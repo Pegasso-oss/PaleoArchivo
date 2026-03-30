@@ -42,12 +42,12 @@ const Register = () => {
         </div>
 
         <div className="text-center mb-10 flex flex-col items-center gap-2.5">
-          <h1 className="text-3xl font-black text-[#fef3c7] italic tracking-tighter uppercase leading-none">Alta de Investigador</h1>
+          <h1 className="text-3xl font-black text-[#fef3c7] italic tracking-tighter uppercase leading-none">REGISTRO DE NUEVO USUARIO</h1>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-6 w-full">
           <div className="space-y-2">
-            <label className="text-[12px] text-stone-500 uppercase tracking-widest ml-5 font-bold">Nombre de Usuario</label>
+            <label className="text-[12px] text-stone-500 tracking-widest ml-5 font-bold">Nombre de Usuario</label>
             <div className="relative">
               <User className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-600" size={20} />
               <input type="text" required onChange={(e) => setFormData({...formData, username: e.target.value})} className="w-full bg-black/40 border-2 border-[#3f3833] rounded-3xl py-5 pl-14 pr-5 text-[#fef3c7] text-lg focus:outline-none focus:border-amber-500/60 font-bold uppercase" placeholder="INVESTIGADOR_01" />
@@ -55,7 +55,7 @@ const Register = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] text-stone-500 uppercase tracking-widest ml-5 font-bold">Correo Electrónico</label>
+            <label className="text-[12px] text-stone-500 tracking-widest ml-5 font-bold">Correo Electrónico</label>
             <div className="relative">
               <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-600" size={20} />
               <input type="email" required onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-black/40 border-2 border-[#3f3833] rounded-3xl py-5 pl-14 pr-5 text-[#fef3c7] text-lg focus:outline-none focus:border-amber-500/60 font-bold uppercase" placeholder="CORREO@PALEOMAIL.COM" />
@@ -63,7 +63,7 @@ const Register = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] text-stone-500 uppercase tracking-widest ml-5 font-bold">Código de Contraseña</label>
+            <label className="text-[12px] text-stone-500 tracking-widest ml-5 font-bold">Contraseña</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-600" size={20} />
               <input type="password" required onChange={(e) => setFormData({...formData, password: e.target.value})} className="w-full bg-black/40 border-2 border-[#3f3833] rounded-3xl py-5 pl-14 pr-5 text-[#fef3c7] text-lg focus:outline-none focus:border-amber-500/60 font-bold" placeholder="••••••••••••" />
@@ -71,7 +71,7 @@ const Register = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] text-stone-500 uppercase tracking-widest ml-5 font-bold">Confirmar Código</label>
+            <label className="text-[12px] text-stone-500 tracking-widest ml-5 font-bold">Confirmar Contraseña</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-600" size={20} />
               <input type="password" required onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className="w-full bg-black/40 border-2 border-[#3f3833] rounded-3xl py-5 pl-14 pr-5 text-[#fef3c7] text-lg focus:outline-none focus:border-amber-500/60 font-bold" placeholder="REPETIR CONTRASEÑA" />

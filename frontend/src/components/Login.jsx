@@ -42,13 +42,12 @@ const Login = () => {
         </div>
 
         <div className="text-center mb-10 flex flex-col items-center gap-2.5">
-          <h1 className="text-3xl font-black text-[#fef3c7] italic tracking-tighter uppercase leading-none">Protocolo de Acceso</h1>
-          <p className="text-[#935f07] text-[10px] tracking-[0.35em] uppercase font-light">Base de Datos Paleontológica</p>
+          <h1 className="text-3xl font-black text-[#fef3c7] italic tracking-tighter uppercase leading-none">INICIO DE SESIÓN</h1>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6 w-full">
           <div className="space-y-2">
-            <label className="text-[12px] text-stone-500 uppercase tracking-widest ml-5 font-bold">Nombre de Usuario</label>
+            <label className="text-[12px] text-stone-500 tracking-widest ml-5 font-bold">Nombre de Usuario</label>
             <div className="relative">
               <User className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-600" size={20} />
               <input 
@@ -62,7 +61,7 @@ const Login = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] text-stone-500 uppercase tracking-widest ml-5 font-bold">Clave de Encriptación</label>
+            <label className="text-[12px] text-stone-500 tracking-widest ml-5 font-bold">Contraseña</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-600" size={20} />
               <input 

@@ -35,7 +35,7 @@ export const dinosaurios = [
     altura: "1 - 2 cm",
     estado: "EXTINTO",
     extincion: "485 m.a.",
-    imagen: "https://i.ytimg.com/vi/gabmirMO0dI/sddefault.jpg",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Opabinia_BW2.jpg",
     descripcion: "Opabinia regalis es un animal antiguo del período Cámbrico, un artrópodo. Se caracterizaba por su extraña cabeza, que poseía unos extraños cinco ojos situados sobre protuberancias.",
   },
   {

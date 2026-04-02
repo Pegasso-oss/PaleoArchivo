@@ -1,6 +1,6 @@
 export const dinosaurios = [
   {
-    id: "001",
+    id: "18",
     nombre: "TITANOBOA",
     subName: "Serpiente Colosal", // Ajustado para un tono más técnico
     tipo: "squamata", // Orden de las serpientes y lagartos
@@ -13,7 +13,7 @@ export const dinosaurios = [
     descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios."
   },
   {
-    id: "002",
+    id: "19",
     nombre: "GASTORNIS",
     subName: "Ave del Terror",
     tipo: "avialae", // Comparten categoría con aves primitivas
@@ -26,7 +26,7 @@ export const dinosaurios = [
     descripcion: "Un ave gigante no voladora. Aunque su aspecto era temible, estudios recientes de isótopos en sus huesos confirman que era vegetariana."
   },
   {
-    id: "003",
+    id: "20",
     nombre: "CORYPHODON",
     subName: "Pies Puntiagudos",
     tipo: "mammalia", // Clasificación base para mamíferos primitivos
@@ -39,7 +39,7 @@ export const dinosaurios = [
     descripcion: "Uno de los primeros grandes mamíferos. Tenía un cerebro diminuto en relación a su cuerpo, pero fue un superviviente exitoso en climas pantanosos."
   },
   {
-    id: "004",
+    id: "21",
     nombre: "PRISTICHAMPSUS",
     subName: "Cocodrilo de Pezuñas",
     tipo: "crocodylomorpha", // Grupo de los cocodrilos terrestres y modernos

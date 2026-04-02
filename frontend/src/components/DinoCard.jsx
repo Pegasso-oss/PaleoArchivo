@@ -35,16 +35,16 @@ const DinoCard = ({ dino }) => {
         <div className="p-7 flex flex-col flex-1">
           <div className="flex justify-between items-start mb-1 gap-2">
             <div className="flex-1 min-w-0">
-              <h2 className="text-2xl font-black text-[#fef3c7] tracking-tighter uppercase italic leading-none group-hover:text-amber-500 transition-colors break-words">
+              <h2 className="text-xl font-black text-[#fef3c7] tracking-tighter uppercase italic leading-none group-hover:text-amber-500 transition-colors break-words">
                 {dino.nombre}
               </h2>
-              <span className="font-black text-amber-500 text-[13px] tracking-tighter uppercase italic leading-none group-hover:text-[#fef3c7] transition-colors break-words">
+              <span className="font-bold text-amber-500 text-[13px] tracking-tighter uppercase leading-none group-hover:text-[#fef3c7] transition-colors break-words">
                 "{dino.subName}" 
               </span>
             </div>
 
             <div className="text-center shrink-0 bg-black/40 px-3 py-2 rounded-xl border border-white/5">
-              <p className="text-[#b0a8a0] text-[7px] uppercase tracking-[0.2em] mb-0.5">ARCHIVO</p>
+              <p className="text-[#b0a8a0] text-[7px] uppercase tracking-[0.2em] mb-0.5">ID</p>
               <p className="text-sm font-bold text-amber-500 font-mono">
                 #{String(dino.id).padStart(3, "0")}
               </p>

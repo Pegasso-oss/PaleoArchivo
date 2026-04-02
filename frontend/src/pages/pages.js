@@ -3,6 +3,7 @@ export { default as MesozoicoPage } from './MesozoicoPage';
 export { default as PaleozoicoPage } from './PaleozoicoPage';
 export { default as JurasicoPage } from './JurasicoPage';
 export { default as CambricoPage } from './CambricoPage'; 
+export { default as OrdovicicoPage } from './OrdovicicoPage';
 export { default as CenozoicoPage } from './CenozoicoPage';
 export { default as PaleogenoPage } from './PaleogenoPage';
 export { default as PaleocenoPage } from './PaleocenoPage';
@@ -11,14 +12,10 @@ export { default as DinoDetailPage } from './DinoDetailPage';
 // Por hacer
 
 /*
-export { default as OrdovicicoPage } from './OrdovicicoPage';
 export { default as SiluricoPage } from './SiluricoPage';
 export { default as DevonicoPage } from './DevonicoPage';
 export { default as CarboniferoPage } from './CarboniferoPage';
 export { default as PermicoPage } from './PermicoPage';
-
-
-
         export { default as PaleocenoPage } from './PaleocenoPage';
         export { default as EocenoPage } from './EocenoPage';
         export { default as OligocenoPage } from './OligecenoPage';

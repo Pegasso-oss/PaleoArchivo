@@ -1,15 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
-import { LogIn, User, LogOut, LockOpen, AlertTriangle } from "lucide-react";
+import {
+  LogIn,
+  User,
+  LogOut,
+  LockOpen,
+  AlertTriangle,
+  Sun,
+  Moon,
+  Languages,
+  ChevronDown,
+} from "lucide-react";
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
+import { useUser } from "../context/useUser";
+import { translations } from "../data/translations";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme, toggleTheme, language, setLanguage } = useUser();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const menuRef = useRef(null);
+  const langRef = useRef(null);
+
+  const t = translations[language].header;
+  const isLight = theme === "light";
 
   useEffect(() => {
     const auth = localStorage.getItem("auth");
@@ -22,11 +43,25 @@ const Header = () => {
     }
   }, [location]);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setIsLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleLogoutConfirm = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("username");
     setIsLoggedIn(false);
     setShowConfirm(false);
+    setIsMenuOpen(false);
     navigate("/", { state: { logoutSuccess: true } });
   };
 
@@ -42,30 +77,22 @@ const Header = () => {
     switch (location.pathname) {
       case "/era/paleozoico":
         return "Paleozoico";
-      case "/era/paleozoico/cambrico":
-        return "Cámbrico";
       case "/era/mesozoico":
         return "Mesozoico";
-      case "/era/mesozoico/jurasico":
-        return "Jurásico";
       case "/era/cenozoico":
         return "Cenozoico";
-      case "/era/cenozoico/paleogeno":
-        return "Paleogeno";
-      case "/era/cenozoico/paleogeno/paleoceno":
-        return "Paleoceno";
       case "/login":
-        return "Inicio de Sesion";
+        return t.login;
       case "/register":
-        return "Inicio de Sesion";
+        return t.register;
       default:
-        return "Todo sobre el pasado, en tu mano";
+        return t.subtitleDefault;
     }
   };
 
   return (
     <>
-      <header className="border-b border-white/5 bg-[#0d0a09] sticky top-0 z-[9999] shadow-2xl w-full h-fit">
+      <header className="bg-[var(--bg-card)] border-b border-[var(--border-color)] transition-colors duration-500 sticky top-0 z-[100] backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-2">
           {/* LOGO */}
           <Link
@@ -77,63 +104,217 @@ const Header = () => {
               alt="Logo"
               className="h-10 md:h-20 w-auto shrink-0 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"
             />
-
             <div className="hidden md:flex flex-col">
-              <h1 className="md:text-3xl font-black tracking-tighter uppercase leading-none text-white italic whitespace-nowrap">
+              <h1
+                className={`md:text-3xl font-black tracking-tighter uppercase leading-none italic transition-colors duration-500 ${isLight ? "text-stone-900" : "text-white"}`}
+              >
                 Paleo<span className="text-amber-600">Archivo</span>
               </h1>
-
               <div className="flex items-center gap-2 mt-1 md:mt-2">
-                <div className="h-0.5 w-4 md:w-8 bg-amber-500/40 shrink-0"></div>
-
-                <span className="text-white text-[10px] md:text-sm font-light tracking-[0.2em] uppercase italic whitespace-nowrap">
+                <div className="h-0.5 w-4 md:w-8 bg-amber-500/40"></div>
+                <span
+                  className={`text-[10px] md:text-sm font-light tracking-[0.2em] uppercase italic transition-colors duration-500 ${isLight ? "text-stone-600" : "text-white"}`}
+                >
                   {getSubtitle()}
                 </span>
-
-                <div className="h-0.5 w-4 md:w-8 bg-amber-500/40 shrink-0"></div>
+                <div className="h-0.5 w-4 md:w-8 bg-amber-500/40"></div>
               </div>
             </div>
           </Link>
 
-          {/* BOTONES */}
+          {/* ACCIONES */}
           <div className="flex items-center gap-1.5 md:gap-4">
             {!isLoggedIn ? (
               <>
                 <Link
                   to="/login"
-                  className="bg-white/5 border-2 border-white/10 px-2.5 py-2 md:px-8 md:py-4 rounded-xl text-stone-300 hover:bg-white hover:text-black transition-all flex items-center gap-1.5 md:gap-2 font-black tracking-widest"
+                  className={`border-2 px-2.5 py-2 md:px-8 md:py-4 rounded-xl transition-all flex items-center gap-1.5 md:gap-2 font-black tracking-widest ${isLight ? "bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white" : "bg-white/5 border-white/10 text-stone-300 hover:bg-white hover:text-black"}`}
                 >
-                  <LogIn
-                    size={14}
-                    className="md:w-5 md:h-5 pointer-events-none"
-                  />
-                  {/* Texto más pequeño en móvil (text-[9px]) y normal en escritorio (md:text-base) */}
-                  <span className="text-[9px] md:text-base pointer-events-none uppercase">
-                    Iniciar Sesión
+                  <LogIn size={14} />{" "}
+                  <span className="text-[9px] md:text-base uppercase">
+                    {t.login}
                   </span>
                 </Link>
-
                 <Link
                   to="/register"
-                  className="bg-amber-600/10 border-2 border-amber-600/60 px-2.5 py-2 md:px-8 md:py-4 rounded-xl text-amber-500 hover:bg-amber-600 hover:text-black transition-all flex items-center gap-1.5 md:gap-2 font-black tracking-widest shadow-lg"
+                  className="bg-amber-600/10 border-2 border-amber-600/60 px-2.5 py-2 md:px-8 md:py-4 rounded-xl text-amber-500 hover:bg-amber-600 hover:text-white transition-all flex items-center gap-1.5 md:gap-2 font-black tracking-widest shadow-lg"
                 >
-                  <LockOpen
-                    size={14}
-                    className="md:w-5 md:h-5 pointer-events-none"
-                  />
-                  <span className="text-[9px] md:text-base pointer-events-none uppercase">
-                    Registrarse
+                  <LockOpen size={14} />{" "}
+                  <span className="text-[9px] md:text-base uppercase">
+                    {t.register}
                   </span>
                 </Link>
               </>
             ) : (
               <div className="flex items-center gap-3 md:gap-10">
-                <div className="flex items-center gap-2 bg-black/80 border-2 border-amber-500/40 px-3 py-2 md:px-7 md:py-4 rounded-xl md:rounded-3xl shadow-inner">
-                  <User size={18} className="text-amber-500 md:w-8 md:h-8" />
+                <div className="relative" ref={menuRef}>
+                  <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className={`flex items-center gap-2 border-2 px-3 py-2 md:px-7 md:py-4 rounded-xl md:rounded-3xl shadow-inner transition-all group ${isLight ? "bg-white border-amber-500/20 hover:border-amber-500" : "bg-black/80 border-amber-500/40 hover:border-amber-500"}`}
+                  >
+                    <User size={18} className="text-amber-500 md:w-8 md:h-8" />
+                    <span
+                      className={`font-black italic text-[10px] md:text-xl uppercase leading-none ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}
+                    >
+                      {username}
+                    </span>
+                    <ChevronDown
+                      size={14}
+                      className={`text-amber-500/50 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
 
-                  <span className="text-[#fef3c7] font-black italic text-[10px] md:text-xl uppercase leading-none whitespace-nowrap">
-                    {username}
-                  </span>
+                  {isMenuOpen && (
+                    <div
+                      className={`absolute top-full right-0 mt-3 w-64 border rounded-2xl shadow-2xl z-[10000] animate-in fade-in slide-in-from-top-2 flex flex-col ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#1a1614] border-white/10 text-white"}`}
+                    >
+                      <div className="p-4 border-b border-white/5 bg-amber-600/5">
+                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em]">
+                          {t.config}
+                        </p>
+                      </div>
+
+                      {/* Contenedor con Scroll si es necesario */}
+                      <div className="p-2 space-y-1 max-h-[70vh] overflow-y-visible">
+                        <button
+                          onClick={toggleTheme}
+                          className="w-full flex items-center justify-between p-3 hover:bg-black/10 rounded-xl transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            {theme === "dark" ? (
+                              <Moon size={16} className="text-blue-400" />
+                            ) : (
+                              <Sun size={16} className="text-amber-500" />
+                            )}
+                            <span className="text-[10px] font-bold uppercase tracking-widest">
+                              {t.mode} {theme === "dark" ? t.dark : t.light}
+                            </span>
+                          </div>
+                          <div
+                            className={`w-8 h-4 rounded-full relative transition-colors ${theme === "dark" ? "bg-stone-700" : "bg-amber-600"}`}
+                          >
+                            <div
+                              className={`absolute top-1 w-2 h-2 rounded-full bg-white transition-all ${theme === "dark" ? "left-1" : "left-5"}`}
+                            />
+                          </div>
+                        </button>
+
+                        <div className="h-[1px] bg-white/5 my-1" />
+
+                        {/* SELECTOR IDIOMA */}
+                        <div className="p-2 relative" ref={langRef}>
+                          <p className="flex items-center gap-2 text-[10px] font-black text-stone-400 uppercase tracking-widest mb-3 px-1">
+                            <Languages
+                              size={18}
+                              className={
+                                theme === "dark"
+                                  ? "text-blue-400"
+                                  : "text-amber-500"
+                              }
+                            />{" "}
+                            {t.lang}
+                          </p>
+
+                          <button
+                            onClick={() => setIsLangOpen(!isLangOpen)}
+                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
+                              language === "es"
+                                ? "border-red-500"
+                                : language === "en"
+                                  ? isLight
+                                    ? "border-stone-300" : "border-white"
+                                  : language === "fr"
+                                    ? "border-sky-700" : "border-emerald-600" 
+                            } ${isLight ? "bg-stone-50" : "bg-white/5"}`}
+                          >
+                            <span
+                              className={`text-[10px] font-black uppercase tracking-wider ${
+                                language === "es"
+                                  ? "text-red-500"
+                                  : language === "en"
+                                    ? "${theme === ´dark´ ? ´text-black´ : text-white´}"
+                                    : language === "fr"
+                                      ? "text-sky-700"
+                                      : "text-emerald-600"
+                              }`}
+                            >
+                              {language === "es" && "ESPAÑOL"}
+                              {language === "en" && "ENGLISH"}
+                              {language === "fr" && "FRANÇAIS"}
+                              {language === "it" && "ITALIANO"}
+                            </span>
+                            <ChevronDown
+                              size={14}
+                              className={`transition-transform ${isLangOpen ? "rotate-180" : ""}`}
+                            />
+                          </button>
+
+                          {isLangOpen && (
+                            <div
+                              className={`absolute top-full left-2 right-2 mt-1 border rounded-xl shadow-2xl z-[10001] overflow-hidden animate-in fade-in slide-in-from-top-1 ${
+                                isLight
+                                  ? "bg-white border-stone-200"
+                                  : "bg-[#25201d] border-white/10"
+                              }`}
+                            >
+                              <button
+                                onClick={() => {
+                                  setLanguage("es");
+                                  setIsLangOpen(false);
+                                }}
+                                className={`w-full text-left p-4 text-[11px] font-black uppercase transition-all ${
+                                  language === "es"
+                                    ? "bg-red-500 text-white"
+                                    : "hover:bg-red-500/10 text-stone-400 hover:text-red-500"
+                                }`}
+                              >
+                                ESPAÑOL
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setLanguage("en");
+                                  setIsLangOpen(false);
+                                }}
+                                className={`w-full text-left p-4 text-[11px] font-black uppercase transition-all ${
+                                  language === "en"
+                                    ? "bg-white text-black"
+                                    : "hover:bg-neutral-300/90 text-stone-400 hover:text-stone-800"
+                                }`}
+                              >
+                                ENGLISH
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setLanguage("fr");
+                                  setIsLangOpen(false);
+                                }}
+                                className={`w-full text-left p-4 text-[11px] font-black uppercase transition-all ${
+                                  language === "fr"
+                                    ? "bg-sky-700 text-white"
+                                    : "hover:bg-sky-700/10 text-stone-400 hover:text-sky-700"
+                                }`}
+                              >
+                                FRANÇAIS
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setLanguage("it");
+                                  setIsLangOpen(false);
+                                }}
+                                className={`w-full text-left p-4 text-[11px] font-black uppercase transition-all ${
+                                  language === "it"
+                                    ? "bg-emerald-600 text-white"
+                                    : "hover:bg-emerald-600/10 text-stone-400 hover:text-emerald-600"
+                                }`}
+                              >
+                                ITALIANO
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <button
@@ -144,9 +325,8 @@ const Header = () => {
                     size={24}
                     className="md:w-10 md:h-10 group-hover:scale-110"
                   />
-
-                  <span className="hidden md:block text-[12px] md:text-xs font-black tracking-tighter uppercase">
-                    CERRAR SESIÓN
+                  <span className="hidden md:block text-[12px] md:text-xs font-black tracking-widest uppercase">
+                    {t.logout}
                   </span>
                 </button>
               </div>
@@ -155,22 +335,27 @@ const Header = () => {
         </div>
       </header>
 
+      {/* MODAL */}
       {showConfirm && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[10002] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/90 backdrop-blur-sm"
             onClick={() => setShowConfirm(false)}
           ></div>
-          <div className="relative bg-[#1a1614] border border-white/10 w-full max-w-md overflow-hidden rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200">
+          <div
+            className={`relative border w-full max-w-md overflow-hidden rounded-2xl shadow-2xl animate-in zoom-in-95 ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}
+          >
             <div className="bg-red-600/10 border-b border-red-600/20 p-4 flex items-center gap-3">
               <AlertTriangle className="text-red-500" size={18} />
               <span className="text-red-500 font-mono text-[14px] tracking-[0.3em] font-bold uppercase text-xs">
-                Cierre de Sesion
+                {t.logout}
               </span>
             </div>
             <div className="p-8 text-center">
-              <h3 className="text-white text-xl font-black italic uppercase tracking-tighter mb-4">
-                ¿ Seguro que quieres <span className="text-red-600">salir</span>{" "}
+              <h3
+                className={`text-xl font-black italic uppercase tracking-tighter mb-4 ${isLight ? "text-stone-900" : "text-white"}`}
+              >
+                {t.confirmLogout} <span className="text-red-600">{t.exit}</span>
                 ?
               </h3>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -178,13 +363,13 @@ const Header = () => {
                   onClick={handleLogoutConfirm}
                   className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest text-xs"
                 >
-                  Confirmar
+                  {t.confirm}
                 </button>
                 <button
                   onClick={() => setShowConfirm(false)}
-                  className="flex-1 bg-stone-800 hover:bg-stone-700 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest text-xs"
+                  className={`flex-1 font-black py-4 rounded-xl transition-all uppercase tracking-widest text-xs ${isLight ? "bg-stone-100 text-stone-600" : "bg-stone-800 text-white"}`}
                 >
-                  Mantener
+                  {t.keep}
                 </button>
               </div>
             </div>

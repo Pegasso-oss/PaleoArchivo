@@ -9,6 +9,24 @@ const LandingPage = () => {
   const location = useLocation();
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
 
+  // 1. Estado para detectar el tema actual
+  const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
+
+  // 2. Observador para detectar cambios de tema en tiempo real sin recargar
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light-theme'));
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Control del mensaje de Logout
   useEffect(() => {
     if (location.state?.logoutSuccess) {
       setShowLogoutMsg(true);
@@ -40,29 +58,32 @@ const LandingPage = () => {
     { id: "cenozoico", name: "CENOZOICO", age: "66 m.a. - Actualidad", image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: "El ascenso de los mamíferos. Megafauna, glaciaciones y la evolución de los primates." },
   ];
 
-  const filteredDinos = Array.from(new Map(allAnimals.map((dino) => [dino.nombre.toLowerCase(), dino])).values())
-    .filter((dino) => {
-      if (!searchTerm) return false;
-      const search = searchTerm.toLowerCase().trim();
-      return dino.nombre.toLowerCase().startsWith(search) || dino.dieta.toLowerCase() === search;
-    })
-    .sort((a, b) => a.nombre.localeCompare(b.nombre))
-    .slice(0, 8);
+  const filteredDinos = Array.from(
+    new Map(allAnimals.map((dino) => [dino.nombre.toLowerCase(), dino])).values(),
+  ).filter((dino) => {
+    if (!searchTerm) return false;
+    const search = searchTerm.toLowerCase().trim();
+    return dino.nombre.toLowerCase().startsWith(search) || dino.dieta.toLowerCase() === search;
+  }).sort((a, b) => a.nombre.localeCompare(b.nombre)).slice(0, 8);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#1d1914] px-4 pt-4 pb-20 relative text-white overflow-x-hidden">
-      {/* MENSAJE LOGOUT */}
-      <div className={`fixed left-0 right-0 z-[100] mx-auto w-full max-w-md px-4 transition-all duration-700 pointer-events-none ${showLogoutMsg ? "top-32 opacity-100 scale-100" : "top-0 opacity-0 scale-95"}`}>
-        <div className="bg-[#1a1614]/95 border border-amber-600/40 backdrop-blur-md rounded-xl shadow-2xl pointer-events-auto overflow-hidden">
+    // CAMBIO: isolate previene que los z-index de aquí se peleen con los de fuera (como el Header)
+    <div className={`min-h-screen flex flex-col px-4 pt-4 pb-20 relative isolate transition-colors duration-500 ${isLight ? 'bg-[#f5f2ed] text-stone-900' : 'bg-[#141210] text-white'}`}>
+      
+      {/* MENSAJE LOGOUT - Ajustado z-index a 40 */}
+      <div className={`fixed left-0 right-0 z-[40] mx-auto w-full max-w-md px-4 transition-all duration-700 pointer-events-none ${showLogoutMsg ? "top-32 opacity-100 scale-100" : "top-0 opacity-0 scale-95"}`}>
+        <div className={`border border-amber-600/40 backdrop-blur-md rounded-xl shadow-2xl pointer-events-auto overflow-hidden transition-colors duration-500 ${isLight ? 'bg-white/95' : 'bg-[#1a1614]/95'}`}>
           <div className="px-5 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <ShieldCheck className="text-amber-500" size={18} />
               <div>
-                <p className="text-white font-bold text-[11px] uppercase tracking-wider">Sesión Cerrada</p>
+                <p className={`font-bold text-[11px] uppercase tracking-wider transition-colors ${isLight ? 'text-stone-900' : 'text-white'}`}>
+                  Sesión Cerrada
+                </p>
                 <p className="text-stone-500 font-mono text-[9px] uppercase tracking-widest">Acceso restringido</p>
               </div>
             </div>
-            <button onClick={() => setShowLogoutMsg(false)} className="text-stone-600 hover:text-white transition-colors"><X size={16} /></button>
+            <button onClick={() => setShowLogoutMsg(false)} className="text-stone-600 hover:text-amber-500 transition-colors"><X size={16} /></button>
           </div>
           <div className="h-[2px] w-full bg-stone-800">
             <div className={`h-full bg-amber-600 transition-all ease-linear ${showLogoutMsg ? "w-0 duration-[5000ms]" : "w-full duration-0"}`} />
@@ -71,15 +92,15 @@ const LandingPage = () => {
       </div>
 
       <div className="max-w-6xl mx-auto text-center w-full relative z-10">
-        <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter mb-6 italic leading-none uppercase">
+        <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 italic leading-none uppercase">
           Explora <span className="text-amber-600">el pasado</span>
         </h1>
-        <p className="max-w-2xl mx-auto text-white/60 text-base md:text-lg mb-10">
+        <p className={`max-w-2xl mx-auto text-base md:text-lg mb-10 transition-colors ${isLight ? 'text-stone-600' : 'text-white/60'}`}>
           Selecciona una era geológica para acceder a los registros fósiles y reconstrucciones biológicas.
         </p>
 
-        {/* BUSCADOR */}
-        <div className="max-w-3xl mx-auto relative z-50 mb-10">
+        {/* BUSCADOR - Ajustado z-index a 30 */}
+        <div className="max-w-3xl mx-auto relative z-[30] mb-10">
           <div className="relative group">
             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
               <Search className={`transition-colors ${searchTerm ? "text-amber-500" : "text-stone-600"}`} size={22} />
@@ -89,19 +110,16 @@ const LandingPage = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="BUSCAR EN EL ARCHIVO..."
-              className="w-full bg-[#2a2420]/40 border border-stone-800 py-5 md:py-6 pl-16 pr-14 rounded-2xl text-sm md:text-base font-mono tracking-widest focus:outline-none focus:border-amber-600/50 focus:bg-[#2a2420]/80 transition-all text-white uppercase shadow-2xl"
+              className={`w-full border py-5 md:py-6 pl-16 pr-14 rounded-2xl text-sm md:text-base font-mono tracking-widest focus:outline-none focus:border-amber-600/50 transition-all uppercase shadow-2xl ${isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-[#2a2420]/40 border-stone-800 text-white'}`}
             />
             {searchTerm && (
-              <button onClick={() => setSearchTerm("")} className="absolute inset-y-0 right-6 flex items-center text-stone-500 hover:text-white"><X size={22} /></button>
+              <button onClick={() => setSearchTerm("")} className="absolute inset-y-0 right-6 flex items-center text-stone-500 hover:text-amber-500"><X size={22} /></button>
             )}
           </div>
 
-          {/* DROP-DOWN DE RESULTADOS CORREGIDO */}
+          {/* DROP-DOWN RESULTADOS - Ajustado z-index a 30 */}
           {searchTerm && (
-            <div 
-              className="absolute top-full left-0 w-full mt-2 bg-stone-900/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl z-[100] overflow-y-auto max-h-[390px] hide-scrollbar"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
+            <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30] overflow-y-auto max-h-[390px] hide-scrollbar transition-colors duration-500 ${isLight ? 'bg-white/90 border-stone-200' : 'bg-stone-900/95 border-white/10'}`}>
               {filteredDinos.length > 0 ? (
                 filteredDinos.map((dino) => {
                   const theme = themes[dino.dieta] || { text: "text-white", bg: "bg-white/10", border: "border-white/20" };
@@ -110,7 +128,7 @@ const LandingPage = () => {
                       <div className="flex items-center gap-5">
                         <img src={dino.imagen} alt={dino.nombre} className="w-12 h-12 object-cover rounded-xl border border-white/10" />
                         <div className="text-left">
-                          <p className="font-black uppercase italic text-white group-hover/item:text-amber-500 transition-colors text-base">{dino.nombre}</p>
+                          <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base ${isLight ? 'text-stone-900' : 'text-white'}`}>{dino.nombre}</p>
                           <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1.5">{dino.subName}</p>
                         </div>
                       </div>
@@ -144,7 +162,6 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* ERAS */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         {eras.map((era) => (
           <EraCard key={era.id} id={era.id} name={era.name} age={era.age} image={era.image}>{era.desc}</EraCard>

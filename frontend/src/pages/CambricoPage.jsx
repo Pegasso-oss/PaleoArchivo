@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { dinosaurios } from '../data/cambrico'; 
 import DinoCard from '../components/DinoCard';
-import { motion } from 'framer-motion'; // 1. Importamos la librería de animación
+import { motion } from 'framer-motion';
 
 const CambricoPage = () => {
+  // --- LÓGICA DE TEMA REACTIVO ---
+  const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light-theme'));
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+  // -------------------------------
+
   return (
     <motion.div 
-          initial={{ opacity: 0, y: 30 }} // Empieza invisible y 30px abajo
-          animate={{ opacity: 1, y: 0 }}  // Termina visible y en su sitio
-          transition={{ duration: 0.8, ease: "easeOut" }} // Duración de casi 1 segundo para que sea suave
-          className="min-h-screen bg-[#1d1914] px-4 py-12"
-        >
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className={`min-h-screen px-4 py-12 transition-colors duration-500 ${isLight ? 'bg-[#f5f2ed]' : 'bg-[#1d1914]'}`}
+    >
 
       {/* Header */}
-      <div className="max-w-[1240px] mx-auto mb-16"> {/* max-w ajustado al grid */}
+      <div className="max-w-[1240px] mx-auto mb-16">
         <button 
           onClick={() => window.history.back()} 
           className="text-amber-500/80 hover:text-blue-500 font-mono text-xs uppercase tracking-[0.3em] mb-8 transition-colors flex items-center gap-2 group"
@@ -21,17 +38,19 @@ const CambricoPage = () => {
           <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span> VOLVER A PERIODOS
         </button>
         
-        <h1 className="text-6xl md:text-8xl font-black text-white italic uppercase tracking-tighter leading-none">
+        <h1 className={`text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-none transition-colors ${isLight ? 'text-stone-900' : 'text-white'}`}>
           REGISTROS <span className="text-blue-600 font-black">Cámbricos</span>
         </h1>
+        
         <div className="flex items-center gap-4 mt-4">
           <div className="h-0.5 w-12 bg-blue-600"></div>
-          <p className="text-slate-500 font-mono text-xs uppercase tracking-[0.2em]">
+          <p className={`font-mono text-xs uppercase tracking-[0.2em] transition-colors ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>
              //  Animales clasificados: {dinosaurios.length} (WIP)
           </p>
         </div>
       </div>
 
+      {/* Grid de Cards */}
       <div className="max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {dinosaurios.map((dino) => (
           <DinoCard 

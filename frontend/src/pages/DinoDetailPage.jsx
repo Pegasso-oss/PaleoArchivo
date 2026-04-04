@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react"; // Añadido useState
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { allAnimals } from "../data/allData";
@@ -15,7 +15,18 @@ const DinoDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Scroll al inicio cada vez que cambie el ID (importante para recomendaciones)
+  // --- LÓGICA DE TEMA REACTIVO ---
+  const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light-theme'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+  // -------------------------------
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
@@ -23,13 +34,6 @@ const DinoDetailPage = () => {
   const dino = allAnimals.find(
     (d) => d.nombre.toLowerCase() === id.toLowerCase(),
   );
-
-  if (!dino)
-    return (
-      <div className="bg-[#141210] min-h-screen text-white p-10 font-mono text-xs uppercase tracking-widest flex items-center justify-center">
-        Cargando archivo...
-      </div>
-    );
 
   const getTheme = (dieta) => {
     const themes = {
@@ -45,22 +49,29 @@ const DinoDetailPage = () => {
     return themes[dieta] || { text: "text-stone-400", bg: "bg-stone-400/10", border: "border-stone-400/50" };
   };
 
-  const theme = getTheme(dino.dieta);
+  const recommendations = useMemo(() => {
+    if (!dino) return [];
+    return allAnimals
+      .filter((a) => a.nombre.toLowerCase() !== id.toLowerCase())
+      .filter((a) => a.dieta === dino.dieta || a.era === dino.era)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
+  }, [id, dino]);
 
-const recommendations = useMemo(() => {
-  return allAnimals
-    .filter((a) => a.nombre.toLowerCase() !== id.toLowerCase()) // Excluir actual
-    .filter((a) => a.dieta === dino.dieta || a.era === dino.era) // Similitud
-    .sort(() => 0.5 - Math.random()) // Aleatoriedad
-    .slice(0, 4); // Límite estricto
-}, [id, dino.dieta, dino.era]); // Se ejecuta cada vez que el ID cambia
+  if (!dino) return (
+    <div className={`min-h-screen font-mono text-xs uppercase tracking-widest flex items-center justify-center ${isLight ? 'bg-[#f5f2ed] text-stone-900' : 'bg-[#141210] text-white'}`}>
+      Cargando archivo...
+    </div>
+  );
+
+  const theme = getTheme(dino.dieta);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-screen bg-[#141210] text-white pb-20 relative"
+      className={`min-h-screen pb-20 relative transition-colors duration-500 ${isLight ? 'bg-[#f5f2ed] text-stone-900' : 'bg-[#141210] text-white'}`}
     >
       {/* HEADER DE NAVEGACIÓN */}
       <div className="max-w-7xl mx-auto px-4 py-6 lg:pt-10">
@@ -72,7 +83,6 @@ const recommendations = useMemo(() => {
         </button>
       </div>
 
-      {/* CONTENIDO PRINCIPAL */}
       <div className="max-w-7xl mx-auto px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
         {/* IMAGEN */}
         <motion.div
@@ -81,7 +91,7 @@ const recommendations = useMemo(() => {
           className="order-first lg:order-last relative w-full"
         >
           <div className={`absolute -inset-10 ${theme.bg} rounded-full blur-[120px] opacity-30`}></div>
-          <div className={`relative aspect-video lg:aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] border-4 shadow-none ${theme.border}`}>
+          <div className={`relative aspect-video lg:aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] border-4 shadow-none transition-colors duration-500 ${theme.border}`}>
             <img
               src={dino.imagen}
               alt={dino.nombre}
@@ -93,7 +103,7 @@ const recommendations = useMemo(() => {
         {/* INFO */}
         <div className="flex flex-col gap-6 lg:gap-8">
           <header>
-            <h1 className="text-4xl md:text-5xl lg:text-5xl font-black italic uppercase leading-[0.85] mt-4 tracking-tighter break-words">
+            <h1 className={`text-4xl md:text-5xl lg:text-5xl font-black italic uppercase leading-[0.85] mt-4 tracking-tighter break-words transition-colors ${isLight ? 'text-stone-900' : 'text-white'}`}>
               {dino.nombre}
             </h1>
             <span className={`font-mono text-[13px] lg:text-xs tracking-[0.4em] uppercase ${theme.text}`}>
@@ -101,7 +111,7 @@ const recommendations = useMemo(() => {
             </span>
           </header>
 
-          <p className="text-stone-300 text-base leading-relaxed font-light italic">
+          <p className={`text-base leading-relaxed font-light italic transition-colors ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
             <Info size={16} className={`inline mr-2.5 mb-1 ${theme.text} opacity-60`} />
             {dino.descripcion}
           </p>
@@ -120,12 +130,12 @@ const recommendations = useMemo(() => {
                 </div>
               )},
             ].map((item, idx) => (
-              <div key={idx} className="bg-white/[0.03] border border-white/5 p-5 rounded-2xl flex flex-col justify-between h-28 transition-colors hover:bg-white/[0.06]">
+              <div key={idx} className={`border p-5 rounded-2xl flex flex-col justify-between h-28 transition-all hover:bg-white/[0.06] ${isLight ? 'bg-white border-stone-200 shadow-sm' : 'bg-white/[0.03] border-white/5'}`}>
                 <div className="flex items-center gap-2 text-stone-500 mb-1.5 shrink-0">
                   {item.icon}
                   <span className="text-[9px] uppercase tracking-[0.2em] font-bold">{item.label}</span>
                 </div>
-                <div className={`text-2xl lg:text-3xl font-mono font-bold ${item.color || "text-white"} ${item.isDiet ? "uppercase" : ""}`}>
+                <div className={`text-2xl lg:text-3xl font-mono font-bold ${item.color || (isLight ? "text-stone-900" : "text-white")} ${item.isDiet ? "uppercase" : ""}`}>
                   {item.val}
                 </div>
               </div>
@@ -133,7 +143,7 @@ const recommendations = useMemo(() => {
           </div>
 
           <div className="pt-6">
-            <button className={`w-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 ${theme.text} px-8 py-5 rounded-2xl font-mono text-[14px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-8 shadow-2xl`}>
+            <button className={`w-full border px-8 py-5 rounded-2xl font-mono text-[14px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-8 shadow-2xl ${isLight ? 'bg-white border-stone-200 text-amber-600 hover:bg-stone-50' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/10 text-amber-500'}`}>
               <FileText size={20} />
               <span>Consultar papers cientificos</span>
             </button>
@@ -141,9 +151,9 @@ const recommendations = useMemo(() => {
         </div>
       </div>
 
-      {/* NUEVA SECCIÓN: RECOMENDADOS */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 mt-24 border-t border-white/5 pt-16">
-        <h3 className="text-2xl md:text-4xl font-black italic text-white uppercase tracking-tighter mb-10">
+      {/* RECOMENDADOS */}
+      <div className={`max-w-7xl mx-auto px-4 md:px-6 mt-24 border-t pt-16 ${isLight ? 'border-stone-200' : 'border-white/5'}`}>
+        <h3 className={`text-2xl md:text-4xl font-black italic uppercase tracking-tighter mb-10 ${isLight ? 'text-stone-900' : 'text-white'}`}>
           Especies <span className="text-amber-600">Relacionadas</span>
         </h3>
 
@@ -154,22 +164,16 @@ const recommendations = useMemo(() => {
               <Link 
                 key={rec.id} 
                 to={`/animal/${rec.nombre.toLowerCase()}`}
-                className="group bg-white/[0.02] border border-white/5 rounded-3xl overflow-hidden hover:border-amber-600/40 transition-all duration-500"
+                className={`group border rounded-3xl overflow-hidden transition-all duration-500 ${isLight ? 'bg-white border-stone-200 hover:border-amber-500' : 'bg-white/[0.02] border-white/5 hover:border-amber-600/40'}`}
               >
                 <div className="aspect-[16/10] overflow-hidden">
-                  <img 
-                    src={rec.imagen} 
-                    alt={rec.nombre} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
+                  <img src={rec.imagen} alt={rec.nombre} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 </div>
                 <div className="p-5">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="text-lg font-black text-white italic uppercase leading-none group-hover:text-amber-500 transition-colors">
-                      {rec.nombre}
-                    </h4>
-                  </div>
-                  <p className="text-stone-500 text-[10px] uppercase tracking-[0.2em] mb-4">
+                  <h4 className={`text-lg font-black italic uppercase leading-none group-hover:text-amber-500 transition-colors ${isLight ? 'text-stone-900' : 'text-white'}`}>
+                    {rec.nombre}
+                  </h4>
+                  <p className="text-stone-500 text-[10px] uppercase tracking-[0.2em] mt-2 mb-4">
                     {rec.subName}
                   </p>
                   <span className={`text-[9px] font-bold px-2 py-1 rounded-md border ${recTheme.bg} ${recTheme.text} ${recTheme.border} uppercase`}>

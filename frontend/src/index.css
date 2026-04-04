@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  margin: 0;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.light-theme {
+  --bg-main: #f8f6f2;
+  --bg-card: #ffffff;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Ajustes automáticos para elementos con clases de Tailwind específicas en modo claro */
+.light-theme header {
+  background-color: rgba(248, 246, 242, 0.8) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.light-theme .EraCard_gradient { 
+  background: linear-gradient(to top, rgba(248, 246, 242, 1) 10%, rgba(248, 246, 242, 0.8) 30%, transparent 100%) !important;
+}

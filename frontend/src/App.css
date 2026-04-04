@@ -1,81 +1,25 @@
-/* 1. RESET Y CONFIGURACIÓN BASE */
-:root {
-  --bg-dark: #1d1914;
-  --accent-amber: #d97706;
-  --text-main: #ffffff;
-  --text-muted: #a8a29e;
+/* src/app.css */
+
+/* Regla ultra-agresiva para el fondo */
+html.light-theme,
+.light-theme body,
+.light-theme #root,
+.light-theme main,
+.light-theme .min-h-screen {
+  background-color: #f5f2ed !important;
+  background: #f5f2ed !important;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Regla ultra-agresiva para los textos */
+.light-theme h1, 
+.light-theme p, 
+.light-theme span:not(.text-amber-600),
+.light-theme div:not(.text-amber-600) {
+  color: #1c1917 !important;
 }
 
-/* 2. CONFIGURACIÓN DE SCROLL GLOBAL */
-html, body, #root {
-  min-height: 100%;
-  width: 100%;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  overflow-x: hidden;
-  scroll-behavior: auto !important;
-}
-
-/* OCULTAR BARRA DE NAVEGACIÓN GLOBAL */
-* {
-  scrollbar-width: none !important; /* Firefox */
-  -ms-overflow-style: none !important; /* IE y Edge */
-}
-
-*::-webkit-scrollbar {
-  display: none !important; /* Chrome, Safari, Opera */
-  width: 0 !important;
-  height: 0 !important;
-}
-
-body {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* 3. UTILIDADES ESPECÍFICAS */
-.hide-scrollbar {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
-  overflow-y: auto;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  background: transparent !important;
-}
-
-.text-gradient {
-  background: linear-gradient(to bottom right, #fff, #a8a29e);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* 4. ANIMACIONES */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-page {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.era-card-glow {
-  transition: all 0.3s ease;
-}
-
-.era-card-glow:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 
-              0 0 15px 0px rgba(217, 119, 6, 0.2);
+/* Para que las letras del buscador no sean blancas */
+.light-theme input {
+  color: #1c1917 !important;
+  background-color: #ffffff !important;
 }

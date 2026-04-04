@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useUser } from "./context/useUser";
 import {
   MesozoicoPage, JurasicoPage, PaleozoicoPage, CambricoPage,
   LandingPage, CenozoicoPage, PaleogenoPage, PaleocenoPage, DinoDetailPage,
@@ -12,14 +13,22 @@ import Register from "./components/Register.jsx";
 
 function App() {
   const location = useLocation();
+  const { theme } = useUser();
+  const isLight = theme === "light";
   
-  // Determinamos si ocultar el Header (en Login y Register)
   const hideHeader = location.pathname === "/login" || location.pathname === "/register";
 
+  // Sincronización del fondo del body para evitar destellos oscuros en navegación
+  useEffect(() => {
+    document.body.style.backgroundColor = isLight ? "#f8f6f2" : "#1d1914";
+    document.body.style.transition = "background-color 0.4s ease";
+  }, [isLight]);
+
   return (
-    <div className="min-h-screen bg-[#1d1914] text-white flex flex-col selection:bg-amber-500/30">
+    <div className={`min-h-screen flex flex-col selection:bg-amber-500/30 transition-all duration-500 ${
+      isLight ? "light-theme bg-[#f8f6f2] text-stone-900" : "bg-[#1d1914] text-white"
+    }`}>
       
-      {/* Solo renderizamos el Header si NO estamos en login/register */}
       {!hideHeader && <Header />}
 
       <main className="flex-grow flex flex-col">
@@ -39,9 +48,12 @@ function App() {
         </Routes>
       </main>
 
-      {/* Footer condicional: usualmente también se oculta en auth pages para evitar distracciones */}
       {!hideHeader && (
-        <footer className="bg-[#0d0a09] text-stone-500 text-[10px] border-t border-white/5 py-10 opacity-60 font-mono tracking-[0.3em] uppercase">
+        <footer className={`py-10 font-mono tracking-[0.3em] uppercase text-[10px] transition-colors duration-500 ${
+          isLight 
+            ? "bg-[#e5e2dd] text-stone-500 border-t border-black/5" 
+            : "bg-[#0d0a09] text-stone-500 border-t border-white/5 opacity-60"
+        }`}>
           <div className="max-w-7xl mx-auto px-4 text-center">
             <p>&copy; 2026 PaleoArchivo Project — Registros Digitales de la Biosfera</p>
           </div>

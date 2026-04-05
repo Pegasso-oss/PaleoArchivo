@@ -1,130 +1,140 @@
 export const dinosaurios = [
   {
     id: 8,
-    nombre: "Allosaurus",
+    nombre: "ALLOSAURUS",
     subName: "Lagarto extraño",
-    tipo: "theropod", // Carnívoro bípedo clásico
+    tipo: "theropod",
     dieta: "Carnívoro",
     longitud: "8.5 metros",
     altura: "4 metros",
     estado: "EXTINTO",
+    conservacion: "88", // Abundantes esqueletos casi completos (Cleveland-Lloyd)
     extincion: "145 m.a.",
     imagen: "https://images.dinosaurpictures.org/Allosaurus/Allosaurus_f614bc6d.jpg",
     descripcion: "Era un gran terópodo típico, con un cráneo grande y un cuello corto una cola larga y miembros superiores reducidos.",
   },
   {
     id: 9,
-    nombre: "Brachiosaurus",
+    nombre: "BRACHIOSAURUS",
     subName: "Lagarto brazo",
-    tipo: "sauropod", // Cuello largo gigante
+    tipo: "sauropod",
     dieta: "Herbívoro",
     longitud: "22 metros",
     altura: "14 metros",
     estado: "EXTINTO",
+    conservacion: "75", // Conocido por esqueletos robustos pero a menudo incompletos
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Brachiosaurus-01.jpg",
     descripcion: "Brachiosaurus tiene el cuello extremadamente largo, un cráneo pequeño y gran tamaño general.",
   },
   {
     id: 10,
-    nombre: "Archaeopteryx",
+    nombre: "ARCHAEOPTERYX",
     subName: "Ala Antigua",
-    tipo: "avialae", // Ave primitiva / Terópodo emplumado
+    tipo: "avialae",
     dieta: "Insectívoro",
-    longitud: "0.5 metros",
-    altura: "0.25 metros",
+    longitud: "5 cm",
+    altura: "25 cm",
     estado: "EXTINTO",
+    conservacion: "98", // Conservación excepcional (impresiones de plumas)
     extincion: "148 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Archaeopteryx-01.jpg",
     descripcion: "Es un género extinto de aves primitivas, con caracteres intermedios entre los dinosaurios emplumados y las aves modernas.",
   },
   {
     id: 11,
-    nombre: "Estegosaurus",
+    nombre: "ESTEGOSAURUS",
     subName: "Lagarto con tejado",
-    tipo: "thyreophoran", // Acorazado con placas
+    tipo: "thyreophoran",
     dieta: "Herbívoro",
     longitud: "9 metros",
     altura: "4 metros",
     estado: "EXTINTO",
+    conservacion: "82", // Placas y esqueletos bien documentados
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Stegosaurus-01.jpg",
     descripcion: "Es uno de los dinosaurios más icónicos y fácilmente reconocibles del período Jurásico.",
   },
   {
     id: 12,
-    nombre: "Dilophosaurus",
+    nombre: "DILOPHOSAURUS",
     subName: "Lagarto de dos crestas",
-    tipo: "theropod", // Carnívoro con crestas
+    tipo: "theropod",
     dieta: "Carnívoro",
     longitud: "7 metros",
     altura: "2.5 metros",
     estado: "EXTINTO",
+    conservacion: "70", // Crestas delicadas que requieren hallazgos muy específicos
     extincion: "183 m.a.",
     imagen: "https://dinosaurland.es/wp-content/uploads/elementor/thumbs/dinosaurio-dilophosaurio-dinosaurland-r1n5kl3d0hoxzyfh48jq2li114xjxmj0g5g6jkao74.jpg",
     descripcion: "Dilophosaurus era un cazador grande y ligero, con robustas extremidades posteriores, cola de gran longitud y peculiar mandíbula superior.",
   },
   {
     id: 13,
-    nombre: "Chlamydoselachus",
+    nombre: "CHLAMYDOSELACHUS",
     subName: "Tiburón Anguila",
-    tipo: "chondrichthyes", // Pez cartilaginoso (Tiburón)
+    tipo: "chondrichthyes",
     dieta: "Carnívoro",
     longitud: "2 metros",
-    altura: "0.4 metros",
+    altura: "40 cm",
     estado: "VIVO", 
+    conservacion: "100", // Al estar vivo, el registro biológico es total
     extincion: "---",
     imagen: "https://preview.redd.it/frilled-shark-chlamydoselachus-anguineus-grows-up-to-2m-6-v0-02evcc2mewl61.jpg?width=640&crop=smart&auto=webp&s=711d60425db6a632c877d383ff52b50c636b26a7",
-    descripcion: "Un superviviente nato del Jurásico. Su anatomía apenas ha variado en 150 millones de años, manteniendo sus características branquias fruncidas y su aspecto de anguila."
+    descripcion: "Un superviviente nato del Jurásico. Su anatomía apenas ha variado en 150 millones de años, manteniendo sus características branquias fruncidas."
   },
   {
     id: 14,
-    nombre: "Diplodocus",
+    nombre: "DIPLODOCUS",
     subName: "Doble viga",
-    tipo: "sauropod", // Herbívoro de cola látigo
+    tipo: "sauropod",
     dieta: "Herbívoro",
     longitud: "30 metros",
     altura: "4.5 metros",
     estado: "EXTINTO",
+    conservacion: "85", // Esqueletos muy largos y bien articulados encontrados
     extincion: "152 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Diplodocus-01.jpg",
     descripcion: "Es uno de los dinosaurios más conocidos. Tenía un cuello largo, una cola en forma de látigo y patas robustas.",
   },
   {
     id: 15,
-    nombre: "Ceratosaurus",
+    nombre: "CERATOSAURUS",
     subName: "Lagarto de cuerno",
-    tipo: "theropod", // Carnívoro con cuerno
+    tipo: "theropod",
     dieta: "Carnívoro",
     longitud: "6.5 metros",
     altura: "2.5 metros",
     estado: "EXTINTO",
+    conservacion: "65", // Más raro de encontrar que el Allosaurus
     extincion: "148 m.a.",
     imagen: "https://t4.ftcdn.net/jpg/02/99/62/13/360_F_299621374_zcgKdN8VRjc1FR5uvwUmXLvLMoV4YYSN.jpg",
     descripcion: "Se distingue por un pequeño cuerno en el hocico y una fila de placas óseas que recorren su espalda.",
   },
   {
     id: 16,
-    nombre: "Pliosaurus",
+    nombre: "PLIOSAURUS",
     subName: "Lagarto de Plioceno",
-    tipo: "plesiosaur", // Depredador marino masivo
+    tipo: "plesiosaur",
     dieta: "Piscívoro",
     longitud: "12 metros",
     altura: "3 metros",
     estado: "EXTINTO",
+    conservacion: "60", // Hallazgos masivos pero a menudo dispersos por el lecho marino
     extincion: "145 m.a.",
-    imagen: "https://static.wikia.nocookie.net/dinosaurs/images/0/0d/PliosaurusMarkWitton.jpg/revision/latest?cb=20231221124953",
+    imagen: "https://static.wikia.nocookie.net/dinosaurs/images/0/0d/PliosaurusMarkWitton.jpg",
     descripcion: "Fue un gigantesco reptil marino. Sus mandíbulas eran enormes, con dientes triangulares capaces de ejercer una presión inmensa.",
   },
   {
     id: 17,
-    nombre: "Compsognathus",
+    nombre: "COMPSOGNATHUS",
     subName: "Mandíbula elegante",
-    tipo: "theropod", // Carnívoro pequeño y ágil
+    tipo: "theropod",
     dieta: "Carnívoro",
     longitud: "1 metro",
-    altura: "0.4 metros",
+    altura: "40 cm",
     estado: "EXTINTO",
+    conservacion: "90", // Esqueletos pequeños muy bien preservados en calizas finas
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Compsognathus-01.jpg",
     descripcion: "Es uno de los dinosaurios más pequeños. Era un cazador ágil que se alimentaba de pequeños vertebrados e insectos.",

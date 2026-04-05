@@ -4,7 +4,7 @@ import { useUser } from "./context/useUser";
 import {
   MesozoicoPage, JurasicoPage, PaleozoicoPage, CambricoPage,
   LandingPage, CenozoicoPage, PaleogenoPage, PaleocenoPage, DinoDetailPage,
-  OrdovicicoPage,
+  OrdovicicoPage, FavoritesPage
 } from "./pages/pages.js";
 
 import Header from "./components/Header.jsx";
@@ -36,6 +36,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/:username/favorites" element={<FavoritesPage />} />
           <Route path="/era/paleozoico" element={<PaleozoicoPage />} />
           <Route path="/era/paleozoico/cambrico" element={<CambricoPage />} />
           <Route path="/era/paleozoico/ordovicico" element={<OrdovicicoPage />} />

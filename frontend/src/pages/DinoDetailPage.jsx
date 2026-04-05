@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react"; // Añadido useState
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { allAnimals } from "../data/allData";
+import { useFavorites } from "../context/FavoritesContext";
 import {
   Ruler,
   Utensils,
@@ -9,13 +10,17 @@ import {
   FileText,
   Skull,
   ArrowsUpFromLine,
+  Star,
+  ShieldCheck, // Nuevo icono
+  Pickaxe,     // Nuevo icono
+  Box          // Nuevo icono
 } from "lucide-react";
 
 const DinoDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  // --- LÓGICA DE TEMA REACTIVO ---
+  
+  const { toggleFavorite, isFavorite } = useFavorites();
   const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
 
   useEffect(() => {
@@ -25,7 +30,6 @@ const DinoDetailPage = () => {
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     return () => observer.disconnect();
   }, []);
-  // -------------------------------
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,6 +38,8 @@ const DinoDetailPage = () => {
   const dino = allAnimals.find(
     (d) => d.nombre.toLowerCase() === id.toLowerCase(),
   );
+
+  const isFav = dino ? isFavorite(dino.id) : false;
 
   const getTheme = (dieta) => {
     const themes = {
@@ -73,7 +79,6 @@ const DinoDetailPage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen pb-20 relative transition-colors duration-500 ${isLight ? 'bg-[#f5f2ed] text-stone-900' : 'bg-[#141210] text-white'}`}
     >
-      {/* HEADER DE NAVEGACIÓN */}
       <div className="max-w-7xl mx-auto px-4 py-6 lg:pt-10">
         <button 
           onClick={() => navigate(-1)} 
@@ -84,7 +89,6 @@ const DinoDetailPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-        {/* IMAGEN */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -100,12 +104,31 @@ const DinoDetailPage = () => {
           </div>
         </motion.div>
 
-        {/* INFO */}
         <div className="flex flex-col gap-6 lg:gap-8">
           <header>
-            <h1 className={`text-4xl md:text-5xl lg:text-5xl font-black italic uppercase leading-[0.85] mt-4 tracking-tighter break-words transition-colors ${isLight ? 'text-stone-900' : 'text-white'}`}>
-              {dino.nombre}
-            </h1>
+            <div className="flex items-center gap-4 flex-wrap">
+              <h1 className={`text-4xl md:text-5xl lg:text-5xl font-black italic uppercase leading-[0.85] mt-4 tracking-tighter break-words transition-colors ${isLight ? 'text-stone-900' : 'text-white'}`}>
+                {dino.nombre}
+              </h1>
+              
+              <motion.button
+                whileTap={{ scale: 0.8 }}
+                onClick={() => toggleFavorite(dino.id)}
+                className={`mt-4 p-3 rounded-2xl transition-all ${
+                  isLight 
+                    ? 'hover:bg-stone-200/50 text-stone-300' 
+                    : 'hover:bg-white/5 text-stone-700'
+                }`}
+              >
+                <Star 
+                  size={32} 
+                  fill={isFav ? "#facc15" : "none"} 
+                  stroke={isFav ? "#facc15" : "currentColor"}
+                  className={`transition-colors duration-300`}
+                />
+              </motion.button>
+            </div>
+
             <span className={`font-mono text-[13px] lg:text-xs tracking-[0.4em] uppercase ${theme.text}`}>
               // {dino.subName}
             </span>
@@ -142,8 +165,41 @@ const DinoDetailPage = () => {
             ))}
           </div>
 
-          <div className="pt-6">
-            <button className={`w-full border px-8 py-5 rounded-2xl font-mono text-[14px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-8 shadow-2xl ${isLight ? 'bg-white border-stone-200 text-amber-600 hover:bg-stone-50' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/10 text-amber-500'}`}>
+          {/* SECCIÓN REGISTRO DE CONSERVACIÓN */}
+          <div className={`p-6 rounded-3xl border mt-4 overflow-hidden relative ${
+            isLight ? 'bg-amber-500/5 border-amber-500/20' : 'bg-white/[0.02] border-white/5'
+          }`}>
+            <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+                <Pickaxe size={80} />
+            </div>
+            
+            <h3 className={`text-sm font-black uppercase italic mb-5 flex items-center gap-2 ${isLight ? 'text-stone-800' : 'text-amber-500'}`}>
+              <ShieldCheck size={18} /> Registro de Conservación
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-stone-500">
+                  <Box size={14} />
+                  <span className="text-[9px] font-bold uppercase tracking-widest">Preservación</span>
+                </div>
+                <p className="text-xs font-bold uppercase italic">Esqueleto Parcialmente Completo</p>
+                <p className="text-[10px] text-stone-500 leading-tight">Integridad ósea estimada: 65% - 80%</p>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-stone-500">
+                  <Pickaxe size={14} />
+                  <span className="text-[9px] font-bold uppercase tracking-widest">Fosilización</span>
+                </div>
+                <p className="text-xs font-bold uppercase italic">Per-mineralización Sílice</p>
+                <p className="text-[10px] text-stone-500 leading-tight">Sustitución mineral en matriz sedimentaria.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <button className={`w-full border px-8 py-5 rounded-2xl font-mono text-[14px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-4 shadow-2xl ${isLight ? 'bg-white border-stone-200 text-amber-600 hover:bg-stone-50' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/10 text-amber-500'}`}>
               <FileText size={20} />
               <span>Consultar papers cientificos</span>
             </button>
@@ -151,12 +207,10 @@ const DinoDetailPage = () => {
         </div>
       </div>
 
-      {/* RECOMENDADOS */}
       <div className={`max-w-7xl mx-auto px-4 md:px-6 mt-24 border-t pt-16 ${isLight ? 'border-stone-200' : 'border-white/5'}`}>
         <h3 className={`text-2xl md:text-4xl font-black italic uppercase tracking-tighter mb-10 ${isLight ? 'text-stone-900' : 'text-white'}`}>
           Especies <span className="text-amber-600">Relacionadas</span>
         </h3>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {recommendations.map((rec) => {
             const recTheme = getTheme(rec.dieta);

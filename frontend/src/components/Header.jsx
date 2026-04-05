@@ -10,6 +10,7 @@ import {
   Moon,
   Languages,
   ChevronDown,
+  Star,
 } from "lucide-react";
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
@@ -66,6 +67,8 @@ const Header = () => {
   };
 
   const getSubtitle = () => {
+    if (location.pathname.includes("/favorites")) return t.favorites;
+
     const match = matchPath({ path: "/animal/:id" }, location.pathname);
     if (match) {
       const animalId = match.params.id;
@@ -74,13 +77,61 @@ const Header = () => {
       );
       return animal ? animal.nombre : animalId;
     }
+
     switch (location.pathname) {
+      // --- PALEOZOICO ---
       case "/era/paleozoico":
         return "Paleozoico";
+      case "/era/paleozoico/cambrico":
+        return "Cámbrico";
+      case "/era/paleozoico/ordovicico":
+        return "Ordovícico";
+      case "/era/paleozoico/silurico":
+        return "Silúrico";
+      case "/era/paleozoico/devonico":
+        return "Devónico";
+      case "/era/paleozoico/carbonifero":
+        return "Carbonífero";
+      case "/era/paleozoico/permico":
+        return "Pérmico";
+
+      // --- MESOZOICO ---
       case "/era/mesozoico":
         return "Mesozoico";
+      case "/era/mesozoico/triasico":
+        return "Triásico";
+      case "/era/mesozoico/jurasico":
+        return "Jurásico";
+      case "/era/mesozoico/cretacico":
+        return "Cretácico";
+
+      // --- CENOZOICO ---
       case "/era/cenozoico":
         return "Cenozoico";
+      case "/era/cenozoico/paleogeno":
+        return "Paleogeno";
+      case "/era/cenozoico/neogeno":
+        return "Neogeno";
+      case "/era/cenozoico/cuaternario":
+        return "Cuaternario";
+
+      // ------- SUBPERIODOS -------
+      case "/era/cenozoico/paleogeno/paleoceno":
+        return "Paleoceno";
+      case "/era/cenozoico/paleogeno/eoceno":
+        return "Eoceno";
+      case "/era/cenozoico/paleogeno/oligoceno":
+        return "Oligoceno";
+      case "/era/cenozoico/neogeno/mioceno":
+        return "Mioceno";
+      case "/era/cenozoico/neogeno/plioceno":
+        return "Plioceno";
+      case "/era/cenozoico/cuaternario/pleistoceno":
+        return "Pleistoceno";
+      case "/era/cenozoico/cuaternario/holoceno":
+        return "Holoceno";
+
+      // --- OTROS ---
       case "/login":
         return t.login;
       case "/register":
@@ -130,7 +181,7 @@ const Header = () => {
                   to="/login"
                   className={`border-2 px-2.5 py-2 md:px-8 md:py-4 rounded-xl transition-all flex items-center gap-1.5 md:gap-2 font-black tracking-widest ${isLight ? "bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white" : "bg-white/5 border-white/10 text-stone-300 hover:bg-white hover:text-black"}`}
                 >
-                  <LogIn size={14} />{" "}
+                  <LogIn size={14} />
                   <span className="text-[9px] md:text-base uppercase">
                     {t.login}
                   </span>
@@ -139,14 +190,15 @@ const Header = () => {
                   to="/register"
                   className="bg-amber-600/10 border-2 border-amber-600/60 px-2.5 py-2 md:px-8 md:py-4 rounded-xl text-amber-500 hover:bg-amber-600 hover:text-white transition-all flex items-center gap-1.5 md:gap-2 font-black tracking-widest shadow-lg"
                 >
-                  <LockOpen size={14} />{" "}
+                  <LockOpen size={14} />
                   <span className="text-[9px] md:text-base uppercase">
                     {t.register}
                   </span>
                 </Link>
               </>
             ) : (
-              <div className="flex items-center gap-3 md:gap-10">
+              <div className="flex items-center gap-3 md:gap-6">
+                {/* MENÚ DE USUARIO DESPLEGABLE */}
                 <div className="relative" ref={menuRef}>
                   <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -174,8 +226,33 @@ const Header = () => {
                         </p>
                       </div>
 
-                      {/* Contenedor con Scroll si es necesario */}
-                      <div className="p-2 space-y-1 max-h-[70vh] overflow-y-visible">
+                      <div className="p-2 space-y-1">
+                        {/* NUEVA OPCIÓN: FAVORITOS */}
+                        <Link
+                          to={`/${username.toLowerCase()}/favorites`}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${isLight ? "hover:bg-amber-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}
+                        >
+                          <Star
+                            size={16}
+                            className={`${
+                              theme === "dark"
+                                ? "text-blue-400"
+                                : "text-amber-500"
+                            } ${
+                              location.pathname.includes("/favorites")
+                                ? "fill-current"
+                                : ""
+                            }`}
+                          />
+                          <span className="text-[10px] font-bold uppercase tracking-widest">
+                            {t.favorites}
+                          </span>
+                        </Link>
+
+                        <div className="h-[1px] bg-white/5 my-1" />
+
+                        {/* MODO OSCURO */}
                         <button
                           onClick={toggleTheme}
                           className="w-full flex items-center justify-between p-3 hover:bg-black/10 rounded-xl transition-colors"
@@ -222,9 +299,11 @@ const Header = () => {
                                 ? "border-red-500"
                                 : language === "en"
                                   ? isLight
-                                    ? "border-stone-300" : "border-white"
+                                    ? "border-stone-300"
+                                    : "border-white"
                                   : language === "fr"
-                                    ? "border-sky-700" : "border-emerald-600" 
+                                    ? "border-sky-700"
+                                    : "border-emerald-600"
                             } ${isLight ? "bg-stone-50" : "bg-white/5"}`}
                           >
                             <span
@@ -243,6 +322,7 @@ const Header = () => {
                               {language === "fr" && "FRANÇAIS"}
                               {language === "it" && "ITALIANO"}
                             </span>
+
                             <ChevronDown
                               size={14}
                               className={`transition-transform ${isLangOpen ? "rotate-180" : ""}`}
@@ -270,6 +350,7 @@ const Header = () => {
                               >
                                 ESPAÑOL
                               </button>
+
                               <button
                                 onClick={() => {
                                   setLanguage("en");
@@ -283,6 +364,7 @@ const Header = () => {
                               >
                                 ENGLISH
                               </button>
+
                               <button
                                 onClick={() => {
                                   setLanguage("fr");
@@ -296,6 +378,7 @@ const Header = () => {
                               >
                                 FRANÇAIS
                               </button>
+
                               <button
                                 onClick={() => {
                                   setLanguage("it");
@@ -317,6 +400,7 @@ const Header = () => {
                   )}
                 </div>
 
+                {/* BOTÓN LOGOUT */}
                 <button
                   onClick={() => setShowConfirm(true)}
                   className="flex flex-col items-center gap-1 text-stone-500 hover:text-red-500 transition-all group shrink-0"
@@ -335,7 +419,7 @@ const Header = () => {
         </div>
       </header>
 
-      {/* MODAL */}
+      {/* MODAL LOGOUT */}
       {showConfirm && (
         <div className="fixed inset-0 z-[10002] flex items-center justify-center p-4">
           <div

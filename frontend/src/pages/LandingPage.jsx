@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import EraCard from "../components/EraCard";
 import { allAnimals } from "../data/allData";
 import { Search, X, ShieldCheck } from "lucide-react";
+import { useUser } from '../context/UserContext';
 
 const LandingPage = () => {
   const [searchTerm, setSearchTerm] = useState("");

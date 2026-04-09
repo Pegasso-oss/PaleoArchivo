@@ -1,37 +1,46 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from "react";
+import axios from "axios";
 
+// 1. Creamos el contexto
 const FavoritesContext = createContext();
 
+// 2. Exportamos el Provider
 export const FavoritesProvider = ({ children }) => {
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('paleo_favs');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = useState([]);
 
+  // Carga inicial de favoritos desde la DB
   useEffect(() => {
-    localStorage.setItem('paleo_favs', JSON.stringify(favorites));
-  }, [favorites]);
+    const loadFavorites = async () => {
+      const uid = localStorage.getItem("userId");
+      // Si no hay ID o es "undefined" (común en errores de login), paramos
+      if (!uid || uid === "undefined") return;
 
-  const toggleFavorite = (id) => {
-    setFavorites(prev => 
-      prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
-    );
-  };
+      try {
+        // IMPORTANTE: Verifica que la URL sea exactamente esta
+        const res = await axios.get(`http://localhost:5000/api/auth/user/${uid}`);
+        setFavorites(res.data.favorites || []);
+      } catch (err) {
+        console.error("Error cargando favoritos:", err);
+      }
+    };
+    loadFavorites();
+  }, []);
 
-  const isFavorite = (id) => favorites.includes(id);
+  // Función de utilidad para comprobar si un ID es favorito
+  const isFavorite = (id) => favorites.includes(String(id));
 
   return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>
+    <FavoritesContext.Provider value={{ favorites, setFavorites, isFavorite }}>
       {children}
     </FavoritesContext.Provider>
   );
 };
 
-// Hook personalizado para usarlo fácilmente
+// 3. Export NOMBRADO del hook (Esto es lo que te fallaba)
 export const useFavorites = () => {
   const context = useContext(FavoritesContext);
   if (!context) {
-    throw new Error('useFavorites debe usarse dentro de un FavoritesProvider');
+    throw new Error("useFavorites debe usarse dentro de un FavoritesProvider");
   }
   return context;
 };

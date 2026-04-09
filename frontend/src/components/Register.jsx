@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, CheckCircle2, ArrowLeft } from "lucide-react"; 
 import BrachioSkull from "../assets/CBrachio.png"; 
 import { useUser } from "../context/useUser";
+import axios from "axios"; // Asegúrate de haber hecho npm install axios
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,15 +18,31 @@ const Register = () => {
   const { theme } = useUser();
   const isLight = theme === "light";
 
-  const handleRegister = (e) => {
+const handleRegister = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("ERROR: Los códigos de encriptación no coinciden.");
       return;
     }
-    localStorage.setItem("auth", "true");
-    localStorage.setItem("username", formData.username.toUpperCase());
-    navigate("/");
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/auth/register", {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password
+      });
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("auth", "true");
+      localStorage.setItem("username", response.data.username.toUpperCase());
+      localStorage.setItem("userId", response.data.userId); // <--- IMPORTANTE
+
+      alert("ACCESO CONCEDIDO: Investigador registrado.");
+      navigate("/");
+      window.location.reload();
+    } catch (err) {
+      alert(err.response?.data?.msg || "Error en el registro.");
+    }
   };
 
   const inputStyles = `w-full border-2 rounded-3xl py-5 pl-14 pr-5 text-lg focus:outline-none focus:border-amber-500/60 font-bold uppercase transition-all ${
@@ -45,23 +62,17 @@ const Register = () => {
           isLight ? "bg-white border-stone-200 shadow-stone-300" : "bg-[#1a1816] border-[#3f3833] shadow-black"
         }`}
       >
-        <button 
-          onClick={() => navigate("/")}
-          className={`absolute top-8 left-8 p-2 rounded-full transition-all group ${isLight ? "text-stone-400 hover:text-amber-600 hover:bg-stone-100" : "text-stone-600 hover:text-amber-500 hover:bg-amber-500/10"}`}
-          title="VOLVER AL ARCHIVO"
-        >
+        <button onClick={() => navigate("/")} className={`absolute top-8 left-8 p-2 rounded-full transition-all group ${isLight ? "text-stone-400 hover:text-amber-600 hover:bg-stone-100" : "text-stone-600 hover:text-amber-500 hover:bg-amber-500/10"}`}>
           <ArrowLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
         </button>
 
-        <div className={`w-24 h-24 border-2 rounded-full flex items-center justify-center mb-8 overflow-hidden transition-colors ${isLight ? "bg-stone-50 border-stone-100" : "bg-amber-500/5 border-amber-500/20"}`}>
-          <img src={BrachioSkull} alt="ADN" className={`w-[80%] h-[80%] object-contain transition-all ${isLight ? "opacity-90 grayscale-[0.2]" : "opacity-80 brightness-110 sepia-[0.5]"}`} />
+        <div className={`w-24 h-24 border-2 rounded-full flex items-center justify-center mb-8 overflow-hidden ${isLight ? "bg-stone-50 border-stone-100" : "bg-amber-500/5 border-amber-500/20"}`}>
+          <img src={BrachioSkull} alt="ADN" className="w-[80%] h-[80%] object-contain" />
         </div>
 
-        <div className="text-center mb-10 flex flex-col items-center gap-2.5">
-          <h1 className={`text-3xl font-black italic tracking-tighter uppercase leading-none text-center transition-colors ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
-            REGISTRO DE <span className="text-amber-600">NUEVO USUARIO</span>
-          </h1>
-        </div>
+        <h1 className={`text-3xl font-black italic tracking-tighter uppercase mb-10 ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
+          REGISTRO DE <span className="text-amber-600">NUEVO USUARIO</span>
+        </h1>
 
         <form onSubmit={handleRegister} className="space-y-6 w-full">
           <div className="space-y-2">
@@ -96,7 +107,7 @@ const Register = () => {
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-amber-600/10 hover:bg-amber-600/25 border-2 border-amber-600/60 text-amber-600 py-5 rounded-3xl font-black italic uppercase tracking-[0.2em] text-lg transition-all mt-4 group flex items-center justify-center gap-3.5 shadow-lg shadow-amber-900/10">
+          <button type="submit" className="w-full bg-amber-600/10 hover:bg-amber-600/25 border-2 border-amber-600/60 text-amber-600 py-5 rounded-3xl font-black italic uppercase tracking-[0.2em] text-lg transition-all group flex items-center justify-center gap-3.5 shadow-lg shadow-amber-900/10">
             <CheckCircle2 size={22} className="group-hover:scale-110 transition-transform" />
             <span>REGISTRARSE</span>
           </button>
@@ -104,7 +115,7 @@ const Register = () => {
 
         <div className={`mt-8 pt-6 border-t-2 w-full text-center ${isLight ? "border-stone-100" : "border-[#3f3833]/70"}`}>
           <p className="text-[14px] text-stone-500 uppercase tracking-widest font-light">
-            ¿Ya tiene una cuenta? <Link to="/login" className="text-amber-600 font-bold hover:underline transition-colors">INICIAR SESIÓN</Link>
+            ¿Ya tiene una cuenta? <Link to="/login" className="text-amber-600 font-bold hover:underline">INICIAR SESIÓN</Link>
           </p>
         </div>
       </motion.div>

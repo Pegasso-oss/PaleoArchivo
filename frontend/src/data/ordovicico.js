@@ -1,6 +1,6 @@
 export const dinosaurios = [
   { 
-    id: "5", 
+    id: "6", 
     nombre: "EURYPTERIDA", 
     subName: "Escorpión Marino", 
     tipo: "Arthropoda", 
@@ -14,7 +14,7 @@ export const dinosaurios = [
     descripcion: "Eran los mayores artrópodos que jamás hayan existido. Aunque se asemejan a los escorpiones, vivían en el lecho marino y utilizaban sus pinzas y apéndices para cazar peces y otros invertebrados en el lodo."
   },
   { 
-    id: "6", 
+    id: "7", 
     nombre: "CAMEROCERAS", 
     subName: "Cefalópodo Gigante", 
     tipo: "Mollusca", 
@@ -28,7 +28,7 @@ export const dinosaurios = [
     descripcion: "Uno de los depredadores más grandes del Ordovícico. Este pariente lejano de los calamares modernos vivía dentro de una concha cónica recta y gigante, acechando en las profundidades marinas."
   },
   { 
-    id: "7", 
+    id: "8", 
     nombre: "ASTRASPIS", 
     subName: "Pez Acorazado", 
     tipo: "Agnatha", 

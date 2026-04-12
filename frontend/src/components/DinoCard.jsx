@@ -1,63 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, CheckCircle, XCircle } from "lucide-react";
 import { useFavorites } from "../context/FavoritesContext";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 
+const Toast = ({ message, type, isVisible, onClose }) => {
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => onClose(), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, onClose]);
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div initial={{ x: 300, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 300, opacity: 0 }}
+          className={`fixed top-10 right-6 z-[100] flex items-center gap-4 px-6 py-4 rounded-2xl border shadow-2xl backdrop-blur-xl ${
+            type === "success" ? "bg-amber-500/90 border-amber-400 text-black" : "bg-red-600/90 border-red-500 text-white"
+          }`}
+        >
+          {type === "success" ? <CheckCircle size={20} /> : <XCircle size={20} />}
+          <span className="font-bold uppercase tracking-tighter text-sm italic">{message}</span>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 const DinoCard = ({ dino }) => {
-  // Extraemos las funciones del contexto de favoritos
-  // Nota: Asegúrate de que tu FavoritesContext exporte 'setFavorites'
   const { isFavorite, setFavorites } = useFavorites();
   const isFav = isFavorite(dino.id);
+  const [isLight, setIsLight] = useState(document.documentElement.classList.contains("light-theme"));
+  const [toast, setToast] = useState({ show: false, msg: "", type: "success" });
 
-  const [isLight, setIsLight] = useState(
-    document.documentElement.classList.contains("light-theme"),
-  );
-
-  // Observador para detectar cambios de tema (Light/Dark)
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setIsLight(document.documentElement.classList.contains("light-theme"));
     });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, []);
 
-  // Función para gestionar el click en la estrella (Guardar en DB)
   const handleFavoriteClick = async (e) => {
-    e.preventDefault();
-    e.stopPropagation(); // Evita que el click active el Link de la tarjeta
-
+    e.preventDefault(); e.stopPropagation();
     const userId = localStorage.getItem("userId");
-
     if (!userId) {
-      alert("IDENTIFICACIÓN REQUERIDA: Inicie sesión para archivar este ejemplar.");
+      setToast({ show: true, msg: "IDENTIFICACIÓN REQUERIDA", type: "error" });
       return;
     }
-
     try {
-      // Petición POST a tu ruta de backend para añadir a la lista 'favorites'
       const response = await axios.post("http://localhost:5000/api/auth/favorites/add", {
-        userId: userId,
-        dinoId: dino.id,
+        userId, dinoId: dino.id, nombre: dino.nombre
       });
-
-      // Si el servidor responde con éxito, actualizamos el estado global de favoritos
       if (setFavorites) {
-        setFavorites(response.data);
+        setFavorites(response.data.map(fav => String(fav.id)));
       }
-      
-      alert(`${dino.nombre.toUpperCase()} ha sido registrado en su archivo personal.`);
+      setToast({ show: true, msg: isFav ? `${dino.nombre} ELIMINADO DE FAVORITOS` : `${dino.nombre} AÑADIDO A FAVORITOS`, type: "success" });
     } catch (err) {
-      console.error("Error al conectar con la base de datos:", err);
-      alert("ERROR DE SISTEMA: No se pudo procesar la solicitud de archivo.");
+      setToast({ show: true, msg: "ERROR DE SISTEMA", type: "error" });
     }
   };
 
-  // Estilos dinámicos según la dieta y el tema
   const dietStyles = {
     Carnívoro: isLight ? "bg-red-100 text-red-700 border-red-200" : "bg-red-900/40 text-red-300 border-red-500/50",
     Herbívoro: isLight ? "bg-green-100 text-green-700 border-green-200" : "bg-green-900/40 text-green-300 border-green-500/50",
@@ -69,77 +74,37 @@ const DinoCard = ({ dino }) => {
     Detritívoro: isLight ? "bg-slate-200 text-slate-700 border-slate-300" : "bg-slate-700/40 text-slate-300 border-slate-500/50",
   };
 
-  const colorDieta = dietStyles[dino.dieta] || "bg-stone-800 text-stone-400 border-stone-700";
-
   return (
     <div className="relative group mx-auto w-full max-w-[380px]">
-      {/* BOTÓN DE ESTRELLA (FAVORITO) */}
-      <button
-        onClick={handleFavoriteClick}
-        className={`absolute top-4 right-4 z-20 p-2.5 rounded-full backdrop-blur-md shadow-lg transition-all duration-300 active:scale-90 border ${
-          isLight 
-            ? "bg-white/70 border-stone-200 text-stone-400 hover:bg-white" 
-            : "bg-black/40 border-white/10 text-stone-500 hover:bg-black/60"
-        }`}
-      >
-        <Star
-          size={18}
-          fill={isFav ? "#facc15" : "none"}
-          stroke={isFav ? "#facc15" : "currentColor"}
-          className={`transition-colors duration-300 ${isFav ? "drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : ""}`}
-        />
+      <Toast isVisible={toast.show} message={toast.msg} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
+      <button onClick={handleFavoriteClick} className={`absolute top-4 right-4 z-20 p-2.5 rounded-full backdrop-blur-md shadow-lg transition-all active:scale-90 border ${isLight ? "bg-white/70 border-stone-200 text-stone-400 hover:bg-white" : "bg-black/40 border-white/10 text-stone-500 hover:bg-black/60"}`}>
+        <Star size={18} fill={isFav ? "#facc15" : "none"} stroke={isFav ? "#facc15" : "currentColor"} className={isFav ? "drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : ""} />
       </button>
-
-      {/* TARJETA DEL DINOSAURIO */}
       <Link to={`/animal/${dino.nombre.toLowerCase()}`} className="block">
-        <div className={`w-full h-[550px] rounded-[2rem] overflow-hidden flex flex-col border transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/40 shadow-none ${
-            isLight ? "bg-white border-stone-200 hover:bg-stone-50" : "bg-[#1a1816] border-[#3f3833] hover:bg-[#1f1d1b]"
-          }`}
-        >
-          {/* Contenedor de Imagen */}
+        <div className={`w-full h-[550px] rounded-[2rem] overflow-hidden flex flex-col border transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/40 ${isLight ? "bg-white border-stone-200 hover:bg-stone-50" : "bg-[#1a1816] border-[#3f3833] hover:bg-[#1f1d1b]"}`}>
           <div className={`h-52 w-full border-b overflow-hidden relative ${isLight ? "border-stone-200" : "border-[#3f3833]"}`}>
             <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src={dino.imagen} alt={dino.nombre} />
             <div className={`absolute inset-0 bg-gradient-to-t to-transparent opacity-60 ${isLight ? "from-white" : "from-[#1a1816]"}`}></div>
           </div>
-
-          {/* Información del Espécimen */}
           <div className="p-7 flex flex-col flex-1">
             <div className="flex justify-between items-start mb-1 gap-2">
               <div className="flex-1 min-w-0">
-                <h2 className={`text-xl font-black tracking-tighter uppercase italic leading-tight group-hover:text-amber-500 transition-colors break-words hyphens-auto ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
-                  {dino.nombre}
-                </h2>
-                <span className={`font-bold text-amber-500 text-[13px] tracking-tighter uppercase leading-none transition-colors break-words ${isLight ? "group-hover:text-stone-700" : "group-hover:text-[#fef3c7]"}`}>
-                  "{dino.subName}"
-                </span>
+                <h2 className={`text-xl font-black tracking-tighter uppercase italic leading-tight group-hover:text-amber-500 transition-colors break-words ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>{dino.nombre}</h2>
+                <span className={`font-bold text-amber-500 text-[13px] tracking-tighter uppercase leading-none transition-colors break-words ${isLight ? "group-hover:text-stone-700" : "group-hover:text-[#fef3c7]"}`}>"{dino.subName}"</span>
               </div>
               <div className={`text-center shrink-0 px-3 py-2 rounded-xl border ${isLight ? "bg-stone-100 border-stone-200" : "bg-black/40 border-white/5"}`}>
                 <p className="text-[#b0a8a0] text-[7px] uppercase tracking-[0.2em] mb-0.5">ID</p>
                 <p className="text-sm font-bold text-amber-500 font-mono">#{String(dino.id).padStart(3, "0")}</p>
               </div>
             </div>
-
-            <p className={`text-sm leading-relaxed line-clamp-4 mt-6 font-light transition-colors ${isLight ? "text-stone-600" : "text-stone-400"}`}>
-              {dino.descripcion}
-            </p>
-
+            <p className={`text-sm leading-relaxed line-clamp-4 mt-6 font-light transition-colors ${isLight ? "text-stone-600" : "text-stone-400"}`}>{dino.descripcion}</p>
             <div className="mt-auto">
-              <div className="mb-5">
-                <span className={`inline-block text-[9px] uppercase tracking-[0.2em] font-black px-4 py-2 rounded-lg border backdrop-blur-sm transition-all ${colorDieta}`}>
-                  {dino.dieta}
-                </span>
-              </div>
+              <div className="mb-5"><span className={`inline-block text-[9px] uppercase tracking-[0.2em] font-black px-4 py-2 rounded-lg border backdrop-blur-sm transition-all ${dietStyles[dino.dieta] || ""}`}>{dino.dieta}</span></div>
               <div className={`border-t pt-5 ${isLight ? "border-stone-200" : "border-[#3f3833]"}`}>
                 <div className="flex justify-between items-center px-2">
-                  <div className="flex-1 text-center">
-                    <span className="text-[#b0a8a0] text-[8px] uppercase tracking-[0.2em] mb-1.5 block opacity-60">Longitud</span>
-                    <span className={`text-sm font-bold font-mono tracking-tight ${isLight ? "text-stone-900" : "text-white"}`}>{dino.longitud}</span>
-                  </div>
+                  <div className="flex-1 text-center"><span className="text-[#b0a8a0] text-[8px] uppercase tracking-[0.2em] mb-1.5 block opacity-60">Longitud</span><span className={`text-sm font-bold font-mono tracking-tight ${isLight ? "text-stone-900" : "text-white"}`}>{dino.longitud}</span></div>
                   <div className={`w-px h-8 ${isLight ? "bg-stone-200" : "bg-[#3f3833]"}`}></div>
-                  <div className="flex-1 text-center">
-                    <span className="text-[#b0a8a0] text-[8px] uppercase tracking-[0.2em] mb-1.5 block opacity-60">Altura</span>
-                    <span className={`text-sm font-bold font-mono tracking-tight ${isLight ? "text-stone-900" : "text-white"}`}>{dino.altura}</span>
-                  </div>
+                  <div className="flex-1 text-center"><span className="text-[#b0a8a0] text-[8px] uppercase tracking-[0.2em] mb-1.5 block opacity-60">Altura</span><span className={`text-sm font-bold font-mono tracking-tight ${isLight ? "text-stone-900" : "text-white"}`}>{dino.altura}</span></div>
                 </div>
               </div>
             </div>

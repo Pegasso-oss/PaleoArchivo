@@ -34,7 +34,7 @@ const handleRegister = async (e) => {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("auth", "true");
-      localStorage.setItem("username", response.data.username.toUpperCase());
+      localStorage.setItem("username", response.data.username);
       localStorage.setItem("userId", response.data.userId); // <--- IMPORTANTE
 
       alert("ACCESO CONCEDIDO: Investigador registrado.");
@@ -45,7 +45,7 @@ const handleRegister = async (e) => {
     }
   };
 
-  const inputStyles = `w-full border-2 rounded-3xl py-5 pl-14 pr-5 text-lg focus:outline-none focus:border-amber-500/60 font-bold uppercase transition-all ${
+  const inputStyles = `w-full border-2 rounded-3xl py-5 pl-14 pr-5 text-lg focus:outline-none focus:border-amber-500/60 font-bold transition-all ${
     isLight ? "bg-stone-50 border-stone-200 text-stone-900 placeholder:text-stone-300" : "bg-black/40 border-[#3f3833] text-[#fef3c7] placeholder:text-stone-800"
   }`;
 
@@ -79,7 +79,7 @@ const handleRegister = async (e) => {
             <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">Nombre de Usuario</label>
             <div className="relative">
               <User className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="text" required onChange={(e) => setFormData({...formData, username: e.target.value})} className={inputStyles} placeholder="INVESTIGADOR_01" />
+              <input type="text" required onChange={(e) => setFormData({...formData, username: e.target.value})} className={inputStyles} placeholder="USUARIO" />
             </div>
           </div>
 
@@ -87,7 +87,7 @@ const handleRegister = async (e) => {
             <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">Correo Electrónico</label>
             <div className="relative">
               <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="email" required onChange={(e) => setFormData({...formData, email: e.target.value})} className={inputStyles} placeholder="CORREO@PALEOMAIL.COM" />
+              <input type="email" required onChange={(e) => setFormData({...formData, email: e.target.value})} className={inputStyles} placeholder="CORREO ELÉCTRONICO" />
             </div>
           </div>
 

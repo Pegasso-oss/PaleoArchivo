@@ -51,51 +51,48 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// --- OBTENER DATOS USUARIO (Favoritos actuales) ---
+// --- OBTENER DATOS USUARIO (UNIFICADA) ---
+// Esta es la ruta que llama el FavoritesContext y la FavoritesPage
 router.get('/user/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
-    if (!user) return res.status(404).json({ msg: "No encontrado" });
+    if (!user) return res.status(404).json({ msg: "Usuario no encontrado" });
+    
+    // Devolvemos el objeto completo. 
+    // El frontend usará user.favorites (que es el array de strings ["1", "8"...])
     res.json(user);
   } catch (err) {
+    console.error("Error en GET /user/:id -", err.message);
     res.status(500).send('Error de servidor');
   }
 });
 
 // --- TOGGLE FAVORITOS (Añadir o Quitar) ---
+// routes/auth.js
 router.post('/favorites/add', async (req, res) => {
-  const { userId, dinoId } = req.body;
+  const { userId, dinoId, nombre } = req.body;
+  
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ msg: "Usuario no encontrado" });
 
     const dinoIdStr = String(dinoId);
-    const index = user.favorites.indexOf(dinoIdStr);
 
-    if (index > -1) {
-      user.favorites.splice(index, 1); // Si existe, lo quita
+    // Buscamos si ya existe el ID
+    const existe = user.favorites.some(fav => fav.id === dinoIdStr);
+
+    if (existe) {
+      user.favorites = user.favorites.filter(fav => fav.id !== dinoIdStr);
     } else {
-      user.favorites.push(dinoIdStr); // Si no existe, lo añade
+      // EMPUJAMOS EL OBJETO CLARO
+      user.favorites.push({ id: dinoIdStr, nombre: nombre });
     }
 
     await user.save();
     res.json(user.favorites); 
   } catch (err) {
-    res.status(500).send('Error al actualizar favoritos');
-  }
-});
-
-router.get('/user/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id)
-      .populate('favorites', 'id nombre'); // Solo trae los campos que pides: id y nombre
-    
-    if (!user) return res.status(404).json({ msg: "Usuario no encontrado" });
-    
-    // Ahora user.favorites será un array de objetos: [{id: 1, nombre: 'Trilobite'}, ...]
-    res.json(user.favorites); 
-  } catch (err) {
-    res.status(500).send('Error de servidor');
+    console.error(err);
+    res.status(500).json({ msg: "Error de servidor" });
   }
 });
 

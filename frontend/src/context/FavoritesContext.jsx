@@ -1,32 +1,31 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
-// 1. Creamos el contexto
 const FavoritesContext = createContext();
 
-// 2. Exportamos el Provider
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
 
-  // Carga inicial de favoritos desde la DB
+  // Carga inicial al refrescar la página
   useEffect(() => {
     const loadFavorites = async () => {
       const uid = localStorage.getItem("userId");
-      // Si no hay ID o es "undefined" (común en errores de login), paramos
       if (!uid || uid === "undefined") return;
 
       try {
-        // IMPORTANTE: Verifica que la URL sea exactamente esta
         const res = await axios.get(`http://localhost:5000/api/auth/user/${uid}`);
-        setFavorites(res.data.favorites || []);
+        // IMPORTANTE: Extraemos solo los IDs de los objetos recibidos
+        const data = res.data.favorites || [];
+        // Si data es [{id: "1", nombre: "..."}, ...], guardamos ["1", ...]
+        setFavorites(data.map(item => String(item.id)));
       } catch (err) {
-        console.error("Error cargando favoritos:", err);
+        console.error("Error cargando favoritos del búnker:", err);
       }
     };
     loadFavorites();
   }, []);
 
-  // Función de utilidad para comprobar si un ID es favorito
+  // Función para saber si un animal específico es favorito
   const isFavorite = (id) => favorites.includes(String(id));
 
   return (
@@ -36,7 +35,6 @@ export const FavoritesProvider = ({ children }) => {
   );
 };
 
-// 3. Export NOMBRADO del hook (Esto es lo que te fallaba)
 export const useFavorites = () => {
   const context = useContext(FavoritesContext);
   if (!context) {

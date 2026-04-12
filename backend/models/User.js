@@ -18,10 +18,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  favorites: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Animal' 
-    }],
+  favorites: [
+    {
+      _id: false, // Esto evita que cree un ID interno y limpie la vista en Atlas
+      id: { type: String, required: true },
+      nombre: { type: String, required: true }
+    }
+  ],
   avatar: {
     type: String,
     default: "https://via.placeholder.com/150" // Por si quieres ponerle foto

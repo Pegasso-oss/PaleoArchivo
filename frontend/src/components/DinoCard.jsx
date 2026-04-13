@@ -17,7 +17,7 @@ const Toast = ({ message, type, isVisible, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div initial={{ x: 300, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 300, opacity: 0 }}
-          className={`fixed top-10 right-6 z-[100] flex items-center gap-4 px-6 py-4 rounded-2xl border shadow-2xl backdrop-blur-xl ${
+          className={`fixed top-10 right-6 z-[9999] flex items-center gap-4 px-6 py-4 rounded-lg border shadow-2xl backdrop-blur-xl ${
             type === "success" ? "bg-amber-500/90 border-amber-400 text-black" : "bg-red-600/90 border-red-500 text-white"
           }`}
         >
@@ -81,7 +81,7 @@ const DinoCard = ({ dino }) => {
         <Star size={18} fill={isFav ? "#facc15" : "none"} stroke={isFav ? "#facc15" : "currentColor"} className={isFav ? "drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : ""} />
       </button>
       <Link to={`/animal/${dino.nombre.toLowerCase()}`} className="block">
-        <div className={`w-full h-[550px] rounded-[2rem] overflow-hidden flex flex-col border transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/40 ${isLight ? "bg-white border-stone-200 hover:bg-stone-50" : "bg-[#1a1816] border-[#3f3833] hover:bg-[#1f1d1b]"}`}>
+        <div className={`w-full h-[550px] rounded-[1.25rem] overflow-hidden flex flex-col border transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/40 ${isLight ? "bg-white border-stone-200 hover:bg-stone-50" : "bg-[#1a1816] border-[#3f3833] hover:bg-[#1f1d1b]"}`}>
           <div className={`h-52 w-full border-b overflow-hidden relative ${isLight ? "border-stone-200" : "border-[#3f3833]"}`}>
             <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src={dino.imagen} alt={dino.nombre} />
             <div className={`absolute inset-0 bg-gradient-to-t to-transparent opacity-60 ${isLight ? "from-white" : "from-[#1a1816]"}`}></div>

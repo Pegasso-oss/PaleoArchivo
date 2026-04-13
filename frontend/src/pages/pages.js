@@ -1,7 +1,9 @@
 export { default as LandingPage } from './LandingPage';
 export { default as MesozoicoPage } from './MesozoicoPage';
 export { default as PaleozoicoPage } from './PaleozoicoPage';
+export { default as TriasicoPage } from './TriasicoPage';
 export { default as JurasicoPage } from './JurasicoPage';
+export { default as CretacicoPage } from './CretacicoPage';
 export { default as CambricoPage } from './CambricoPage'; 
 export { default as OrdovicicoPage } from './OrdovicicoPage';
 export { default as CenozoicoPage } from './CenozoicoPage';

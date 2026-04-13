@@ -4,6 +4,8 @@ import { useUser } from "./context/useUser";
 import {
   MesozoicoPage,
   JurasicoPage,
+  TriasicoPage,
+  CretacicoPage,
   PaleozoicoPage,
   CambricoPage,
   LandingPage,
@@ -71,6 +73,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/:username/favorites" element={<FavoritesPage />} />
+          
           <Route path="/era/paleozoico" element={<PaleozoicoPage />} />
           <Route path="/era/paleozoico/cambrico" element={<CambricoPage />} />
           <Route
@@ -78,7 +81,10 @@ function App() {
             element={<OrdovicicoPage />}
           />
           <Route path="/era/mesozoico" element={<MesozoicoPage />} />
+          <Route path="/era/mesozoico/triasico" element={<TriasicoPage />} />
           <Route path="/era/mesozoico/jurasico" element={<JurasicoPage />} />
+          <Route path="/era/mesozoico/cretacico" element={<CretacicoPage />} />
+
           <Route path="/era/cenozoico" element={<CenozoicoPage />} />
           <Route path="/era/cenozoico/paleogeno" element={<PaleogenoPage />} />
           <Route

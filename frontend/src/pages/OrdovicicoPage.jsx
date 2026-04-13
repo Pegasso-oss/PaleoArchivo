@@ -33,7 +33,7 @@ const OrdovicicoPage = () => {
     >
 
       {/* Header */}
-      <div className="max-w-[1240px] mx-auto mb-16">
+      <div className="max-w-[1820px] mx-auto mb-16">
         <button 
           onClick={() => window.history.back()} 
           className="text-blue-500/80 hover:text-blue-600 font-mono text-xs uppercase tracking-[0.3em] mb-8 transition-colors flex items-center gap-2 group"
@@ -58,7 +58,7 @@ const OrdovicicoPage = () => {
       </div>
 
       {/* Grid de Cards */}
-      <div className="max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {dinosaurios.map((dino) => (
           <DinoCard 
             key={dino.id} 

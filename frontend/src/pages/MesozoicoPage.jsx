@@ -54,7 +54,7 @@ const MesozoicoPage = () => {
         isLight ? 'bg-[#f5f2ed]' : 'bg-[#1d1914]'
       }`}
     >
-      <div className="max-w-6xl mx-auto mb-16">
+      <div className="max-w-[1400px] mx-auto mb-16">
         <button 
           onClick={() => window.history.back()}
           className="text-amber-500/80 hover:text-amber-600 font-mono text-xs uppercase tracking-[0.3em] mb-8 transition-colors flex items-center gap-2 group"
@@ -78,7 +78,7 @@ const MesozoicoPage = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {periodos.map((p) => (
           <EraCard 
             key={p.id}

@@ -91,7 +91,7 @@ const handleLogin = async (e) => {
                 type="text" 
                 required 
                 onChange={(e) => setFormData({...formData, identifier: e.target.value})} 
-                className={`w-full border-2 rounded-3xl py-5 pl-14 pr-5 text-lg focus:outline-none focus:border-amber-500/60 font-bold uppercase transition-all ${
+                className={`w-full border-2 rounded-3xl py-5 pl-14 pr-5 text-lg focus:outline-none focus:border-amber-500/60 font-bold transition-all ${
                   isLight ? "bg-stone-50 border-stone-200 text-stone-900" : "bg-black/40 border-[#3f3833] text-[#fef3c7]"
                 }`} 
                 placeholder="USUARIO O EMAIL" 

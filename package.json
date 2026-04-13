@@ -3,9 +3,17 @@
     "axios": "^1.15.0",
     "framer-motion": "^12.38.0"
   },
+  "name": "paleoarchivo-root",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "npm run dev --prefix frontend",
+    "frontend": "npm run dev --prefix frontend",
+    "backend": "nodemon backend/server.js",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
     "build": "npm run build --prefix frontend",
-    "start": "npm run start --prefix frontend"
+    "start": "node backend/server.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.14"
   }
 }

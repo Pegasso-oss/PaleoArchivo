@@ -6,8 +6,8 @@ const EraCard = ({ name, age, image, children, id }) => {
 
   // 1. Cambiamos border-[var(--border-color)] por border-amber-500/30
   const posterStyle = `
-    relative overflow-hidden group rounded-[2.5rem] 
-    border border-amber-500/30 
+    relative overflow-hidden group rounded-[1.25em]
+    border border-amber-500/30 max-w-[450px]
     bg-[var(--bg-card)] 
     transition-all duration-500 
     hover:border-amber-500 hover:-translate-y-2 

@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: './backend/.env' });
 const authRoutes = require('./routes/auth');
 
 const app = express();

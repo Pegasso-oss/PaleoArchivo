@@ -142,14 +142,14 @@ const DinoDetailPage = () => {
       <Toast isVisible={toast.show} message={toast.msg} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
 
       <div className="max-w-7xl mx-auto px-4 py-4 lg:pt-6">
-        <button onClick={() => navigate(-1)} className={`${theme.text} opacity-80 hover:opacity-100 font-mono text-[10px] uppercase tracking-[0.3em] mb-4 flex items-center gap-2 group transition-all`}>
+        <button onClick={() => navigate(-1)} className={`${theme.text} opacity-80 hover:opacity-100 font-mono text-[12px] uppercase tracking-[0.3em] mb-4 flex items-center gap-2 group transition-all`}>
           <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span> VOLVER A REGISTROS
         </button>
       </div>
 
       <div className="max-w-7xl mx-auto px-0 lg:px-6 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-16 items-start">
         <motion.div className="order-first lg:order-last w-full relative">
-          <div className={`relative w-auto aspect-square md:aspect-video overflow-hidden lg:rounded-[2.5rem] border-b-2 lg:border-4 shadow-2xl transition-colors duration-500 ${theme.border}`}>
+          <div className={`relative w-auto aspect-square md:aspect-video overflow-hidden lg:rounded-[1.25rem] border-b-2 lg:border-4 shadow-2xl transition-colors duration-500 ${theme.border}`}>
             <img src={dino.imagen} alt={dino.nombre} className="w-full h-full object-cover object-center" />
             <div className={`absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden`} />
           </div>
@@ -157,9 +157,9 @@ const DinoDetailPage = () => {
 
         <div className="flex flex-col gap-6 lg:gap-8 pt-8 lg:pt-0 px-4 lg:px-0">
           <header className="flex items-start justify-between gap-4">
-            <div className="flex-1">
+            <div className="flex-1 ">
               <h1 className="text-5xl lg:text-7xl font-black italic uppercase leading-[0.8] tracking-tighter">{dino.nombre}</h1>
-              <div className={`mt-4 font-mono text-[11px] tracking-[0.4em] uppercase ${theme.text}`}>// {dino.subName}</div>
+              <div className={`mt-4 font-mono text-[14px] tracking-[0.4em] uppercase ${theme.text}`}>// {dino.subName}</div>
             </div>
 
             <button onClick={handleToggleFavorite} className="p-3 relative shrink-0 outline-none group">
@@ -207,7 +207,7 @@ const DinoDetailPage = () => {
               <Link 
                 key={rec.id} 
                 to={`/animal/${rec.nombre.toLowerCase()}`}
-                className={`group border rounded-3xl overflow-hidden transition-all duration-500 ${isLight ? 'bg-white border-stone-200 hover:border-stone-400' : 'bg-white/[0.02] border-white/5 hover:border-white/20'}`}
+                className={`group border rounded-lg overflow-hidden transition-all duration-500 ${isLight ? 'bg-white border-stone-200 hover:border-stone-400' : 'bg-white/[0.02] border-white/5 hover:border-white/20'}`}
               >
                 <div className="aspect-[16/10] overflow-hidden relative">
                   <img src={rec.imagen} alt={rec.nombre} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -220,7 +220,7 @@ const DinoDetailPage = () => {
                   <p className="text-stone-500 text-[10px] uppercase tracking-[0.2em] mt-2 mb-4 line-clamp-1">
                     {rec.subName}
                   </p>
-                  <span className={`text-[9px] font-bold px-3 py-1 rounded-full border transition-colors ${recTheme.bg} ${recTheme.text} ${recTheme.border} uppercase`}>
+                  <span className={`text-[9px] font-bold px-3 py-1 rounded-lg border transition-colors ${recTheme.bg} ${recTheme.text} ${recTheme.border} uppercase`}>
                     {rec.dieta}
                   </span>
                 </div>

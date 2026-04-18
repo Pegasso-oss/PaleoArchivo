@@ -3,29 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import EraCard from "../components/EraCard";
 import { allAnimals } from "../data/allData";
 import { Search, X, ShieldCheck } from "lucide-react";
-import { useUser } from '../context/UserContext';
+import { useUser } from '../context/useUser';
 
 const LandingPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
-
-  // 1. Estado para detectar el tema actual
-  const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
-
-  // 2. Observador para detectar cambios de tema en tiempo real sin recargar
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsLight(document.documentElement.classList.contains('light-theme'));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const { theme } = useUser();
+  const isLight = theme === 'light';
 
   // Control del mensaje de Logout
   useEffect(() => {

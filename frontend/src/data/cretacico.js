@@ -1,6 +1,6 @@
 export const dinosaurios = [
   {
-    id: "1212",
+    id: 20,
     nombre: "AUCASAURUS",
     subName: "Lagarto de Auca",
     tipo: "Abelisauridae",
@@ -17,7 +17,7 @@ export const dinosaurios = [
     descripcion: "Un depredador de tamaño medio emparentado con el Carnotaurus, pero con brazos aún más pequeños y sin cuernos. Es famoso por el hallazgo de su esqueleto casi completo en la formación Anacleto, en Argentina.",
   },
   {
-  id: "1213", // ID correlativo para evitar conflictos
+  id: 21,
   nombre: "ABELISAURUS",
   subName: "Abelisaurus comahuensis",
   tipo: "Abelisauridae",

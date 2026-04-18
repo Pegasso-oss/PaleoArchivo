@@ -1,25 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useUser } from '../context/useUser';
 import EraCard from '../components/EraCard';
 import { motion } from 'framer-motion';
 
 const MesozoicoPage = () => {
-  // --- LÓGICA DE TEMA REACTIVO ---
-  const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsLight(document.documentElement.classList.contains('light-theme'));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
-  // -------------------------------
-
+  const { theme } = useUser();
+  const isLight = theme === 'light';
   const periodos = [
     {
       id: 'triasico',

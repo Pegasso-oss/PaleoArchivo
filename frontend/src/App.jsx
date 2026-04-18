@@ -72,7 +72,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/:username/favorites" element={<FavoritesPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
           
           <Route path="/era/paleozoico" element={<PaleozoicoPage />} />
           <Route path="/era/paleozoico/cambrico" element={<CambricoPage />} />

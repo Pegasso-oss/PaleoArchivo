@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Lock, User, LogIn, ArrowLeft, Eye, EyeOff } from "lucide-react"; 
 import BrachioSkull from "../assets/CBrachio.png"; 
 import { useUser } from "../context/useUser";
-import axios from "axios";
+import apiClient from "../api/apiClient";
 
 const Login = () => {
   const [formData, setFormData] = useState({ identifier: "", password: "" });
@@ -16,19 +16,14 @@ const Login = () => {
 const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    // 1. Limpiamos cualquier rastro de sesiones fallidas anteriores
     localStorage.clear();
 
-    const response = await axios.post("http://localhost:5000/api/auth/login", {
+    const response = await apiClient.post("/login", {
       identifier: formData.identifier,
       password: formData.password
     });
 
-    // 2. Verificamos qué llega (mira la consola del navegador F12)
-    console.log("Respuesta del servidor:", response.data);
-
     if (response.data.userId || response.data.user?._id) {
-      // 3. Guardamos los datos uno por uno
       const idFinal = response.data.userId || response.data.user._id;
       
       localStorage.setItem("token", response.data.token);
@@ -36,9 +31,6 @@ const handleLogin = async (e) => {
       localStorage.setItem("username", response.data.username.toUpperCase());
       localStorage.setItem("userId", idFinal);
 
-      console.log("¡Datos guardados! ID:", idFinal);
-
-      // 4. Redirección y recarga completa para limpiar el estado de React
       window.location.href = "/"; 
     } else {
       alert("Error: El servidor no envió el ID de usuario.");

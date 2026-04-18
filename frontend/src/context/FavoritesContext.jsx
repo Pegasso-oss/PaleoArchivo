@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import axios from "axios";
+import apiClient from "../api/apiClient";
 
 const FavoritesContext = createContext();
 
@@ -13,10 +13,8 @@ export const FavoritesProvider = ({ children }) => {
       if (!uid || uid === "undefined") return;
 
       try {
-        const res = await axios.get(`http://localhost:5000/api/auth/user/${uid}`);
-        // IMPORTANTE: Extraemos solo los IDs de los objetos recibidos
+        const res = await apiClient.get(`/user/${uid}`);
         const data = res.data.favorites || [];
-        // Si data es [{id: "1", nombre: "..."}, ...], guardamos ["1", ...]
         setFavorites(data.map(item => String(item.id)));
       } catch (err) {
         console.error("Error cargando favoritos del búnker:", err);
@@ -28,8 +26,11 @@ export const FavoritesProvider = ({ children }) => {
   // Función para saber si un animal específico es favorito
   const isFavorite = (id) => favorites.includes(String(id));
 
+  // Limpiar favoritos al cerrar sesión
+  const clearFavorites = () => setFavorites([]);
+
   return (
-    <FavoritesContext.Provider value={{ favorites, setFavorites, isFavorite }}>
+    <FavoritesContext.Provider value={{ favorites, setFavorites, isFavorite, clearFavorites }}>
       {children}
     </FavoritesContext.Provider>
   );

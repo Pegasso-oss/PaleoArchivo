@@ -1,18 +1,19 @@
 export const dinosaurios = [
-    {
-    id: "Tri-1",
-    nombre: "Tri-1",
-    subName: "Lagarto de Auca",
-    tipo: "theropod",
-    dieta: "Carnívoro",
-    longitud: "7 metros",
-    altura: "2.4 metros",
+  {
+    id: 9,
+    nombre: "Eoraptor",
+    subName: "Ladrón del Alba",
+    tipo: "Saurischia",
+    dieta: "Omnívoro",
+    longitud: "1 metro",
+    altura: "0.5 metros",
     estado: "EXTINTO",
-    conservacion: "87",
-    metodo: "Reemplazo",
-    material: "Calcita",
-    extincion: "58 m.a.",
-    imagen: "",
-    descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios."
+    conservacion: 78,
+    metodo: "Permineralización",
+    material: "Arenisca",
+    extincion: "231 m.a.",
+    imagen: "https://i.ytimg.com/vi/7j8krOd0-KA/maxresdefault.jpg",
+    descripcion: "Uno de los dinosaurios más primitivos conocidos. Bípedo y de pequeño tamaño, habitó lo que hoy es Argentina hace unos 231 millones de años. Su esqueleto casi completo lo convierte en una pieza clave para entender el origen de los dinosaurios.",
+    era: "Triásico",
   },
-] 
+];

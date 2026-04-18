@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sun, Moon, Languages, User, ChevronDown } from "lucide-react";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser";
 
 const SettingsMenu = () => {
   const { theme, toggleTheme, language, setLanguage } = useUser();

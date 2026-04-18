@@ -6,9 +6,24 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-// Middlewares
-app.use(cors());
-app.use(express.json()); // Para que el servidor entienda archivos JSON
+// CORS: en producción, cambia esto al dominio real de tu frontend
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir peticiones sin origin (ej: Postman, apps móviles)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origen no permitido por CORS: ${origin}`));
+    }
+  },
+  credentials: true,
+}));
+
+app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 // Ruta de prueba

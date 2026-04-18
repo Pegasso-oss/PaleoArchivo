@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, CheckCircle2, ArrowLeft } from "lucide-react"; 
 import BrachioSkull from "../assets/CBrachio.png"; 
 import { useUser } from "../context/useUser";
-import axios from "axios"; // Asegúrate de haber hecho npm install axios
+import apiClient from "../api/apiClient";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +26,7 @@ const handleRegister = async (e) => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", {
+      const response = await apiClient.post("/register", {
         username: formData.username,
         email: formData.email,
         password: formData.password
@@ -35,7 +35,7 @@ const handleRegister = async (e) => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("auth", "true");
       localStorage.setItem("username", response.data.username);
-      localStorage.setItem("userId", response.data.userId); // <--- IMPORTANTE
+      localStorage.setItem("userId", response.data.userId);
 
       alert("ACCESO CONCEDIDO: Investigador registrado.");
       navigate("/");

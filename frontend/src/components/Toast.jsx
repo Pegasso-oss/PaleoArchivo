@@ -15,13 +15,13 @@ const Toast = ({ message, type, isVisible, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ y: -50, opacity: 0 }}
+          initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -50, opacity: 0 }}
+          exit={{ y: -20, opacity: 0 }}
           style={{ 
             position: "fixed",
-            top: "100px", // Si el header es alto, esto lo pone visible. Ajusta si es necesario.
-            right: "40px",
+            top: "90px",
+            right: "24px",
             zIndex: 2147483647, // Máximo valor real de 32 bits
             pointerEvents: "none"
           }}

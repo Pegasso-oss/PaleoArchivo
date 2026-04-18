@@ -1,47 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Star, CheckCircle, XCircle } from "lucide-react";
+import { Star } from "lucide-react";
 import { useFavorites } from "../context/FavoritesContext";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
-
-const Toast = ({ message, type, isVisible, onClose }) => {
-  useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => onClose(), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isVisible, onClose]);
-
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div initial={{ x: 300, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 300, opacity: 0 }}
-          className={`fixed top-10 right-6 z-[9999] flex items-center gap-4 px-6 py-4 rounded-lg border shadow-2xl backdrop-blur-xl ${
-            type === "success" ? "bg-amber-500/90 border-amber-400 text-black" : "bg-red-600/90 border-red-500 text-white"
-          }`}
-        >
-          {type === "success" ? <CheckCircle size={20} /> : <XCircle size={20} />}
-          <span className="font-bold uppercase tracking-tighter text-sm italic">{message}</span>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+import { useUser } from "../context/useUser";
+import Toast from "./Toast";
+import { useState } from "react";
+import apiClient from "../api/apiClient";
 
 const DinoCard = ({ dino }) => {
   const { isFavorite, setFavorites } = useFavorites();
   const isFav = isFavorite(dino.id);
-  const [isLight, setIsLight] = useState(document.documentElement.classList.contains("light-theme"));
+  const { theme } = useUser();
+  const isLight = theme === "light";
   const [toast, setToast] = useState({ show: false, msg: "", type: "success" });
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsLight(document.documentElement.classList.contains("light-theme"));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
 
   const handleFavoriteClick = async (e) => {
     e.preventDefault(); e.stopPropagation();
@@ -51,7 +23,7 @@ const DinoCard = ({ dino }) => {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/favorites/add", {
+      const response = await apiClient.post("/favorites/add", {
         userId, dinoId: dino.id, nombre: dino.nombre
       });
       if (setFavorites) {

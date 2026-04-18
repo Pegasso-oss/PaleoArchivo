@@ -15,12 +15,40 @@ import {
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
 import { useUser } from "../context/useUser";
+import { useFavorites } from "../context/FavoritesContext";
 import { translations } from "../data/translations";
+
+// Mapa de rutas a subtítulos — añade aquí nuevas rutas sin tocar la lógica
+const ROUTE_SUBTITLES = {
+  "/era/paleozoico": "Paleozoico",
+  "/era/paleozoico/cambrico": "Cámbrico",
+  "/era/paleozoico/ordovicico": "Ordovícico",
+  "/era/paleozoico/silurico": "Silúrico",
+  "/era/paleozoico/devonico": "Devónico",
+  "/era/paleozoico/carbonifero": "Carbonífero",
+  "/era/paleozoico/permico": "Pérmico",
+  "/era/mesozoico": "Mesozoico",
+  "/era/mesozoico/triasico": "Triásico",
+  "/era/mesozoico/jurasico": "Jurásico",
+  "/era/mesozoico/cretacico": "Cretácico",
+  "/era/cenozoico": "Cenozoico",
+  "/era/cenozoico/paleogeno": "Paleogeno",
+  "/era/cenozoico/neogeno": "Neogeno",
+  "/era/cenozoico/cuaternario": "Cuaternario",
+  "/era/cenozoico/paleogeno/paleoceno": "Paleoceno",
+  "/era/cenozoico/paleogeno/eoceno": "Eoceno",
+  "/era/cenozoico/paleogeno/oligoceno": "Oligoceno",
+  "/era/cenozoico/neogeno/mioceno": "Mioceno",
+  "/era/cenozoico/neogeno/plioceno": "Plioceno",
+  "/era/cenozoico/cuaternario/pleistoceno": "Pleistoceno",
+  "/era/cenozoico/cuaternario/holoceno": "Holoceno",
+};
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, toggleTheme, language, setLanguage } = useUser();
+  const { clearFavorites } = useFavorites();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
@@ -60,6 +88,9 @@ const Header = () => {
   const handleLogoutConfirm = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    clearFavorites(); // Limpia favoritos del estado global al cerrar sesión
     setIsLoggedIn(false);
     setShowConfirm(false);
     setIsMenuOpen(false);
@@ -68,68 +99,18 @@ const Header = () => {
 
   const getSubtitle = () => {
     if (location.pathname.includes("/favorites")) return t.favorites;
+    if (location.pathname === "/login") return t.login;
+    if (location.pathname === "/register") return t.register;
 
-    const match = matchPath({ path: "/animal/:id" }, location.pathname);
-    if (match) {
-      const animalId = match.params.id;
+    const animalMatch = matchPath({ path: "/animal/:id" }, location.pathname);
+    if (animalMatch) {
       const animal = allAnimals.find(
-        (a) => a.nombre.toLowerCase() === animalId.toLowerCase(),
+        (a) => a.nombre.toLowerCase() === animalMatch.params.id.toLowerCase()
       );
-      return animal ? animal.nombre : animalId;
+      return animal ? animal.nombre : animalMatch.params.id;
     }
 
-    switch (location.pathname) {
-      case "/era/paleozoico":
-        return "Paleozoico";
-      case "/era/paleozoico/cambrico":
-        return "Cámbrico";
-      case "/era/paleozoico/ordovicico":
-        return "Ordovícico";
-      case "/era/paleozoico/silurico":
-        return "Silúrico";
-      case "/era/paleozoico/devonico":
-        return "Devónico";
-      case "/era/paleozoico/carbonifero":
-        return "Carbonífero";
-      case "/era/paleozoico/permico":
-        return "Pérmico";
-      case "/era/mesozoico":
-        return "Mesozoico";
-      case "/era/mesozoico/triasico":
-        return "Triásico";
-      case "/era/mesozoico/jurasico":
-        return "Jurásico";
-      case "/era/mesozoico/cretacico":
-        return "Cretácico";
-      case "/era/cenozoico":
-        return "Cenozoico";
-      case "/era/cenozoico/paleogeno":
-        return "Paleogeno";
-      case "/era/cenozoico/neogeno":
-        return "Neogeno";
-      case "/era/cenozoico/cuaternario":
-        return "Cuaternario";
-      case "/era/cenozoico/paleogeno/paleoceno":
-        return "Paleoceno";
-      case "/era/cenozoico/paleogeno/eoceno":
-        return "Eoceno";
-      case "/era/cenozoico/paleogeno/oligoceno":
-        return "Oligoceno";
-      case "/era/cenozoico/neogeno/mioceno":
-        return "Mioceno";
-      case "/era/cenozoico/neogeno/plioceno":
-        return "Plioceno";
-      case "/era/cenozoico/cuaternario/pleistoceno":
-        return "Pleistoceno";
-      case "/era/cenozoico/cuaternario/holoceno":
-        return "Holoceno";
-      case "/login":
-        return t.login;
-      case "/register":
-        return t.register;
-      default:
-        return t.subtitleDefault;
-    }
+    return ROUTE_SUBTITLES[location.pathname] || t.subtitleDefault;
   };
 
   return (
@@ -192,7 +173,7 @@ const Header = () => {
 
                       <div className="p-2 space-y-1">
                         <Link
-                          to={`/${username.toLowerCase()}/favorites`}
+                          to={`/favorites`}
                           onClick={() => setIsMenuOpen(false)}
                           className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${isLight ? "hover:bg-amber-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}
                         >

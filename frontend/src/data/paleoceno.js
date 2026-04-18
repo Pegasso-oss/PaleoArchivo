@@ -1,9 +1,9 @@
 export const dinosaurios = [
   {
-    id: "18",
+    id: 22,
     nombre: "TITANOBOA",
     subName: "Serpiente Colosal",
-    tipo: "squamata",
+    tipo: "Squamata",
     dieta: "Carnívoro",
     longitud: "13 metros",
     altura: "1 metro",
@@ -16,10 +16,10 @@ export const dinosaurios = [
     descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios."
   },
   {
-    id: "19",
+    id: 23,
     nombre: "GASTORNIS",
     subName: "Ave del Terror",
-    tipo: "avialae",
+    tipo: "Avialae",
     dieta: "Herbívoro",
     longitud: "2 metros",
     altura: "1.8 metros",
@@ -32,10 +32,10 @@ export const dinosaurios = [
     descripcion: "Un ave gigante no voladora. Aunque su aspecto era temible, estudios recientes de isótopos en sus huesos confirman que era vegetariana."
   },
   {
-    id: "20",
+    id: 24,
     nombre: "CORYPHODON",
     subName: "Pies Puntiagudos",
-    tipo: "mammalia",
+    tipo: "Mammalia",
     dieta: "Herbívoro",
     longitud: "2.5 metros",
     altura: "1 metro",
@@ -48,10 +48,10 @@ export const dinosaurios = [
     descripcion: "Uno de los primeros grandes mamíferos. Tenía un cerebro diminuto en relación a su cuerpo, pero fue un superviviente exitoso en climas pantanosos."
   },
   {
-    id: "21",
+    id: 25,
     nombre: "PRISTICHAMPSUS",
     subName: "Cocodrilo de Pezuñas",
-    tipo: "crocodylomorpha",
+    tipo: "Crocodylomorpha",
     dieta: "Carnívoro",
     longitud: "3 metros",
     altura: "0.8 metros",

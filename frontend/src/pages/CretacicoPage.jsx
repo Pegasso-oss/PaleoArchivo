@@ -1,26 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useUser } from '../context/useUser';
 import { dinosaurios } from '../data/cretacico'; 
 import DinoCard from '../components/DinoCard';
 import { motion } from 'framer-motion';
 
 const CretacicoPage = () => {
-  // --- LÓGICA DE TEMA REACTIVO ---
-  const [isLight, setIsLight] = useState(document.documentElement.classList.contains('light-theme'));
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsLight(document.documentElement.classList.contains('light-theme'));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
-  // -------------------------------
-
+  const { theme } = useUser();
+  const isLight = theme === 'light';
   return (
     <motion.div 
       initial={{ opacity: 0, y: 30 }}

@@ -1,43 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { allAnimals } from "../data/allData"; // Tus datos locales
-import { useFavorites } from "../context/FavoritesContext"; // El contexto corregido
-import DinoCard from "../components/DinoCard"; // Asegúrate de que esta ruta es correcta
+import { useNavigate } from "react-router-dom";
+import { allAnimals } from "../data/allData";
+import { useFavorites } from "../context/FavoritesContext";
+import DinoCard from "../components/DinoCard";
 import { FolderHeart, Search } from "lucide-react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../api/apiClient";
 
 const FavoritesPage = () => {
-  // Sacamos favorites y la función para actualizar del context
   const { favorites, setFavorites } = useFavorites();
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // 1. Cargar datos frescos al montar la página para asegurar la sincronización
   useEffect(() => {
-  const fetchFreshFavorites = async () => {
     const userId = localStorage.getItem("userId");
-    if (!userId || userId === "undefined") {
-      setLoading(false);
+    const auth = localStorage.getItem("auth");
+
+    // Si no hay sesión activa, redirigir al login
+    if (!auth || auth !== "true" || !userId || userId === "undefined") {
+      navigate("/login", { replace: true });
       return;
     }
-    try {
-      const res = await axios.get(`http://localhost:5000/api/auth/user/${userId}`);
-      
-      // IMPORTANTE: Como ahora guardas objetos {id, nombre}, 
-      // extraemos solo el ID para que el .includes de abajo funcione.
-      const data = res.data.favorites || [];
-      const onlyIds = data.map(item => String(item.id || item)); 
-      
-      setFavorites(onlyIds);
-    } catch (err) {
-      console.error("Error al sincronizar:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  fetchFreshFavorites();
-}, []); // Lo dejamos vacío para que solo corra al entrar
+
+    const fetchFreshFavorites = async () => {
+      try {
+        const res = await apiClient.get(`/user/${userId}`);
+        const data = res.data.favorites || [];
+        const onlyIds = data.map(item => String(item.id || item));
+        setFavorites(onlyIds);
+      } catch (err) {
+        console.error("Error al sincronizar:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFreshFavorites();
+  }, []);
 
   // 2. Cruzar IDs de la DB con los objetos de allData.js (La lógica clave)
   // Usamos String() para que la comparación sea infalible.
@@ -56,12 +56,10 @@ const FavoritesPage = () => {
   }
 
   return (
-    // Fondo oscuro como en tu captura
-    <div className="min-h-screen bg-[#141210] pt-12 pb-20 px-6">
-      <div className="max-w-[1300px] mx-auto">
+    <div className="min-h-screen bg-[#141210] pt-12 pb-20 px-4">
+      <div className="max-w-[1820px] mx-auto">
         
-        {/* CABECERA ESTILO TERMINAL (Como en la captura de registros) */}
-        <header className="mb-20 border-l-4 border-amber-500 pl-6">
+        <header className="mb-16 max-w-[1720px] mx-auto">
           <motion.h1 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -69,13 +67,15 @@ const FavoritesPage = () => {
           >
             MIS <span className="text-amber-500">FAVORITOS</span>
           </motion.h1>
-          <p className="text-stone-600 font-mono text-xs mt-3 tracking-[0.4em] uppercase">
-            {myFavs.length} ejemplares registrados en tus favoritos
-          </p>
+          <div className="flex items-center gap-4 mt-4">
+            <div className="h-0.5 w-12 bg-amber-500"></div>
+            <p className="text-slate-500 font-mono text-xs uppercase tracking-[0.2em]">
+              // {myFavs.length} ejemplares registrados en tus favoritos
+            </p>
+          </div>
         </header>
 
-        {/* REJILLA DE TARJETAS (Copia exacta del layout de la captura) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
+        <div className="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <AnimatePresence mode="popLayout">
             {myFavs.length > 0 ? (
               myFavs.map((animal) => (

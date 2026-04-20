@@ -146,7 +146,7 @@ const DinoDetailPage = () => {
                 </h1>
                 {/* ID + estrella — solo visible en desktop junto al nombre */}
                 <div className="hidden lg:flex items-center gap-2 shrink-0 mt-2">
-                  <div className="font-mono text-lg font-black px-3 py-1.5 rounded-full border"
+                  <div className="font-mono text-lg font-black px-3 py-1.5 rounded-lg border"
                     style={{ borderColor: `${hex}50`, color: hex, backgroundColor: `${hex}14` }}>
                     #{String(dino.id).padStart(3, "0")}
                   </div>
@@ -165,13 +165,13 @@ const DinoDetailPage = () => {
               <div className="flex items-center justify-between mt-3 gap-2">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="h-px w-8 shrink-0" style={{ backgroundColor: hex }} />
-                  <span className="font-mono text-[11px] uppercase tracking-[0.3em] truncate" style={{ color: hex }}>
+                  <span className="font-mono text-[14px] uppercase tracking-[0.3em] truncate" style={{ color: hex }}>
                     {dino.subName}
                   </span>
                 </div>
                 {/* ID + estrella — solo visible en móvil, junto al subname */}
                 <div className="flex lg:hidden items-center gap-1.5 shrink-0">
-                  <div className="font-mono text-[10px] font-black px-2.5 py-1 rounded-full border"
+                  <div className="font-mono text-[12px] font-black px-2.5 py-1 rounded-lg border"
                     style={{ borderColor: `${hex}50`, color: hex, backgroundColor: `${hex}14` }}>
                     #{String(dino.id).padStart(3, "0")}
                   </div>

@@ -8,12 +8,13 @@ export const dinosaurios = [
     longitud: "13 metros",
     altura: "1 metro",
     estado: "EXTINTO",
+    era: "Paleoceno",
     conservacion: "87",
     metodo: "Reemplazo",
     material: "Calcita",
     extincion: "58 m.a.",
     imagen: "https://img.freepik.com/premium-photo/titanoboa-snake-jungle_871710-294.jpg",
-    descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios."
+    descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios.",
   },
   {
     id: 23,
@@ -24,12 +25,13 @@ export const dinosaurios = [
     longitud: "2 metros",
     altura: "1.8 metros",
     estado: "EXTINTO",
+    era: "Paleoceno",
     conservacion: "85",
     metodo: "Permineralización",
     material: "Sílice",
     extincion: "45 m.a.",
     imagen: "https://static.wikia.nocookie.net/prehistrico/images/3/32/Gastornis_by_Mark_Witton.png/revision/latest?cb=20190404115143&path-prefix=es",
-    descripcion: "Un ave gigante no voladora. Aunque su aspecto era temible, estudios recientes de isótopos en sus huesos confirman que era vegetariana."
+    descripcion: "Un ave gigante no voladora. Aunque su aspecto era temible, estudios recientes de isótopos en sus huesos confirman que era vegetariana.",
   },
   {
     id: 24,
@@ -40,12 +42,13 @@ export const dinosaurios = [
     longitud: "2.5 metros",
     altura: "1 metro",
     estado: "EXTINTO",
+    era: "Paleoceno",
     conservacion: "78",
     metodo: "Recristalización",
     material: "Apatita",
     extincion: "35 m.a.",
     imagen: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Coryphodon.jpg",
-    descripcion: "Uno de los primeros grandes mamíferos. Tenía un cerebro diminuto en relación a su cuerpo, pero fue un superviviente exitoso en climas pantanosos."
+    descripcion: "Uno de los primeros grandes mamíferos. Tenía un cerebro diminuto en relación a su cuerpo, pero fue un superviviente exitoso en climas pantanosos.",
   },
   {
     id: 25,
@@ -56,11 +59,12 @@ export const dinosaurios = [
     longitud: "3 metros",
     altura: "0.8 metros",
     estado: "EXTINTO",
+    era: "Paleoceno",
     conservacion: "72",
     metodo: "Per-mineralización",
     material: "Óxidos de Hierro",
     extincion: "40 m.a.",
     imagen: "https://i.pinimg.com/564x/d1/ec/19/d1ec199d417c110a08500f19610e8058.jpg",
-    descripcion: "Un cocodrilo terrestre con patas de corredor. Sus dedos terminaban en pezuñas, lo que le permitía perseguir presas en bosques densos."
-  }
+    descripcion: "Un cocodrilo terrestre con patas de corredor. Sus dedos terminaban en pezuñas, lo que le permitía perseguir presas en bosques densos.",
+  },
 ];

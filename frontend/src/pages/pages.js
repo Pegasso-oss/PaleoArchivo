@@ -11,6 +11,7 @@ export { default as PaleogenoPage } from './PaleogenoPage';
 export { default as PaleocenoPage } from './PaleocenoPage';
 export { default as DinoDetailPage } from './DinoDetailPage';
 export { default as FavoritesPage } from './FavoritesPage';
+export { default as ProfilePage } from './ProfilePage';
 
 // Por hacer
 

@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true, // No puede haber dos PEGASSO
+    unique: true,
     trim: true
   },
   email: {
@@ -18,17 +18,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  bio: {
+    type: String,
+    default: "",
+    maxlength: 300
+  },
+  avatar: {
+    type: String,
+    default: ""
+  },
   favorites: [
     {
-      _id: false, // Esto evita que cree un ID interno y limpie la vista en Atlas
+      _id: false,
       id: { type: String, required: true },
       nombre: { type: String, required: true }
     }
   ],
-  avatar: {
-    type: String,
-    default: "https://via.placeholder.com/150" // Por si quieres ponerle foto
-  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -1,16 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
 import {
-  LogIn,
-  User,
-  LogOut,
-  LockOpen,
-  AlertTriangle,
-  Sun,
-  Moon,
-  Languages,
-  ChevronDown,
-  Star,
+  LogIn, User, LogOut, LockOpen, AlertTriangle,
+  Sun, Moon, ChevronDown, Star,
 } from "lucide-react";
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
@@ -18,7 +10,6 @@ import { useUser } from "../context/useUser";
 import { useFavorites } from "../context/FavoritesContext";
 import { translations } from "../data/translations";
 
-// Mapa de rutas a subtítulos — añade aquí nuevas rutas sin tocar la lógica
 const ROUTE_SUBTITLES = {
   "/era/paleozoico": "Paleozoico",
   "/era/paleozoico/cambrico": "Cámbrico",
@@ -47,28 +38,32 @@ const ROUTE_SUBTITLES = {
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, toggleTheme, language, setLanguage } = useUser();
+  const { theme, toggleTheme, language } = useUser();
   const { clearFavorites } = useFavorites();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
-
   const menuRef = useRef(null);
-  const langRef = useRef(null);
 
   const t = translations[language].header;
   const isLight = theme === "light";
 
+  // Color de iconos según tema
+  const iconColor = isLight ? "text-blue-500" : "text-amber-500";
+
   useEffect(() => {
     const auth = localStorage.getItem("auth");
     const savedName = localStorage.getItem("username");
+    const savedAvatar = localStorage.getItem("avatar");
     if (auth === "true") {
       setIsLoggedIn(true);
       setUsername(savedName || "INVESTIGADOR");
+      setAvatar(savedAvatar || "");
     } else {
       setIsLoggedIn(false);
+      setAvatar("");
     }
   }, [location]);
 
@@ -76,9 +71,6 @@ const Header = () => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
-      }
-      if (langRef.current && !langRef.current.contains(e.target)) {
-        setIsLangOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -90,7 +82,8 @@ const Header = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-    clearFavorites(); // Limpia favoritos del estado global al cerrar sesión
+    localStorage.removeItem("avatar");
+    clearFavorites();
     setIsLoggedIn(false);
     setShowConfirm(false);
     setIsMenuOpen(false);
@@ -101,6 +94,7 @@ const Header = () => {
     if (location.pathname.includes("/favorites")) return t.favorites;
     if (location.pathname === "/login") return t.login;
     if (location.pathname === "/register") return t.register;
+    if (location.pathname === "/perfil") return "Mi perfil";
 
     const animalMatch = matchPath({ path: "/animal/:id" }, location.pathname);
     if (animalMatch) {
@@ -117,236 +111,131 @@ const Header = () => {
     <>
       <header className="bg-[#1a1614] border-b border-[#d97706] sticky top-0 z-[50]">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-2">
+
+          {/* Logo */}
           <Link to="/" className="group flex items-center gap-6 shrink-0">
-            <img
-              src={paleoLogo}
-              alt="Logo"
-              className="h-10 md:h-20 w-auto transition-transform group-hover:scale-110"
-            />
+            <img src={paleoLogo} alt="Logo"
+              className="h-10 md:h-20 w-auto transition-transform group-hover:scale-110" />
             <div className="hidden md:flex flex-col">
-              <h1
-                className={`text-3xl font-black tracking-tighter uppercase italic ${isLight ? "text-stone-900" : "text-white"}`}
-              >
+              <h1 className={`text-3xl font-black tracking-tighter uppercase italic ${isLight ? "text-stone-900" : "text-white"}`}>
                 Paleo<span className="text-amber-600">Archivo</span>
               </h1>
               <div className="flex items-center gap-2 mt-2">
-                <div className="h-0.5 w-8 bg-amber-500/40"></div>
-                <span
-                  className={`text-sm font-light tracking-[0.2em] uppercase italic ${isLight ? "text-stone-600" : "text-white"}`}
-                >
+                <div className="h-0.5 w-8 bg-amber-500/40" />
+                <span className={`text-sm font-light tracking-[0.2em] uppercase italic ${isLight ? "text-stone-600" : "text-white"}`}>
                   {getSubtitle()}
                 </span>
-                <div className="h-0.5 w-8 bg-amber-500/40"></div>
+                <div className="h-0.5 w-8 bg-amber-500/40" />
               </div>
             </div>
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+
+            {/* Botón tema — visible en móvil */}
+            <button onClick={toggleTheme}
+              className={`md:hidden p-2 rounded-lg border transition-all
+                ${isLight ? "bg-white border-stone-200" : "bg-black/40 border-white/10"}`}>
+              {isLight
+                ? <Moon size={16} className={iconColor} />
+                : <Sun size={16} className={iconColor} />}
+            </button>
+
             {isLoggedIn ? (
-              <div className="flex items-center gap-6">
-                <div className="relative" ref={menuRef}>
-                  <button
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className={`flex items-center gap-2 border-2 px-3 py-2 md:px-7 md:py-4 rounded-xl md:rounded-lg shadow-inner transition-all group ${isLight ? "bg-white border-amber-500/20 hover:border-amber-500" : "bg-black/80 border-amber-500/40 hover:border-amber-500"}`}
-                  >
-                    <User size={18} className="text-amber-500 md:w-8 md:h-8" />
-                    <span
-                      className={`font-black italic text-[10px] md:text-xl uppercase leading-none ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}
-                    >
-                      {username}
-                    </span>
-                    <ChevronDown
-                      size={14}
-                      className={`text-amber-500/50 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
+              <div className="relative" ref={menuRef}>
 
-                  {isMenuOpen && (
-                    <div
-                      className={`absolute top-full right-0 mt-3 w-64 border rounded-lg shadow-2xl z-[1000] animate-in fade-in slide-in-from-top-2 flex flex-col ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#1a1614] border-white/10 text-white"}`}
-                    >
-                      <div className="p-4 border-b border-white/5 bg-amber-600/5">
-                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em]">
-                          {t.config}
-                        </p>
-                      </div>
-
-                      <div className="p-2 space-y-1">
-                        <Link
-                          to={`/favorites`}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${isLight ? "hover:bg-amber-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}
-                        >
-                          <Star
-                            size={16}
-                            className={`${theme === "dark" ? "text-blue-400" : "text-amber-500"} ${location.pathname.includes("/favorites") ? "fill-current" : ""}`}
-                          />
-                          <span className="text-[10px] font-bold uppercase tracking-widest">
-                            {t.favorites}
-                          </span>
-                        </Link>
-
-                        <div className="h-[1px] bg-white/5 my-1" />
-
-                        <button
-                          onClick={toggleTheme}
-                          className="w-full flex items-center justify-between p-3 hover:bg-black/10 rounded-lg transition-colors"
-                        >
-                          <div className="flex items-center gap-3">
-                            {theme === "dark" ? (
-                              <Moon size={16} className="text-blue-400" />
-                            ) : (
-                              <Sun size={16} className="text-amber-500" />
-                            )}
-                            <span className="text-[10px] font-bold uppercase tracking-widest">
-                              {t.mode} {theme === "dark" ? t.dark : t.light}
-                            </span>
-                          </div>
-                          <div
-                            className={`w-8 h-4 rounded-full relative transition-colors ${theme === "dark" ? "bg-stone-700" : "bg-amber-600"}`}
-                          >
-                            <div
-                              className={`absolute top-1 w-2 h-2 rounded-full bg-white transition-all ${theme === "dark" ? "left-1" : "left-5"}`}
-                            />
-                          </div>
-                        </button>
-
-                        <div className="h-[1px] bg-white/5 my-1" />
-
-                        <div className="p-2 relative" ref={langRef}>
-                          <p className="flex items-center gap-2 text-[10px] font-black text-stone-400 uppercase tracking-widest mb-3 px-1">
-                            <Languages
-                              size={18}
-                              className={
-                                theme === "dark"
-                                  ? "text-blue-400"
-                                  : "text-amber-500"
-                              }
-                            />{" "}
-                            {t.lang}
-                          </p>
-
-                          {/* BOTÓN PRINCIPAL: Recupera el borde y texto dinámico */}
-                          <button
-                            onClick={() => setIsLangOpen(!isLangOpen)}
-                            className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all 
-      ${
-        language === "es"
-          ? "border-red-500"
-          : language === "en"
-            ? isLight
-              ? "border-stone-300"
-              : "border-white"
-            : language === "fr"
-              ? "border-sky-700"
-              : "border-emerald-600"
-      } 
-      ${isLight ? "bg-stone-50" : "bg-white/5"}`}
-                          >
-                            <span
-                              className={`text-[10px] font-black uppercase tracking-wider 
-      ${
-        language === "es"
-          ? "text-red-500"
-          : language === "en"
-            ? theme === "dark"
-              ? "text-white"
-              : "text-stone-900"
-            : language === "fr"
-              ? "text-sky-700"
-              : "text-emerald-600"
-      }`}
-                            >
-                              {language === "es"
-                                ? "ESPAÑOL"
-                                : language === "en"
-                                  ? "ENGLISH"
-                                  : language === "fr"
-                                    ? "FRANÇAIS"
-                                    : "ITALIANO"}
-                            </span>
-                            <ChevronDown
-                              size={14}
-                              className={`transition-transform ${isLangOpen ? "rotate-180" : ""}`}
-                            />
-                          </button>
-
-                          {/* DESPLEGABLE */}
-                          {isLangOpen && (
-                            <div
-                              className={`absolute top-full left-0 right-0 mt-1 border rounded-lg shadow-2xl z-[1001] overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#25201d] border-white/10"}`}
-                            >
-                              {["es", "en", "fr", "it"].map((lang) => {
-                                // Definimos el color de fondo activo según el idioma
-                                const activeBg =
-                                  lang === "es"
-                                    ? "bg-red-500"
-                                    : lang === "en"
-                                      ? "bg-amber-500"
-                                      : lang === "fr"
-                                        ? "bg-sky-700"
-                                        : "bg-emerald-600";
-
-                                return (
-                                  <button
-                                    key={lang}
-                                    onClick={() => {
-                                      setLanguage(lang);
-                                      setIsLangOpen(false);
-                                    }}
-                                    className={`w-full text-left p-4 text-[11px] font-black uppercase transition-all 
-              ${language === lang ? `${activeBg} text-white` : "hover:bg-white/5 text-stone-400"}`}
-                                  >
-                                    {lang === "es"
-                                      ? "ESPAÑOL"
-                                      : lang === "en"
-                                        ? "ENGLISH"
-                                        : lang === "fr"
-                                          ? "FRANÇAIS"
-                                          : "ITALIANO"}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <button
-                  onClick={() => setShowConfirm(true)}
-                  className="flex flex-col items-center gap-1 text-stone-500 hover:text-red-500 transition-all group shrink-0"
+                {/* Botón usuario — avatar circular si tiene foto, icono si no */}
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg shadow-inner transition-all
+                    ${isLight ? "bg-white border-amber-500/20 hover:border-amber-500" : "bg-black/80 border-amber-500/40 hover:border-amber-500"}`}
                 >
-                  <LogOut
-                    size={24}
-                    className="md:w-10 md:h-10 group-hover:scale-110"
-                  />
-                  <span className="hidden md:block text-[12px] md:text-xs font-black tracking-widest uppercase">
-                    {t.logout}
+                  {avatar ? (
+                    <div className="w-7 h-7 md:w-9 md:h-9 rounded-full overflow-hidden border border-amber-500/40 shrink-0">
+                      <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <User size={18} className={`${iconColor} md:w-7 md:h-7`} />
+                  )}
+                  <span className={`font-black italic text-[10px] md:text-lg uppercase leading-none ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
+                    {username}
                   </span>
+                  <ChevronDown size={14} className={`${iconColor} opacity-50 transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
                 </button>
+
+                {/* Menú desplegable */}
+                {isMenuOpen && (
+                  <div className={`absolute top-full right-0 mt-3 w-60 border rounded-xl shadow-2xl z-[1000] overflow-hidden
+                    ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#1a1614] border-white/10 text-white"}`}>
+
+                    {/* Cabecera */}
+                    <div className="px-4 py-3 border-b border-white/5 bg-amber-600/5">
+                      <p className="text-[9px] font-black text-amber-500 uppercase tracking-[0.25em]">{username}</p>
+                    </div>
+
+                    <div className="p-1.5 flex flex-col gap-0.5">
+
+                      {/* Favoritos */}
+                      <Link to="/favorites" onClick={() => setIsMenuOpen(false)}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
+                          ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
+                        <Star size={15} className={iconColor} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">{t.favorites}</span>
+                      </Link>
+
+                      {/* Mi perfil */}
+                      <Link to="/perfil" onClick={() => setIsMenuOpen(false)}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
+                          ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
+                        <User size={15} className={iconColor} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Mi perfil</span>
+                      </Link>
+
+                      <div className={`h-px mx-2 my-1 ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
+
+                      {/* Toggle tema */}
+                      <button onClick={toggleTheme}
+                        className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors w-full
+                          ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
+                        <div className="flex items-center gap-3">
+                          {isLight
+                            ? <Sun size={15} className={iconColor} />
+                            : <Moon size={15} className={iconColor} />}
+                          <span className="text-[10px] font-black uppercase tracking-widest">
+                            {isLight ? t.light : t.dark}
+                          </span>
+                        </div>
+                        <div className={`w-7 h-3.5 rounded-full relative transition-colors ${isLight ? "bg-amber-500" : "bg-blue-500"}`}>
+                          <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all ${isLight ? "left-[14px]" : "left-0.5"}`} />
+                        </div>
+                      </button>
+
+                      <div className={`h-px mx-2 my-1 ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
+
+                      {/* Cerrar sesión */}
+                      <button onClick={() => { setIsMenuOpen(false); setShowConfirm(true); }}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-red-500/70 hover:text-red-500 hover:bg-red-500/5 w-full">
+                        <LogOut size={15} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">{t.logout}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
+
             ) : (
               <div className="flex items-center gap-1.5 md:gap-4">
-                <Link
-                  to="/login"
-                  className={`border-2 px-2.5 py-2 md:px-8 md:py-4 rounded-lg transition-all flex items-center gap-2 font-black tracking-widest ${isLight ? "bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white" : "bg-white/5 border-white/10 text-stone-300 hover:bg-white hover:text-black"}`}
+                <Link to="/login"
+                  className={`border-2 px-2.5 py-2 md:px-8 md:py-4 rounded-lg transition-all flex items-center gap-2 font-black tracking-widest
+                    ${isLight ? "bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white" : "bg-white/5 border-white/10 text-stone-300 hover:bg-white hover:text-black"}`}
                 >
-                  <LogIn size={14} />{" "}
-                  <span className="text-[9px] md:text-base uppercase">
-                    {t.login}
-                  </span>
+                  <LogIn size={14} />
+                  <span className="text-[9px] md:text-base uppercase">{t.login}</span>
                 </Link>
-                <Link
-                  to="/register"
+                <Link to="/register"
                   className="bg-amber-600/10 border-2 border-amber-600/60 px-2.5 py-2 md:px-8 md:py-4 rounded-lg text-amber-500 hover:bg-amber-600 hover:text-white transition-all flex items-center gap-2 font-black shadow-lg"
                 >
-                  <LockOpen size={14} />{" "}
-                  <span className="text-[9px] md:text-base uppercase">
-                    {t.register}
-                  </span>
+                  <LockOpen size={14} />
+                  <span className="text-[9px] md:text-base uppercase">{t.register}</span>
                 </Link>
               </div>
             )}
@@ -354,39 +243,28 @@ const Header = () => {
         </div>
       </header>
 
+      {/* Modal confirmar logout */}
       {showConfirm && (
         <div className="fixed inset-0 z-[1002] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/90 backdrop-blur-sm"
-            onClick={() => setShowConfirm(false)}
-          ></div>
-          <div
-            className={`relative border w-full max-w-md overflow-hidden rounded-2xl shadow-2xl animate-in zoom-in-95 ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}
-          >
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setShowConfirm(false)} />
+          <div className={`relative border w-full max-w-md overflow-hidden rounded-2xl shadow-2xl
+            ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}>
             <div className="bg-red-600/10 border-b border-red-600/20 p-4 flex items-center gap-3">
               <AlertTriangle className="text-red-500" size={18} />
-              <span className="text-red-500 font-mono text-[14px] tracking-[0.3em] font-bold uppercase">
-                {t.logout}
-              </span>
+              <span className="text-red-500 font-mono text-[14px] tracking-[0.3em] font-bold uppercase">{t.logout}</span>
             </div>
             <div className="p-8 text-center">
-              <h3
-                className={`text-xl font-black italic uppercase tracking-tighter mb-4 ${isLight ? "text-stone-900" : "text-white"}`}
-              >
-                {t.confirmLogout} <span className="text-red-600">{t.exit}</span>
-                ?
+              <h3 className={`text-xl font-black italic uppercase tracking-tighter mb-4 ${isLight ? "text-stone-900" : "text-white"}`}>
+                {t.confirmLogout} <span className="text-red-600">{t.exit}</span>?
               </h3>
               <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={handleLogoutConfirm}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest text-xs"
-                >
+                <button onClick={handleLogoutConfirm}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest text-xs">
                   {t.confirm || "SÍ, SALIR"}
                 </button>
-                <button
-                  onClick={() => setShowConfirm(false)}
-                  className={`flex-1 font-black py-4 rounded-xl uppercase tracking-widest text-xs ${isLight ? "bg-stone-100 text-stone-600" : "bg-stone-800 text-white"}`}
-                >
+                <button onClick={() => setShowConfirm(false)}
+                  className={`flex-1 font-black py-4 rounded-xl uppercase tracking-widest text-xs
+                    ${isLight ? "bg-stone-100 text-stone-600" : "bg-stone-800 text-white"}`}>
                   {t.keep}
                 </button>
               </div>

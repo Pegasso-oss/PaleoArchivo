@@ -15,6 +15,7 @@ import {
   DinoDetailPage,
   OrdovicicoPage,
   FavoritesPage,
+  ProfilePage,
 } from "./pages/pages.js";
 
 import Header from "./components/Header.jsx";
@@ -73,6 +74,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/perfil" element={<ProfilePage />} />
           
           <Route path="/era/paleozoico" element={<PaleozoicoPage />} />
           <Route path="/era/paleozoico/cambrico" element={<CambricoPage />} />

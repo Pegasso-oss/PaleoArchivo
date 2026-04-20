@@ -8,7 +8,8 @@ export const dinosaurios = [
     longitud: "8.5 metros",
     altura: "4 metros",
     estado: "EXTINTO",
-    conservacion: "88", // Abundantes esqueletos casi completos (Cleveland-Lloyd)
+    era: "Jurásico",
+    conservacion: "88",
     extincion: "145 m.a.",
     imagen: "https://images.dinosaurpictures.org/Allosaurus/Allosaurus_f614bc6d.jpg",
     descripcion: "Era un gran terópodo típico, con un cráneo grande y un cuello corto una cola larga y miembros superiores reducidos.",
@@ -22,7 +23,8 @@ export const dinosaurios = [
     longitud: "22 metros",
     altura: "14 metros",
     estado: "EXTINTO",
-    conservacion: "75", // Conocido por esqueletos robustos pero a menudo incompletos
+    era: "Jurásico",
+    conservacion: "75",
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Brachiosaurus-01.jpg",
     descripcion: "Brachiosaurus tiene el cuello extremadamente largo, un cráneo pequeño y gran tamaño general.",
@@ -36,7 +38,8 @@ export const dinosaurios = [
     longitud: "5 cm",
     altura: "25 cm",
     estado: "EXTINTO",
-    conservacion: "98", // Conservación excepcional (impresiones de plumas)
+    era: "Jurásico",
+    conservacion: "98",
     extincion: "148 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Archaeopteryx-01.jpg",
     descripcion: "Es un género extinto de aves primitivas, con caracteres intermedios entre los dinosaurios emplumados y las aves modernas.",
@@ -50,7 +53,8 @@ export const dinosaurios = [
     longitud: "9 metros",
     altura: "4 metros",
     estado: "EXTINTO",
-    conservacion: "82", // Placas y esqueletos bien documentados
+    era: "Jurásico",
+    conservacion: "82",
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Stegosaurus-01.jpg",
     descripcion: "Es uno de los dinosaurios más icónicos y fácilmente reconocibles del período Jurásico.",
@@ -64,7 +68,8 @@ export const dinosaurios = [
     longitud: "7 metros",
     altura: "2.5 metros",
     estado: "EXTINTO",
-    conservacion: "70", // Crestas delicadas que requieren hallazgos muy específicos
+    era: "Jurásico",
+    conservacion: "70",
     extincion: "183 m.a.",
     imagen: "https://dinosaurland.es/wp-content/uploads/elementor/thumbs/dinosaurio-dilophosaurio-dinosaurland-r1n5kl3d0hoxzyfh48jq2li114xjxmj0g5g6jkao74.jpg",
     descripcion: "Dilophosaurus era un cazador grande y ligero, con robustas extremidades posteriores, cola de gran longitud y peculiar mandíbula superior.",
@@ -77,11 +82,12 @@ export const dinosaurios = [
     dieta: "Carnívoro",
     longitud: "2 metros",
     altura: "40 cm",
-    estado: "VIVO", 
-    conservacion: "100", // Al estar vivo, el registro biológico es total
+    estado: "VIVO",
+    era: "Jurásico",
+    conservacion: "100",
     extincion: "---",
     imagen: "https://preview.redd.it/frilled-shark-chlamydoselachus-anguineus-grows-up-to-2m-6-v0-02evcc2mewl61.jpg?width=640&crop=smart&auto=webp&s=711d60425db6a632c877d383ff52b50c636b26a7",
-    descripcion: "Un superviviente nato del Jurásico. Su anatomía apenas ha variado en 150 millones de años, manteniendo sus características branquias fruncidas."
+    descripcion: "Un superviviente nato del Jurásico. Su anatomía apenas ha variado en 150 millones de años, manteniendo sus características branquias fruncidas.",
   },
   {
     id: 16,
@@ -92,7 +98,8 @@ export const dinosaurios = [
     longitud: "30 metros",
     altura: "4.5 metros",
     estado: "EXTINTO",
-    conservacion: "85", // Esqueletos muy largos y bien articulados encontrados
+    era: "Jurásico",
+    conservacion: "85",
     extincion: "152 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Diplodocus-01.jpg",
     descripcion: "Es uno de los dinosaurios más conocidos. Tenía un cuello largo, una cola en forma de látigo y patas robustas.",
@@ -106,7 +113,8 @@ export const dinosaurios = [
     longitud: "6.5 metros",
     altura: "2.5 metros",
     estado: "EXTINTO",
-    conservacion: "65", // Más raro de encontrar que el Allosaurus
+    era: "Jurásico",
+    conservacion: "65",
     extincion: "148 m.a.",
     imagen: "https://t4.ftcdn.net/jpg/02/99/62/13/360_F_299621374_zcgKdN8VRjc1FR5uvwUmXLvLMoV4YYSN.jpg",
     descripcion: "Se distingue por un pequeño cuerno en el hocico y una fila de placas óseas que recorren su espalda.",
@@ -120,7 +128,8 @@ export const dinosaurios = [
     longitud: "12 metros",
     altura: "3 metros",
     estado: "EXTINTO",
-    conservacion: "60", // Hallazgos masivos pero a menudo dispersos por el lecho marino
+    era: "Jurásico",
+    conservacion: "60",
     extincion: "145 m.a.",
     imagen: "https://static.wikia.nocookie.net/dinosaurs/images/0/0d/PliosaurusMarkWitton.jpg",
     descripcion: "Fue un gigantesco reptil marino. Sus mandíbulas eran enormes, con dientes triangulares capaces de ejercer una presión inmensa.",
@@ -134,9 +143,10 @@ export const dinosaurios = [
     longitud: "1 metro",
     altura: "40 cm",
     estado: "EXTINTO",
-    conservacion: "90", // Esqueletos pequeños muy bien preservados en calizas finas
+    era: "Jurásico",
+    conservacion: "90",
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Compsognathus-01.jpg",
     descripcion: "Es uno de los dinosaurios más pequeños. Era un cazador ágil que se alimentaba de pequeños vertebrados e insectos.",
-  }
+  },
 ];

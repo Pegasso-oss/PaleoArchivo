@@ -1,9 +1,14 @@
+// src/components/Toast.jsx
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useTranslation } from "../hooks/useTranslation";
 
 const Toast = ({ message, type, isVisible, onClose }) => {
+  const { tSection } = useTranslation();
+  const toastT = tSection('toast');
+
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => onClose(), 3000);
@@ -22,7 +27,7 @@ const Toast = ({ message, type, isVisible, onClose }) => {
             position: "fixed",
             top: "90px",
             right: "24px",
-            zIndex: 2147483647, // Máximo valor real de 32 bits
+            zIndex: 2147483647,
             pointerEvents: "none"
           }}
         >
@@ -30,7 +35,7 @@ const Toast = ({ message, type, isVisible, onClose }) => {
             style={{
               backgroundColor: "#1a1614", 
               border: `2px solid ${type === "success" ? "#d97706" : "#ef4444"}`,
-              padding: "16px 24px", // PADDING NORMAL
+              padding: "16px 24px",
               borderRadius: "12px",
               display: "flex",
               alignItems: "center",
@@ -45,7 +50,7 @@ const Toast = ({ message, type, isVisible, onClose }) => {
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p style={{ color: "#78716c", fontSize: "10px", fontWeight: "900", margin: 0, textTransform: "uppercase", letterSpacing: "1px" }}>
-                {type === "success" ? "Sistema Actualizado" : "Aviso de Seguridad"}
+                {type === "success" ? toastT.successLabel : toastT.errorLabel}
               </p>
               <p style={{ color: "white", fontSize: "13px", fontWeight: "bold", margin: 0 }}>
                 {message}

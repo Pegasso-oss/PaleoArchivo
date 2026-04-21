@@ -1,42 +1,39 @@
+// src/components/Register.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, CheckCircle2, ArrowLeft } from "lucide-react"; 
 import BrachioSkull from "../assets/CBrachio.png"; 
 import { useUser } from "../context/useUser";
+import { useTranslation } from "../hooks/useTranslation";
 import apiClient from "../api/apiClient";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
+    username: "", email: "", password: "", confirmPassword: ""
   });
-  
   const navigate = useNavigate();
   const { theme } = useUser();
+  const { tSection } = useTranslation();
+  const rg = tSection('register');
   const isLight = theme === "light";
 
-const handleRegister = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("ERROR: Los códigos de encriptación no coinciden.");
+      alert("ERROR: Las contraseñas no coinciden.");
       return;
     }
-
     try {
       const response = await apiClient.post("/register", {
         username: formData.username,
         email: formData.email,
         password: formData.password
       });
-
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("auth", "true");
       localStorage.setItem("username", response.data.username);
       localStorage.setItem("userId", response.data.userId);
-
       alert("ACCESO CONCEDIDO: Investigador registrado.");
       navigate("/");
       window.location.reload();
@@ -71,28 +68,28 @@ const handleRegister = async (e) => {
         </div>
 
         <h1 className={`text-3xl font-black italic tracking-tighter uppercase mb-10 ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
-          REGISTRO DE <span className="text-amber-600">NUEVO USUARIO</span>
+          {rg.title} <span className="text-amber-600">{rg.titleAccent}</span>
         </h1>
 
         <form onSubmit={handleRegister} className="space-y-6 w-full">
           <div className="space-y-2">
-            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">Nombre de Usuario</label>
+            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">{rg.username}</label>
             <div className="relative">
               <User className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="text" required onChange={(e) => setFormData({...formData, username: e.target.value})} className={inputStyles} placeholder="USUARIO" />
+              <input type="text" required onChange={(e) => setFormData({...formData, username: e.target.value})} className={inputStyles} placeholder={rg.username} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">Correo Electrónico</label>
+            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">{rg.email}</label>
             <div className="relative">
               <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="email" required onChange={(e) => setFormData({...formData, email: e.target.value})} className={inputStyles} placeholder="CORREO ELÉCTRONICO" />
+              <input type="email" required onChange={(e) => setFormData({...formData, email: e.target.value})} className={inputStyles} placeholder={rg.emailPlaceholder} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">Contraseña</label>
+            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">{rg.password}</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
               <input type="password" required onChange={(e) => setFormData({...formData, password: e.target.value})} className={inputStyles} placeholder="••••••••••••" />
@@ -100,22 +97,22 @@ const handleRegister = async (e) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">Confirmar Contraseña</label>
+            <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">{rg.confirmPassword}</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="password" required onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className={inputStyles} placeholder="REPETIR CONTRASEÑA" />
+              <input type="password" required onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className={inputStyles} placeholder={rg.confirmPlaceholder} />
             </div>
           </div>
 
           <button type="submit" className="w-full bg-amber-600/10 hover:bg-amber-600/25 border-2 border-amber-600/60 text-amber-600 py-5 rounded-3xl font-black italic uppercase tracking-[0.2em] text-lg transition-all group flex items-center justify-center gap-3.5 shadow-lg shadow-amber-900/10">
             <CheckCircle2 size={22} className="group-hover:scale-110 transition-transform" />
-            <span>REGISTRARSE</span>
+            <span>{rg.submit}</span>
           </button>
         </form>
 
         <div className={`mt-8 pt-6 border-t-2 w-full text-center ${isLight ? "border-stone-100" : "border-[#3f3833]/70"}`}>
           <p className="text-[14px] text-stone-500 uppercase tracking-widest font-light">
-            ¿Ya tiene una cuenta? <Link to="/login" className="text-amber-600 font-bold hover:underline">INICIAR SESIÓN</Link>
+            {rg.hasAccount} <Link to="/login" className="text-amber-600 font-bold hover:underline">{rg.signIn}</Link>
           </p>
         </div>
       </motion.div>

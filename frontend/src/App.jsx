@@ -14,6 +14,10 @@ import {
   PaleocenoPage,
   DinoDetailPage,
   OrdovicicoPage,
+  SiluricoPage,
+  PermicoPage,
+  DevonicoPage,
+  CarboniferoPage,
   FavoritesPage,
   ProfilePage,
 } from "./pages/pages.js";
@@ -70,30 +74,34 @@ function App() {
 
       <main className="flex-grow flex flex-col">
         <Routes>
+
+         {/*PERSONAL*/}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/perfil" element={<ProfilePage />} />
+          <Route path="/animal/:id" element={<DinoDetailPage />} />
           
+         {/*PALEOZOICO*/}
           <Route path="/era/paleozoico" element={<PaleozoicoPage />} />
           <Route path="/era/paleozoico/cambrico" element={<CambricoPage />} />
-          <Route
-            path="/era/paleozoico/ordovicico"
-            element={<OrdovicicoPage />}
-          />
+          <Route path="/era/paleozoico/ordovicico" element={<OrdovicicoPage />}/>
+          <Route path="/era/paleozoico/silurico" element={<SiluricoPage />}/>
+          <Route path="/era/paleozoico/devonico" element={<DevonicoPage />}/>
+          <Route path="/era/paleozoico/carbonifero" element={<CarboniferoPage />}/>
+          <Route path="/era/paleozoico/permico" element={<PermicoPage />}/>
+
+         {/*MESOZOICO*/}
           <Route path="/era/mesozoico" element={<MesozoicoPage />} />
           <Route path="/era/mesozoico/triasico" element={<TriasicoPage />} />
           <Route path="/era/mesozoico/jurasico" element={<JurasicoPage />} />
           <Route path="/era/mesozoico/cretacico" element={<CretacicoPage />} />
-
+        
+         {/*CENOZOICO*/}
           <Route path="/era/cenozoico" element={<CenozoicoPage />} />
           <Route path="/era/cenozoico/paleogeno" element={<PaleogenoPage />} />
-          <Route
-            path="/era/cenozoico/paleogeno/paleoceno"
-            element={<PaleocenoPage />}
-          />
-          <Route path="/animal/:id" element={<DinoDetailPage />} />
+          <Route path="/era/cenozoico/paleogeno/paleoceno" element={<PaleocenoPage />}/>
         </Routes>
       </main>
 

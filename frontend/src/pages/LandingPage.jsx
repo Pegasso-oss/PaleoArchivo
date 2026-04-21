@@ -1,9 +1,11 @@
+// src/pages/LandingPage.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import EraCard from "../components/EraCard";
 import { allAnimals } from "../data/allData";
 import { Search, X, ShieldCheck, ChevronDown } from "lucide-react";
 import { useUser } from '../context/useUser';
+import { useTranslation } from '../hooks/useTranslation';
 
 // ── Paletas de colores ────────────────────────────────────────────────────
 
@@ -40,16 +42,6 @@ const TYPE_THEMES = {
   Squamata:          { text: "text-yellow-400", bg: "bg-yellow-400/10", border: "border-yellow-400/40", hoverBg: "hover:bg-yellow-400/10", hoverText: "hover:text-yellow-300", hoverBorder: "hover:border-yellow-400/40" },
   Mammalia:          { text: "text-indigo-400", bg: "bg-indigo-400/10", border: "border-indigo-400/40", hoverBg: "hover:bg-indigo-400/10", hoverText: "hover:text-indigo-300", hoverBorder: "hover:border-indigo-400/40" },
   Crocodylomorpha:   { text: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/40",  hoverBg: "hover:bg-green-400/10",  hoverText: "hover:text-green-300",  hoverBorder: "hover:border-green-400/40"  },
-};
-
-// Etiquetas bonitas para los tipos
-const TYPE_LABELS = {
-  Theropod: "Terópodo", Sauropod: "Saurópodo", Avialae: "Ave primitiva",
-  Thyreophoran: "Tireoforo", Plesiosaur: "Plesiosaurio", Chondrichthyes: "Condrictio",
-  Basal_arthropod: "Artrópodo", Basal_chordate: "Cordado", Mollusca: "Molusco",
-  Arthropoda: "Artrópodo", Agnatha: "Agnato", Saurischia: "Saurisquio",
-  Abelisauridae: "Abelisáurido", Squamata: "Escamoso", Mammalia: "Mamífero",
-  Crocodylomorpha: "Crocodilomorfo",
 };
 
 // ── Componente Dropdown ───────────────────────────────────────────────────
@@ -102,13 +94,15 @@ const LandingPage = () => {
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
   const { theme } = useUser();
   const isLight = theme === 'light';
+  const { t, tSection } = useTranslation();
+  const lnd = tSection('landing');
+  const typeLabels = tSection('typeLabels');
+  const dietLabels = tSection('dietLabels');
 
-  // Abrir dropdown cuando hay algo activo
   useEffect(() => {
     if (searchTerm || activeDiet || activeType) setShowDropdown(true);
   }, [searchTerm, activeDiet, activeType]);
 
-  // Cierre al hacer clic fuera y Escape
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (filtersRef.current && !filtersRef.current.contains(e.target)) {
@@ -147,12 +141,11 @@ const LandingPage = () => {
   }, [location]);
 
   const eras = [
-    { id: "paleozoico", name: "PALEOZOICO", age: "541 - 252 m.a.", image: "https://media.istockphoto.com/id/1144091536/es/foto/criaturas-del-período-cámbrico-escena-submarina-con-anomalocaris-opabinia-hallucigenia-pirania.jpg?s=612x612&w=0&k=20&c=XD683S0yCOb2WhXsT3iRx5XGVS7jCNjS3EN4SK0e7uA=", desc: "El origen de la vida compleja. Trilobites, bosques de helechos gigantes y los primeros anfibios." },
-    { id: "mesozoico", name: "MESOZOICO", age: "252 - 66 m.a.", image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: "La era de los dinosaurios. Triásico, Jurásico y Cretácico. El reinado de los reptiles gigantes." },
-    { id: "cenozoico", name: "CENOZOICO", age: "66 m.a. - Actualidad", image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: "El ascenso de los mamíferos. Megafauna, glaciaciones y la evolución de los primates." },
+    { id: "paleozoico", name: "PALEOZOICO", age: "541 - 252 m.a.", image: "https://media.istockphoto.com/id/1144091536/es/foto/criaturas-del-período-cámbrico-escena-submarina-con-anomalocaris-opabinia-hallucigenia-pirania.jpg?s=612x612&w=0&k=20&c=XD683S0yCOb2WhXsT3iRx5XGVS7jCNjS3EN4SK0e7uA=", desc: lnd.eras?.paleozoico?.desc },
+    { id: "mesozoico", name: "MESOZOICO", age: "252 - 66 m.a.", image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: lnd.eras?.mesozoico?.desc },
+    { id: "cenozoico", name: "CENOZOICO", age: "66 m.a. - " + t('landing.today', {}), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
   ];
 
-  // Tipos únicos presentes en los datos
   const availableTypes = [...new Set(allAnimals.map(a => a.tipo).filter(Boolean))].sort();
 
   const filteredDinos = Array.from(
@@ -177,8 +170,8 @@ const LandingPage = () => {
             <div className="flex items-center gap-3">
               <ShieldCheck className="text-amber-500" size={18} />
               <div>
-                <p className={`font-bold text-[11px] uppercase tracking-wider ${isLight ? 'text-stone-900' : 'text-white'}`}>Sesión Cerrada</p>
-                <p className="text-stone-500 font-mono text-[9px] uppercase tracking-widest">Acceso restringido</p>
+                <p className={`font-bold text-[11px] uppercase tracking-wider ${isLight ? 'text-stone-900' : 'text-white'}`}>{lnd.logoutTitle}</p>
+                <p className="text-stone-500 font-mono text-[9px] uppercase tracking-widest">{lnd.logoutSub}</p>
               </div>
             </div>
             <button onClick={() => setShowLogoutMsg(false)} className="text-stone-600 hover:text-amber-500 transition-colors"><X size={16} /></button>
@@ -191,10 +184,10 @@ const LandingPage = () => {
 
       <div className="max-w-6xl mx-auto text-center w-full relative z-10">
         <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 italic leading-none uppercase">
-          Explora <span className="text-amber-600">el pasado</span>
+          {lnd.heroTitle} <span className="text-amber-600">{lnd.heroTitleAccent}</span>
         </h1>
         <p className={`max-w-2xl mx-auto text-base md:text-lg mb-10 transition-colors ${isLight ? 'text-stone-600' : 'text-white/60'}`}>
-          Selecciona una era geológica para acceder a los registros fósiles y reconstrucciones biológicas.
+          {lnd.heroSubtitle}
         </p>
 
         {/* BUSCADOR */}
@@ -204,7 +197,7 @@ const LandingPage = () => {
               <Search className={`transition-colors ${searchTerm ? "text-amber-500" : "text-stone-600"}`} size={22} />
             </div>
             <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="BUSCAR EN EL ARCHIVO..."
+              placeholder={lnd.searchPlaceholder?.toUpperCase()}
               className={`w-full border py-5 md:py-6 pl-16 pr-14 rounded-2xl text-sm md:text-base font-mono tracking-widest focus:outline-none focus:border-amber-600/50 transition-all uppercase shadow-2xl
                 ${isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-[#2a2420]/40 border-stone-800 text-white'}`}
             />
@@ -233,12 +226,14 @@ const LandingPage = () => {
                           <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1">{dino.subName}</p>
                         </div>
                       </div>
-                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>{dino.dieta}</span>
+                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>
+                        {dietLabels[dino.dieta] || dino.dieta}
+                      </span>
                     </Link>
                   );
                 })
               ) : (
-                <div className="p-6 text-stone-500 font-mono text-sm uppercase tracking-[0.2em]">Sin registros</div>
+                <div className="p-6 text-stone-500 font-mono text-sm uppercase tracking-[0.2em]">{lnd.noResults}</div>
               )}
             </div>
           )}
@@ -250,9 +245,9 @@ const LandingPage = () => {
 
             {/* Dropdown Dietas */}
             <FilterDropdown
-              label="Dietas" emoji="🦴"
+              label={lnd.filterDiets} emoji="🦴"
               active={activeDiet ? DIET_THEMES[activeDiet] : null}
-              activeLabel={activeDiet}
+              activeLabel={dietLabels[activeDiet] || activeDiet}
               onClear={() => setActiveDiet("")}
               isOpen={dietOpen}
               onToggle={() => { setDietOpen(d => !d); setTypeOpen(false); }}
@@ -269,7 +264,7 @@ const LandingPage = () => {
                         : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`
                       }`}>
                     <span className="text-base shrink-0">{DIET_EMOJIS[dieta]}</span>
-                    <span>{dieta}</span>
+                    <span>{dietLabels[dieta] || dieta}</span>
                   </button>
                 );
               })}
@@ -277,9 +272,9 @@ const LandingPage = () => {
 
             {/* Dropdown Tipos */}
             <FilterDropdown
-              label="Tipos" emoji="🦕"
+              label={lnd.filterTypes} emoji="🦕"
               active={activeType ? TYPE_THEMES[activeType] : null}
-              activeLabel={TYPE_LABELS[activeType] || activeType}
+              activeLabel={typeLabels[activeType] || activeType}
               onClear={() => setActiveType("")}
               isOpen={typeOpen}
               onToggle={() => { setTypeOpen(t => !t); setDietOpen(false); }}
@@ -297,7 +292,7 @@ const LandingPage = () => {
                         : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`
                       }`}>
                     <span className={`w-2 h-2 rounded-full shrink-0 ${th.bg} ${th.border} border`} />
-                    <span>{TYPE_LABELS[tipo] || tipo}</span>
+                    <span>{typeLabels[tipo] || tipo}</span>
                   </button>
                 );
               })}
@@ -306,9 +301,9 @@ const LandingPage = () => {
             {/* Limpiar filtros */}
             {(activeDiet || activeType) && (
               <button onClick={() => { setActiveDiet(""); setActiveType(""); if (!searchTerm) setShowDropdown(false); }}
-                className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all
+                className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest transition-all
                   ${isLight ? "text-stone-400 hover:text-stone-600" : "text-stone-600 hover:text-stone-400"}`}>
-                <X size={12} /> Limpiar
+                <X size={24} /> {lnd.clearFilters}
               </button>
             )}
           </div>

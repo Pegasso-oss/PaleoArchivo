@@ -1,25 +1,25 @@
-export { default as LandingPage } from './LandingPage';
-export { default as MesozoicoPage } from './MesozoicoPage';
-export { default as PaleozoicoPage } from './PaleozoicoPage';
-export { default as TriasicoPage } from './TriasicoPage';
-export { default as JurasicoPage } from './JurasicoPage';
-export { default as CretacicoPage } from './CretacicoPage';
-export { default as CambricoPage } from './CambricoPage'; 
-export { default as OrdovicicoPage } from './OrdovicicoPage';
-export { default as CenozoicoPage } from './CenozoicoPage';
-export { default as PaleogenoPage } from './PaleogenoPage';
-export { default as PaleocenoPage } from './PaleocenoPage';
-export { default as DinoDetailPage } from './DinoDetailPage';
-export { default as FavoritesPage } from './FavoritesPage';
-export { default as ProfilePage } from './ProfilePage';
+export { default as LandingPage } from "./LandingPage";
+export { default as MesozoicoPage } from "./MesozoicoPage";
+export { default as PaleozoicoPage } from "./PaleozoicoPage";
+export { default as TriasicoPage } from "./TriasicoPage";
+export { default as JurasicoPage } from "./JurasicoPage";
+export { default as CretacicoPage } from "./CretacicoPage";
+export { default as CambricoPage } from "./CambricoPage";
+export { default as OrdovicicoPage } from "./OrdovicicoPage";
+export { default as CenozoicoPage } from "./CenozoicoPage";
+export { default as PaleogenoPage } from "./PaleogenoPage";
+export { default as PaleocenoPage } from "./PaleocenoPage";
+export { default as DinoDetailPage } from "./DinoDetailPage";
+export { default as FavoritesPage } from "./FavoritesPage";
+export { default as ProfilePage } from "./ProfilePage";
+export { default as SiluricoPage } from "./SiluricoPage";
+export { default as DevonicoPage } from "./DevonicoPage";
+export { default as CarboniferoPage } from "./CarboniferoPage";
+export { default as PermicoPage } from "./PermicoPage";
 
 // Por hacer
 
 /*
-export { default as SiluricoPage } from './SiluricoPage';
-export { default as DevonicoPage } from './DevonicoPage';
-export { default as CarboniferoPage } from './CarboniferoPage';
-export { default as PermicoPage } from './PermicoPage';
         export { default as PaleocenoPage } from './PaleocenoPage';
         export { default as EocenoPage } from './EocenoPage';
         export { default as OligocenoPage } from './OligecenoPage';

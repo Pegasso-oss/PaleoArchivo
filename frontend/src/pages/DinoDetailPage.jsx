@@ -1,9 +1,11 @@
+// src/pages/DinoDetailPage.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { allAnimals } from "../data/allData";
 import { useFavorites } from "../context/FavoritesContext";
 import { useUser } from "../context/useUser";
+import { useTranslation } from "../hooks/useTranslation";
 import apiClient from "../api/apiClient";
 import Toast from "../components/Toast";
 import {
@@ -54,6 +56,9 @@ const DinoDetailPage = () => {
   const navigate = useNavigate();
   const { isFavorite, setFavorites } = useFavorites();
   const { theme: colorTheme } = useUser();
+  const { tSection } = useTranslation();
+  const dd = tSection('dinoDetail');
+  const toastT = tSection('toast');
   const isLight = colorTheme === "light";
   const [toast, setToast] = useState({ show: false, msg: "", type: "success" });
 
@@ -78,39 +83,39 @@ const DinoDetailPage = () => {
 
   const handleToggleFavorite = async () => {
     const userId = localStorage.getItem("userId");
-    if (!userId) { setToast({ show: true, msg: "IDENTIFICACIÓN REQUERIDA", type: "error" }); return; }
+    if (!userId) { setToast({ show: true, msg: dd.authRequired, type: "error" }); return; }
     try {
       const response = await apiClient.post("/favorites/add", { userId, dinoId: dino.id, nombre: dino.nombre });
       if (setFavorites) setFavorites(response.data.map((fav) => String(fav.id)));
-      setToast({ show: true, msg: isFav ? "ELIMINADO DE FAVORITOS" : "AÑADIDO A FAVORITOS", type: "success" });
+      setToast({ show: true, msg: isFav ? dd.removedFav : dd.addedFav, type: "success" });
     } catch {
-      setToast({ show: true, msg: "ERROR DE CONEXIÓN", type: "error" });
+      setToast({ show: true, msg: dd.connectionError, type: "error" });
     }
   };
 
   if (!dino) return (
     <div className={`min-h-screen flex items-center justify-center font-mono italic tracking-[0.5em] text-sm ${isLight ? "bg-[#f5f2ed] text-stone-400" : "bg-[#0f0d0b] text-amber-600"}`}>
-      ACCEDIENDO AL ARCHIVO...
+      {dd.loading}
     </div>
   );
 
   const fossilFields = [
-    { label: "Método",    value: dino.metodo,    icon: <FlaskConical size={11} /> },
-    { label: "Material",  value: dino.material,  icon: <Layers size={11} /> },
-    { label: "Extinción", value: dino.extincion, icon: <Clock size={11} /> },
+    { label: dd.method,    value: dino.metodo,    icon: <FlaskConical size={11} /> },
+    { label: dd.material,  value: dino.material,  icon: <Layers size={11} /> },
+    { label: dd.extinction, value: dino.extincion, icon: <Clock size={11} /> },
   ].filter(f => f.value);
 
   const conservacionLabel =
-    conservacion >= 80 ? "Excelente" :
-    conservacion >= 50 ? "Moderada"  : "Fragmentaria";
+    conservacion >= 80 ? dd.conservationExcellent :
+    conservacion >= 50 ? dd.conservationModerate  : dd.conservationFragmentary;
 
   const conservacionColor =
     conservacion >= 80 ? "#22c55e" :
     conservacion >= 50 ? "#f59e0b" : "#ef4444";
 
   const extraFields = [
-    { label: "Tipo",     value: dino.tipo },
-    { label: "Era",      value: dino.era },
+    { label: dd.type, value: dino.tipo },
+    { label: dd.era,  value: dino.era  },
   ].filter(f => f.value);
 
   return (
@@ -127,24 +132,22 @@ const DinoDetailPage = () => {
           <button onClick={() => navigate(-1)}
             className="text-amber-500/80 hover:text-amber-500 font-mono text-xs uppercase tracking-[0.3em] transition-colors flex items-center gap-2 group"
           >
-            <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span> Volver a registros
+            <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span> {dd.backToRecords}
           </button>
         </div>
 
         {/* ── MAIN GRID ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_460px] gap-6 xl:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_520px] gap-6 xl:gap-12 items-start">
 
           {/* ════ COLUMNA IZQUIERDA ════ */}
           <div className="flex flex-col gap-5">
 
             {/* Título + ID + estrella */}
-            {/* En móvil: apilado. En desktop: nombre a la izq, ID+estrella a la dcha */}
             <div>
               <div className="flex items-start justify-between gap-3">
                 <h1 className="text-5xl lg:text-7xl font-black italic uppercase tracking-tighter leading-[0.85] break-words min-w-0">
                   {dino.nombre}
                 </h1>
-                {/* ID + estrella — solo visible en desktop junto al nombre */}
                 <div className="hidden lg:flex items-center gap-2 shrink-0 mt-2">
                   <div className="font-mono text-lg font-black px-3 py-1.5 rounded-lg border"
                     style={{ borderColor: `${hex}50`, color: hex, backgroundColor: `${hex}14` }}>
@@ -161,7 +164,6 @@ const DinoDetailPage = () => {
                 </div>
               </div>
 
-              {/* Subname + ID+estrella en móvil en la misma fila */}
               <div className="flex items-center justify-between mt-3 gap-2">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="h-px w-8 shrink-0" style={{ backgroundColor: hex }} />
@@ -169,7 +171,6 @@ const DinoDetailPage = () => {
                     {dino.subName}
                   </span>
                 </div>
-                {/* ID + estrella — solo visible en móvil, junto al subname */}
                 <div className="flex lg:hidden items-center gap-1.5 shrink-0">
                   <div className="font-mono text-[12px] font-black px-2.5 py-1 rounded-lg border"
                     style={{ borderColor: `${hex}50`, color: hex, backgroundColor: `${hex}14` }}>
@@ -187,7 +188,7 @@ const DinoDetailPage = () => {
               </div>
             </div>
 
-            {/* Imagen solo en móvil — en desktop se muestra en columna derecha */}
+            {/* Imagen móvil */}
             <div className={`lg:hidden rounded-xl overflow-hidden border aspect-[4/3]`}
               style={{ borderColor: `${hex}30` }}
             >
@@ -202,10 +203,10 @@ const DinoDetailPage = () => {
             {/* Stats */}
             <div className="grid grid-cols-2 gap-2.5">
               {[
-                { label: "Longitud", value: dino.longitud, icon: <Ruler size={11} />, accentHex: "#78716c" },
-                { label: "Altura",   value: dino.altura,   icon: <ArrowsUpFromLine size={11} />, accentHex: "#78716c" },
-                { label: "Dieta",    value: dino.dieta,    icon: <Utensils size={11} />, accentHex: hex, textColor: theme.text },
-                { label: "Estado",   value: dino.estado || "EXTINTO", icon: <Skull size={11} />,
+                { label: dd.length, value: dino.longitud, icon: <Ruler size={11} />, accentHex: "#78716c" },
+                { label: dd.height, value: dino.altura,   icon: <ArrowsUpFromLine size={11} />, accentHex: "#78716c" },
+                { label: dd.diet,   value: dino.dieta,    icon: <Utensils size={11} />, accentHex: hex, textColor: theme.text },
+                { label: dd.status, value: dino.estado || dd.extinct, icon: <Skull size={11} />,
                   accentHex: dino.estado === "VIVO" ? "#22d3ee" : "#ef4444",
                   textColor: dino.estado === "VIVO" ? "text-cyan-400" : "text-red-400" },
               ].map(({ label, value, icon, accentHex, textColor }) => (
@@ -234,7 +235,7 @@ const DinoDetailPage = () => {
                   <div className="flex items-center gap-2">
                     <Pickaxe size={12} style={{ color: hex }} />
                     <span className="font-mono text-[14px] font-black uppercase tracking-[0.25em]" style={{ color: hex }}>
-                      Conservación fósil
+                      {dd.fossilConservation}
                     </span>
                   </div>
                   <div className="flex items-center gap-2.5">
@@ -255,7 +256,7 @@ const DinoDetailPage = () => {
                     />
                   </div>
                   <div className="flex justify-between mt-1.5">
-                    <span className={`text-[12px] font-mono uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>Integridad del espécimen</span>
+                    <span className={`text-[12px] font-mono uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>{dd.specimenIntegrity}</span>
                     <span className={`text-[12px] font-mono uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>100%</span>
                   </div>
                 </div>
@@ -280,12 +281,11 @@ const DinoDetailPage = () => {
           {/* ════ COLUMNA DERECHA ════ */}
           <div className="flex flex-col gap-4 lg:sticky lg:top-24">
 
-            {/* Imagen — oculta en móvil, visible en desktop */}
+            {/* Imagen desktop */}
             <div className={`hidden lg:block rounded-xl overflow-hidden border aspect-[4/3]`}
               style={{ borderColor: `${hex}30` }}
             >
-              <img src={dino.imagen} alt={dino.nombre}
-                className="w-full h-full object-cover" />
+              <img src={dino.imagen} alt={dino.nombre} className="w-full h-full object-cover" />
             </div>
 
             {/* Datos extra */}
@@ -302,15 +302,15 @@ const DinoDetailPage = () => {
               </div>
             )}
 
-            {/* Placeholder del mapa */}
+            {/* Placeholder mapa */}
             <div className={`rounded-lg border-2 border-dashed flex flex-col items-center justify-center py-10 gap-3 ${isLight ? "border-stone-200 bg-stone-50" : "border-white/[0.07] bg-white/[0.02]"}`}>
               <MapPin size={22} className={isLight ? "text-stone-300" : "text-stone-700"} />
               <div className="text-center">
                 <p className={`font-mono text-[14px] uppercase tracking-[0.25em] font-black ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-                  Mapa de hallazgos
+                  {dd.discoveryMap}
                 </p>
                 <p className={`font-mono text-[12px] uppercase tracking-widest mt-1 ${isLight ? "text-stone-300" : "text-stone-700"}`}>
-                  Próximamente
+                  {dd.comingSoon}
                 </p>
               </div>
             </div>
@@ -318,11 +318,11 @@ const DinoDetailPage = () => {
 
         </div>
 
-        {/* ════ ESPECIES RELACIONADAS — fuera del grid, siempre al final ════ */}
+        {/* ════ ESPECIES RELACIONADAS ════ */}
         {recommendations.length > 0 && (
           <div className={`mt-8 pt-6 border-t ${isLight ? "border-stone-200" : "border-white/[0.07]"}`}>
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-stone-500 mb-4 flex items-center gap-2">
-              <Dna size={11} style={{ color: hex }} /> Especies vinculadas
+            <p className="font-mono text-[14px] uppercase tracking-[0.3em] text-stone-500 mb-4 flex items-center gap-2">
+              <Dna size={21} style={{ color: hex }} /> {dd.relatedSpecies}
             </p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               {recommendations.map((rec) => {
@@ -331,7 +331,7 @@ const DinoDetailPage = () => {
                   <Link key={rec.id} to={`/animal/${rec.nombre.toLowerCase()}`}
                     className={`group rounded-xl overflow-hidden border transition-all duration-300 hover:-translate-y-1 ${isLight ? "bg-white border-stone-100 hover:border-stone-300 hover:shadow-md" : "bg-white/[0.03] border-white/[0.06] hover:border-white/20"}`}
                   >
-                    <div className="relative h-40 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden">
                       <img src={rec.imagen} alt={rec.nombre}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

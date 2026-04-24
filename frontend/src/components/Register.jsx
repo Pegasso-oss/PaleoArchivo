@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, CheckCircle2, ArrowLeft } from "lucide-react"; 
+import { Mail, Lock, User, CheckCircle2, ArrowLeft, Eye, EyeOff } from "lucide-react"; 
 import BrachioSkull from "../assets/CBrachio.png"; 
 import { useUser } from "../context/useUser";
 import { useTranslation } from "../hooks/useTranslation";
@@ -12,6 +12,8 @@ const Register = () => {
   const [formData, setFormData] = useState({
     username: "", email: "", password: "", confirmPassword: ""
   });
+
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { theme } = useUser();
   const { tSection } = useTranslation();

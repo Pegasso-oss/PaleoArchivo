@@ -14,6 +14,7 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   const { theme } = useUser();
   const { tSection } = useTranslation();
@@ -44,8 +45,12 @@ const Register = () => {
     }
   };
 
-  const inputStyles = `w-full border-2 rounded-3xl py-5 pl-14 pr-5 text-lg focus:outline-none focus:border-amber-500/60 font-bold transition-all ${
+  const inputStyles = `w-full border-2 rounded-3xl py-5 pl-14 pr-16 text-lg focus:outline-none focus:border-amber-500/60 font-bold transition-all ${
     isLight ? "bg-stone-50 border-stone-200 text-stone-900 placeholder:text-stone-300" : "bg-black/40 border-[#3f3833] text-[#fef3c7] placeholder:text-stone-800"
+  }`;
+
+  const eyeStyles = `absolute right-6 top-1/2 -translate-y-1/2 transition-colors hover:scale-110 active:scale-95 ${
+    isLight ? "text-stone-300 hover:text-amber-600" : "text-stone-600 hover:text-amber-500"
   }`;
 
   return (
@@ -94,11 +99,14 @@ const Register = () => {
             <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">{rg.password}</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="password" required onChange={(e) => setFormData({...formData, password: e.target.value})} className={inputStyles} placeholder="••••••••••••" />
-            <button type="button" onClick={() => setShowPassword(!showPassword)}
-                className={`absolute right-6 top-1/2 -translate-y-1/2 transition-colors hover:scale-110 active:scale-95 ${
-                  isLight ? "text-stone-300 hover:text-amber-600" : "text-stone-600 hover:text-amber-500"
-                }`}>
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                className={inputStyles}
+                placeholder="••••••••••••"
+              />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className={eyeStyles}>
                 {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
             </div>
@@ -108,12 +116,15 @@ const Register = () => {
             <label className="text-[12px] tracking-widest ml-5 font-bold uppercase text-stone-500">{rg.confirmPassword}</label>
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
-              <input type="password" required onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className={inputStyles} placeholder={rg.confirmPlaceholder} />
-              <button type="button" onClick={() => setShowPassword(!showPassword)}
-                className={`absolute right-6 top-1/2 -translate-y-1/2 transition-colors hover:scale-110 active:scale-95 ${
-                  isLight ? "text-stone-300 hover:text-amber-600" : "text-stone-600 hover:text-amber-500"
-                }`}>
-                {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                required
+                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                className={inputStyles}
+                placeholder={rg.confirmPlaceholder}
+              />
+              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className={eyeStyles}>
+                {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
             </div>
           </div>

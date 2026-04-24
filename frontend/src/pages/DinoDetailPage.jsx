@@ -13,17 +13,7 @@ import {
   Star, Pickaxe, FlaskConical, Layers, Clock,
   Dna, MapPin,
 } from "lucide-react";
-
-const DIET_THEME = {
-  "Carnívoro":   { text: "text-red-500",    fill: "#ef4444" },
-  "Herbívoro":   { text: "text-green-500",  fill: "#22c55e" },
-  "Omnívoro":    { text: "text-amber-500",  fill: "#f59e0b" },
-  "Filtrador":   { text: "text-cyan-500",   fill: "#06b6d4" },
-  "Insectívoro": { text: "text-orange-400", fill: "#fb923c" },
-  "Piscívoro":   { text: "text-blue-400",   fill: "#60a5fa" },
-  "Carroñero":   { text: "text-purple-400", fill: "#c084fc" },
-  "Detritívoro": { text: "text-slate-400",  fill: "#94a3b8" },
-};
+import { getDietConfig, getDietLabel } from "../data/dietConfig";
 
 const Sparkles = ({ isFav, fill }) => {
   const pts = [
@@ -55,7 +45,7 @@ const DinoDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isFavorite, setFavorites } = useFavorites();
-  const { theme: colorTheme } = useUser();
+  const { theme: colorTheme, language } = useUser();
   const { tSection } = useTranslation();
   const dd = tSection('dinoDetail');
   const toastT = tSection('toast');
@@ -66,11 +56,11 @@ const DinoDetailPage = () => {
 
   const dino = allAnimals.find((d) => d.nombre.toLowerCase() === id.toLowerCase());
   const isFav = dino ? isFavorite(dino.id) : false;
-  const theme = useMemo(() => DIET_THEME[dino?.dieta] || { text: "text-stone-400", fill: "#a8a29e" }, [dino]);
+  const theme = useMemo(() => getDietConfig(dino?.dieta), [dino]);
   const hex = theme.fill;
   const conservacion = parseInt(dino?.conservacion) || 0;
 
-  const getTheme = (dieta) => DIET_THEME[dieta] || { text: "text-stone-400", fill: "#a8a29e" };
+  const getTheme = (dieta) => getDietConfig(dieta);
 
   const recommendations = useMemo(() => {
     if (!dino) return [];
@@ -344,7 +334,7 @@ const DinoDetailPage = () => {
                       <p className="text-stone-500 text-[9px] uppercase tracking-[0.15em] mb-2 line-clamp-1">{rec.subName}</p>
                       <span className="text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide border"
                         style={{ color: rt.fill, borderColor: `${rt.fill}35`, backgroundColor: `${rt.fill}10` }}>
-                        {rec.dieta}
+                        {getDietLabel(rec.dieta, language)}
                       </span>
                     </div>
                   </Link>

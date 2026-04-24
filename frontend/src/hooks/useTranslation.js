@@ -3,9 +3,13 @@
 //   t('header.login')           → string
 //   tSection('dinoDetail')      → objeto completo de la sección
 //   t('profile.viewAll', { n: 5 }) → interpola {n}
+//
+// dietLabels se genera dinámicamente desde dietConfig.js —
+// NO está en translations.js para evitar duplicación.
 
 import { useUser } from '../context/useUser';
 import { translations } from '../data/translations';
+import { DIET_CONFIG } from '../data/dietConfig';
 
 /**
  * Accede a cualquier clave de traducción con notación de punto.
@@ -40,9 +44,20 @@ export const useTranslation = () => {
 
   /**
    * tSection('dinoDetail') → objeto completo de la sección
-   * Útil cuando destructuras varias claves a la vez.
+   * tSection('dietLabels') → generado dinámicamente desde dietConfig
    */
-  const tSection = (section) => lang[section] || translations['es'][section] || {};
+  const tSection = (section) => {
+    if (section === 'dietLabels') {
+      // Genera el mapa { dieta: label } para el idioma activo
+      return Object.fromEntries(
+        Object.entries(DIET_CONFIG).map(([key, cfg]) => [
+          key,
+          cfg.labels[language] ?? cfg.labels['es'] ?? key,
+        ])
+      );
+    }
+    return lang[section] || translations['es'][section] || {};
+  };
 
   return { t, tSection, language };
 };

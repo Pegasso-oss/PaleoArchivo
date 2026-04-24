@@ -3,27 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import EraCard from "../components/EraCard";
 import { allAnimals } from "../data/allData";
+import { DIET_CONFIG, getDietConfig, getDietLabel } from "../data/dietConfig";
 import { Search, X, ShieldCheck, ChevronDown } from "lucide-react";
 import { useUser } from '../context/useUser';
 import { useTranslation } from '../hooks/useTranslation';
-
-// ── Paletas de colores ────────────────────────────────────────────────────
-
-const DIET_THEMES = {
-  Carnívoro:   { text: "text-red-500",    bg: "bg-red-500/10",    border: "border-red-500/40",    hoverBg: "hover:bg-red-500/10",    hoverText: "hover:text-red-400",    hoverBorder: "hover:border-red-500/40"    },
-  Herbívoro:   { text: "text-green-500",  bg: "bg-green-500/10",  border: "border-green-500/40",  hoverBg: "hover:bg-green-500/10",  hoverText: "hover:text-green-400",  hoverBorder: "hover:border-green-500/40"  },
-  Omnívoro:    { text: "text-amber-500",  bg: "bg-amber-500/10",  border: "border-amber-500/40",  hoverBg: "hover:bg-amber-500/10",  hoverText: "hover:text-amber-400",  hoverBorder: "hover:border-amber-500/40"  },
-  Insectívoro: { text: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/40", hoverBg: "hover:bg-orange-500/10", hoverText: "hover:text-orange-400", hoverBorder: "hover:border-orange-500/40" },
-  Piscívoro:   { text: "text-cyan-500",   bg: "bg-cyan-500/10",   border: "border-cyan-500/40",   hoverBg: "hover:bg-cyan-500/10",   hoverText: "hover:text-cyan-400",   hoverBorder: "hover:border-cyan-500/40"   },
-  Carroñero:   { text: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/40", hoverBg: "hover:bg-purple-500/10", hoverText: "hover:text-purple-400", hoverBorder: "hover:border-purple-500/40" },
-  Filtrador:   { text: "text-blue-500",   bg: "bg-blue-500/10",   border: "border-blue-500/40",   hoverBg: "hover:bg-blue-500/10",   hoverText: "hover:text-blue-400",   hoverBorder: "hover:border-blue-500/40"   },
-  Detritívoro: { text: "text-slate-400",  bg: "bg-slate-400/10",  border: "border-slate-400/40",  hoverBg: "hover:bg-slate-400/10",  hoverText: "hover:text-slate-300",  hoverBorder: "hover:border-slate-400/40"  },
-};
-
-const DIET_EMOJIS = {
-  Carnívoro: "🥩", Herbívoro: "🌿", Omnívoro: "🍲", Insectívoro: "🐛",
-  Piscívoro: "🐟", Carroñero: "🦴", Filtrador: "🌊", Detritívoro: "🍂",
-};
 
 const TYPE_THEMES = {
   Theropod:          { text: "text-red-400",    bg: "bg-red-400/10",    border: "border-red-400/40",    hoverBg: "hover:bg-red-400/10",    hoverText: "hover:text-red-300",    hoverBorder: "hover:border-red-400/40"    },
@@ -92,12 +75,17 @@ const LandingPage = () => {
   const searchRef = useRef(null);
   const location = useLocation();
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
-  const { theme } = useUser();
+  const { theme, lang } = useUser();
   const isLight = theme === 'light';
   const { t, tSection } = useTranslation();
   const lnd = tSection('landing');
   const typeLabels = tSection('typeLabels');
-  const dietLabels = tSection('dietLabels');
+
+  // Dietas disponibles: solo las que realmente aparecen en los datos,
+  // en el orden definido en dietConfig (que es el orden "canónico").
+  const usedDiets = Object.keys(DIET_CONFIG).filter(diet =>
+    allAnimals.some(a => a.dieta === diet)
+  );
 
   useEffect(() => {
     if (searchTerm || activeDiet || activeType) setShowDropdown(true);
@@ -215,7 +203,7 @@ const LandingPage = () => {
               ${isLight ? 'bg-white/90 border-stone-200' : 'bg-stone-900/95 border-white/10'}`}>
               {filteredDinos.length > 0 ? (
                 filteredDinos.map((dino) => {
-                  const th = DIET_THEMES[dino.dieta] || { text: "text-white", bg: "bg-white/10", border: "border-white/20" };
+                  const th = getDietConfig(dino.dieta).color;
                   return (
                     <Link key={dino.id} to={`/animal/${dino.nombre.toLowerCase()}`}
                       className="flex items-center justify-between p-5 hover:bg-amber-600/10 transition-colors border-b border-white/5 last:border-none group/item">
@@ -227,7 +215,7 @@ const LandingPage = () => {
                         </div>
                       </div>
                       <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>
-                        {dietLabels[dino.dieta] || dino.dieta}
+                        {getDietLabel(dino.dieta, lang)}
                       </span>
                     </Link>
                   );
@@ -246,14 +234,16 @@ const LandingPage = () => {
             {/* Dropdown Dietas */}
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
-              active={activeDiet ? DIET_THEMES[activeDiet] : null}
-              activeLabel={dietLabels[activeDiet] || activeDiet}
+              active={activeDiet ? getDietConfig(activeDiet).color : null}
+              activeLabel={getDietLabel(activeDiet, lang)}
               onClear={() => setActiveDiet("")}
               isOpen={dietOpen}
               onToggle={() => { setDietOpen(d => !d); setTypeOpen(false); }}
               isLight={isLight}
             >
-              {Object.entries(DIET_THEMES).map(([dieta, th]) => {
+              {usedDiets.map((dieta) => {
+                const cfg = getDietConfig(dieta);
+                const th = cfg.color;
                 const isActive = activeDiet === dieta;
                 return (
                   <button key={dieta}
@@ -263,8 +253,8 @@ const LandingPage = () => {
                         ? `${th.bg} ${th.border} ${th.text}`
                         : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`
                       }`}>
-                    <span className="text-base shrink-0">{DIET_EMOJIS[dieta]}</span>
-                    <span>{dietLabels[dieta] || dieta}</span>
+                    <span className="text-base shrink-0">{cfg.emoji}</span>
+                    <span>{getDietLabel(dieta, lang)}</span>
                   </button>
                 );
               })}

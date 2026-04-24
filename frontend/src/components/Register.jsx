@@ -93,6 +93,12 @@ const Register = () => {
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
               <input type="password" required onChange={(e) => setFormData({...formData, password: e.target.value})} className={inputStyles} placeholder="••••••••••••" />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}
+                className={`absolute right-6 top-1/2 -translate-y-1/2 transition-colors hover:scale-110 active:scale-95 ${
+                  isLight ? "text-stone-300 hover:text-amber-600" : "text-stone-600 hover:text-amber-500"
+                }`}>
+                {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              </button>
             </div>
           </div>
 
@@ -101,6 +107,12 @@ const Register = () => {
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
               <input type="password" required onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className={inputStyles} placeholder={rg.confirmPlaceholder} />
+              <button type="button" onClick={() => setShowPassword(!showPassword)}
+                className={`absolute right-6 top-1/2 -translate-y-1/2 transition-colors hover:scale-110 active:scale-95 ${
+                  isLight ? "text-stone-300 hover:text-amber-600" : "text-stone-600 hover:text-amber-500"
+                }`}>
+                {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              </button>
             </div>
           </div>
 

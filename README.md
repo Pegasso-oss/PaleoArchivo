@@ -102,3 +102,5 @@ PaleoArchivo/
 - [x] Dietas extensibles con fuente de verdad única (`dietConfig.js`)
 - [ ] Mapa interactivo de hallazgos fósiles por animal
 - [ ] Ampliar catálogo: Silúrico, Devónico, Carbonífero, Pérmico, Eoceno, Oligoceno, Mioceno, Plioceno, Pleistoceno, Holoceno
+
+🌐 **[Ver en producción](https://paleoarchivo.vercel.app)**

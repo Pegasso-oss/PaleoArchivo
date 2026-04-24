@@ -9,7 +9,7 @@ const app = express();
 // CORS: en producción, cambia esto al dominio real de tu frontend
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173', 'http://localhost:3000'];
+  : ['http://localhost:5173', 'http://localhost:3000' ];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -40,3 +40,10 @@ mongoose.connect(process.env.MONGO_URI)
     app.listen(PORT, () => console.log(`🚀 Servidor corriendo en el puerto ${PORT}`));
   })
   .catch(err => console.error('❌ Error de conexión:', err));
+
+  const allowedOrigins = [
+  'https://paleoarchivo.vercel.app',
+  'http://localhost:5173',
+  'https://localhost',        // ← añade esto para Capacitor/Android
+  'capacitor://localhost',    // ← y esto por si acaso
+];

@@ -6,17 +6,16 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-// CORS: en producción, cambia esto al dominio real de tu frontend
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173', 'http://localhost:3000' ];
+  : ['http://localhost:5173', 'http://localhost:3000', 'https://localhost', 'capacitor://localhost'];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Permitir peticiones sin origin (ej: Postman, apps móviles)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log(`Origen no permitido por CORS: ${origin}`);
       callback(new Error(`Origen no permitido por CORS: ${origin}`));
     }
   },
@@ -26,12 +25,10 @@ app.use(cors({
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 
-// Ruta de prueba
 app.get('/', (req, res) => {
   res.send('El servidor de la Reserva Dino está ONLINE 🦖');
 });
 
-// Conexión a la Base de Datos
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI)
@@ -40,10 +37,3 @@ mongoose.connect(process.env.MONGO_URI)
     app.listen(PORT, () => console.log(`🚀 Servidor corriendo en el puerto ${PORT}`));
   })
   .catch(err => console.error('❌ Error de conexión:', err));
-
-  const allowedOrigins = [
-  'https://paleoarchivo.vercel.app',
-  'http://localhost:5173',
-  'https://localhost',        // ← añade esto para Capacitor/Android
-  'capacitor://localhost',    // ← y esto por si acaso
-];

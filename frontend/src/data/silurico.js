@@ -1,6 +1,6 @@
 export const dinosaurios = [
   {
-    id: 301,
+    id: 26,
     nombre: "COOKSONIA",
     subName: "Pionera Terrestre",
     tipo: "Rhyniopsida",
@@ -17,7 +17,7 @@ export const dinosaurios = [
     descripcion: "Una de las primeras plantas en colonizar la tierra firme. Sus tallos simples terminaban en cápsulas redondeadas que contenían las esporas para su reproducción.",
   },
   {
-    id: 302,
+    id: 27,
     nombre: "PNEUMODESMUS",
     subName: "Primer Explorador",
     tipo: "Diplopoda",
@@ -34,7 +34,7 @@ export const dinosaurios = [
     descripcion: "Uno de los primeros animales en desarrollar espiráculos para respirar aire. Es el milpiés más antiguo conocido y pionero de la vida terrestre.",
   },
   {
-    id: 303,
+    id: 28,
     nombre: "BIRKENIA",
     subName: "Escama de Diamante",
     tipo: "Anaspida",
@@ -51,7 +51,7 @@ export const dinosaurios = [
     descripcion: "Pez primitivo sin mandíbulas cubierto de escamas superpuestas. Nadaba de forma activa en ambientes de agua dulce y estuarios.",
   },
   {
-    id: 304,
+    id: 29,
     nombre: "ENTELOGNATHUS",
     subName: "Mandíbula Primordial",
     tipo: "Placodermi",
@@ -66,5 +66,5 @@ export const dinosaurios = [
     extincion: "418 m.a.",
     imagen: "https://www.vistaalmar.es/images/stories/fotos-30/entelognathus-primordialis.jpg",
     descripcion: "Un descubrimiento revolucionario. Es el primer animal conocido con los huesos de la mandíbula que heredamos los vertebrados modernos.",
-  }
+  },
 ];

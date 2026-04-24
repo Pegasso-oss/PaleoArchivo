@@ -2,6 +2,10 @@
 // Cubre: header, landing, eras (paleozoico/mesozoico/cenozoico/paleogeno),
 //        periodos (era pages), dinoCard, dinoDetail, favorites, profile,
 //        login, register, toast, common
+//
+// NOTA: dietLabels ya NO se define aquí. Las traducciones de dietas viven en
+// dietConfig.js → DIET_CONFIG[dieta].labels. El hook useTranslation genera
+// dietLabels dinámicamente a partir de ese archivo.
 
 export const translations = {
   es: {
@@ -55,9 +59,9 @@ export const translations = {
     eraPage: {
       backToEras: "Volver a las eras",
       backToPeriods: "Volver a periodos",
-      recordsOf: "Registros",
-      periodsOf: "Periodos del",
-      epochsOf: "Épocas del",
+      recordsOf: "REGISTROS",
+      periodsOf: "PERIODOS DEL",
+      epochsOf: "ÉPOCAS DEL",
       classifiedAnimals: "Animales clasificados",
       classifiedDinos: "Dinosaurios clasificados",
       wip: "WIP",
@@ -126,6 +130,19 @@ export const translations = {
           desc: "La expansión de las praderas. El clima se enfría, los bosques retroceden y surgen mamíferos gigantes.",
         },
       },
+
+      // Neogeno
+      neogeno: {
+        subtitle: "La era de las praderas", 
+        mioceno:  {desc: "El amanecer de las grandes praderas y los ancestros de los simios, La Tierra se transforma en vastas sabanas."},
+        plioceno: {desc: "Mundo de desiertos crecientes, los primeros Homínidos se ponen en pie para cruzar La Tierra llena de faunas y climas en constante cambio."},
+      },
+
+      cuaternario: {
+        subtitle: "El ascenso de los humanos modernos",
+        pleistoceno:  {desc: "Abarca las últimas glaciaciones extremas, incluyendo episodios como Dryas Reciente."},
+        holoceno: {desc: "Época geológica actual, los climas más cálidos y establos permiten el desarrollo humano."},
+      }
     },
 
     // ── DINO CARD ─────────────────────────────────────────────────────────
@@ -281,18 +298,6 @@ export const translations = {
       Mammalia: "Mamífero",
       Crocodylomorpha: "Crocodilomorfo",
     },
-
-    // ── DIETAS ────────────────────────────────────────────────────────────
-    dietLabels: {
-      Carnívoro: "Carnívoro",
-      Herbívoro: "Herbívoro",
-      Omnívoro: "Omnívoro",
-      Filtrador: "Filtrador",
-      Insectívoro: "Insectívoro",
-      Piscívoro: "Piscívoro",
-      Carroñero: "Carroñero",
-      Detritívoro: "Detritívoro",
-    },
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -343,9 +348,9 @@ export const translations = {
     eraPage: {
       backToEras: "Back to eras",
       backToPeriods: "Back to periods",
-      recordsOf: "Records",
-      periodsOf: "Periods of",
-      epochsOf: "Epochs of",
+      recordsOf: "RECORDS",
+      periodsOf: "PERIODS OF",
+      epochsOf: "EPOCHS OF",
       classifiedAnimals: "Animals classified",
       classifiedDinos: "Dinosaurs classified",
       wip: "WIP",
@@ -556,17 +561,6 @@ export const translations = {
       Mammalia: "Mammal",
       Crocodylomorpha: "Crocodylomorph",
     },
-
-    dietLabels: {
-      Carnívoro: "Carnivore",
-      Herbívoro: "Herbivore",
-      Omnívoro: "Omnivore",
-      Filtrador: "Filter feeder",
-      Insectívoro: "Insectivore",
-      Piscívoro: "Piscivore",
-      Carroñero: "Scavenger",
-      Detritívoro: "Detritivore",
-    },
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -617,9 +611,9 @@ export const translations = {
     eraPage: {
       backToEras: "Retour aux ères",
       backToPeriods: "Retour aux périodes",
-      recordsOf: "Registres",
-      periodsOf: "Périodes du",
-      epochsOf: "Époques du",
+      recordsOf: "REGISTRES",
+      periodsOf: "PÉRIODES DU",
+      epochsOf: "ÉPOQUES DU",
       classifiedAnimals: "Animaux classifiés",
       classifiedDinos: "Dinosaures classifiés",
       wip: "En cours",
@@ -831,17 +825,6 @@ export const translations = {
       Mammalia: "Mammifère",
       Crocodylomorpha: "Crocodylomorphe",
     },
-
-    dietLabels: {
-      Carnívoro: "Carnivore",
-      Herbívoro: "Herbivore",
-      Omnívoro: "Omnivore",
-      Filtrador: "Filtreur",
-      Insectívoro: "Insectivore",
-      Piscívoro: "Piscivore",
-      Carroñero: "Charognard",
-      Detritívoro: "Détrivore",
-    },
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -892,9 +875,9 @@ export const translations = {
     eraPage: {
       backToEras: "Torna alle ere",
       backToPeriods: "Torna ai periodi",
-      recordsOf: "Registri",
-      periodsOf: "Periodi del",
-      epochsOf: "Epoche del",
+      recordsOf: "REGISTRI",
+      periodsOf: "PERIODI DEL",
+      epochsOf: "EPOCHE DEL",
       classifiedAnimals: "Animali classificati",
       classifiedDinos: "Dinosauri classificati",
       wip: "In corso",
@@ -1105,17 +1088,6 @@ export const translations = {
       Squamata: "Squamato",
       Mammalia: "Mammifero",
       Crocodylomorpha: "Crocodilomorfo",
-    },
-
-    dietLabels: {
-      Carnívoro: "Carnivoro",
-      Herbívoro: "Erbivoro",
-      Omnívoro: "Onnivoro",
-      Filtrador: "Filtratore",
-      Insectívoro: "Insettivoro",
-      Piscívoro: "Piscivoro",
-      Carroñero: "Spazzino",
-      Detritívoro: "Detritofago",
     },
   },
 };

@@ -18,19 +18,23 @@ const ROUTE_SUBTITLES = {
   "/era/paleozoico/devonico": "Devónico",
   "/era/paleozoico/carbonifero": "Carbonífero",
   "/era/paleozoico/permico": "Pérmico",
+
   "/era/mesozoico": "Mesozoico",
   "/era/mesozoico/triasico": "Triásico",
   "/era/mesozoico/jurasico": "Jurásico",
   "/era/mesozoico/cretacico": "Cretácico",
+
   "/era/cenozoico": "Cenozoico",
   "/era/cenozoico/paleogeno": "Paleogeno",
-  "/era/cenozoico/neogeno": "Neogeno",
-  "/era/cenozoico/cuaternario": "Cuaternario",
   "/era/cenozoico/paleogeno/paleoceno": "Paleoceno",
   "/era/cenozoico/paleogeno/eoceno": "Eoceno",
   "/era/cenozoico/paleogeno/oligoceno": "Oligoceno",
+
+  "/era/cenozoico/neogeno": "Neogeno",
   "/era/cenozoico/neogeno/mioceno": "Mioceno",
   "/era/cenozoico/neogeno/plioceno": "Plioceno",
+
+  "/era/cenozoico/cuaternario": "Cuaternario",
   "/era/cenozoico/cuaternario/pleistoceno": "Pleistoceno",
   "/era/cenozoico/cuaternario/holoceno": "Holoceno",
 };
@@ -94,7 +98,7 @@ const Header = () => {
     if (location.pathname.includes("/favorites")) return t.favorites;
     if (location.pathname === "/login") return t.login;
     if (location.pathname === "/register") return t.register;
-    if (location.pathname === "/perfil") return "Mi perfil";
+    if (location.pathname === "/perfil") return t.profile;
 
     const animalMatch = matchPath({ path: "/animal/:id" }, location.pathname);
     if (animalMatch) {

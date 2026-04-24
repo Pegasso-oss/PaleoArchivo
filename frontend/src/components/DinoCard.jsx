@@ -5,13 +5,14 @@ import { Star } from "lucide-react";
 import { useFavorites } from "../context/FavoritesContext";
 import { useUser } from "../context/useUser";
 import { useTranslation } from "../hooks/useTranslation";
+import { getDietConfig, getDietLabel } from "../data/dietConfig";
 import Toast from "./Toast";
 import apiClient from "../api/apiClient";
 
 const DinoCard = ({ dino }) => {
   const { isFavorite, setFavorites } = useFavorites();
   const isFav = isFavorite(dino.id);
-  const { theme } = useUser();
+  const { theme, language } = useUser();
   const { tSection } = useTranslation();
   const dc = tSection('dinoCard');
   const isLight = theme === "light";
@@ -39,16 +40,11 @@ const DinoCard = ({ dino }) => {
     }
   };
 
-  const dietStyles = {
-    Carnívoro:   isLight ? "bg-red-100 text-red-700 border-red-200"       : "bg-red-900/40 text-red-300 border-red-500/50",
-    Herbívoro:   isLight ? "bg-green-100 text-green-700 border-green-200"  : "bg-green-900/40 text-green-300 border-green-500/50",
-    Omnívoro:    isLight ? "bg-amber-100 text-amber-700 border-amber-200"  : "bg-amber-900/40 text-amber-300 border-amber-500/50",
-    Insectívoro: isLight ? "bg-orange-100 text-orange-700 border-orange-200": "bg-orange-900/40 text-orange-300 border-orange-500/50",
-    Piscívoro:   isLight ? "bg-cyan-100 text-cyan-700 border-cyan-200"     : "bg-cyan-900/40 text-cyan-300 border-cyan-500/50",
-    Carroñero:   isLight ? "bg-purple-100 text-purple-700 border-purple-200": "bg-purple-900/40 text-purple-300 border-purple-500/50",
-    Filtrador:   isLight ? "bg-blue-100 text-blue-700 border-blue-200"     : "bg-blue-900/40 text-blue-300 border-blue-500/50",
-    Detritívoro: isLight ? "bg-slate-200 text-slate-700 border-slate-300"  : "bg-slate-700/40 text-slate-300 border-slate-500/50",
-  };
+  const dietCfg = getDietConfig(dino.dieta);
+  // Adapta los colores de dietConfig al esquema claro/oscuro de DinoCard
+  const dietClass = isLight
+    ? `${dietCfg.color.bg} ${dietCfg.color.text} ${dietCfg.color.border}`
+    : `${dietCfg.color.bg} ${dietCfg.color.text} ${dietCfg.color.border}`;
 
   return (
     <div className="relative group w-full">
@@ -71,7 +67,7 @@ const DinoCard = ({ dino }) => {
             <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               src={dino.imagen} alt={dino.nombre} />
             <div className={`absolute inset-0 bg-gradient-to-t to-transparent opacity-50
-              ${isLight ? "from-white" : "from-[#1a1816]"}`} />
+              ${isLight ? "from-white/50" : "from-[#1a1816]"}`} />
           </div>
 
           <div className="p-5 flex flex-col flex-1 gap-3">
@@ -100,9 +96,8 @@ const DinoCard = ({ dino }) => {
             </p>
 
             <div className="mt-auto flex flex-col gap-3">
-              <span className={`self-start text-[9px] uppercase tracking-[0.2em] font-black px-3 py-1.5 rounded-lg border
-                ${dietStyles[dino.dieta] || ""}`}>
-                {dino.dieta}
+              <span className={`self-start text-[9px] uppercase tracking-[0.2em] font-black px-3 py-1.5 rounded-lg border ${dietClass}`}>
+                {getDietLabel(dino.dieta, language)}
               </span>
 
               <div className={`border-t pt-3 ${isLight ? "border-stone-200" : "border-[#3f3833]"}`}>

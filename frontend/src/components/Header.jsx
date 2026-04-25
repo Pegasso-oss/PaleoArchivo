@@ -134,13 +134,13 @@ const Header = () => {
 
           <div className="flex items-center gap-2">
 
-            {/* Botón tema — siempre visible en móvil y PC */}
+            {/* Botón tema — mismo tamaño que el botón de cuenta */}
             <button onClick={toggleTheme}
-              className={`p-2 rounded-lg border transition-all
-                ${isLight ? "bg-white border-stone-200" : "bg-black/40 border-white/10"}`}>
+              className={`flex items-center justify-center border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
+                ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}>
               {isLight
-                ? <Moon size={16} className={iconColor} />
-                : <Sun size={16} className={iconColor} />}
+                ? <Moon size={18} className={`${iconColor} md:w-6 md:h-6`} />
+                : <Sun size={18} className={`${iconColor} md:w-6 md:h-6`} />}
             </button>
 
             {isLoggedIn ? (
@@ -174,8 +174,6 @@ const Header = () => {
                     </div>
 
                     <div className="p-1.5 flex flex-col gap-0.5">
-
-                      {/* Favoritos */}
                       <Link to="/favorites" onClick={() => setIsMenuOpen(false)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
                           ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
@@ -183,7 +181,6 @@ const Header = () => {
                         <span className="text-[10px] font-black uppercase tracking-widest">{t.favorites}</span>
                       </Link>
 
-                      {/* Mi perfil */}
                       <Link to="/perfil" onClick={() => setIsMenuOpen(false)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
                           ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
@@ -193,7 +190,6 @@ const Header = () => {
 
                       <div className={`h-px mx-2 my-1 ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
 
-                      {/* Cerrar sesión */}
                       <button onClick={() => { setIsMenuOpen(false); setShowConfirm(true); }}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-red-500/70 hover:text-red-500 hover:bg-red-500/5 w-full">
                         <LogOut size={15} />
@@ -258,4 +254,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header; 

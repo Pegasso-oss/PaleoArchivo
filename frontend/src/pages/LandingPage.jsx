@@ -89,7 +89,7 @@ const DatoCurioso = ({ isLight }) => {
   );
 };
 
-// ── Tarjeta "Ir al archivo de X" ─────────────────────────────────────────
+// ── Tarjeta "Ir al archivo de X" — a la derecha del buscador ─────────────
 const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) => {
   if (!activeDiet && !activeType) return null;
 
@@ -105,21 +105,23 @@ const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) 
   return (
     <Link
       to={href}
-      className={`max-w-3xl mx-auto mb-6 rounded-xl border px-4 py-3 flex items-center gap-3 transition-all hover:scale-[1.01] group
+      className={`shrink-0 w-52 rounded-2xl border px-4 py-3 flex flex-col gap-1.5 transition-all hover:scale-[1.02] group self-stretch justify-center
         ${isLight ? "bg-white border-stone-200 hover:border-amber-400/40" : "bg-white/5 border-white/10 hover:border-amber-500/30"}`}
     >
-      <span className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-base ${color?.bg} ${color?.border} border`}>
-        {emoji}
-      </span>
-      <div className="flex-1 text-left">
-        <p className={`text-[10px] uppercase tracking-[0.12em] font-bold mb-0.5 ${isLight ? "text-stone-400" : "text-stone-500"}`}>
-          {isDiet ? "Dieta" : "Tipo"} · {count} registros
-        </p>
-        <p className={`text-sm font-black uppercase tracking-wide ${color?.text}`}>
-          Ver archivo de {label}
+      <div className="flex items-center gap-2">
+        <span className={`w-6 h-6 rounded-md flex items-center justify-center text-sm ${color?.bg} ${color?.border} border`}>
+          {emoji}
+        </span>
+        <p className={`text-[10px] uppercase tracking-[0.1em] font-bold ${isLight ? "text-stone-400" : "text-stone-500"}`}>
+          {isDiet ? "Dieta" : "Tipo"} · {count}
         </p>
       </div>
-      <ArrowRight size={16} className={`shrink-0 transition-transform group-hover:translate-x-1 ${color?.text}`} />
+      <div className="flex items-center justify-between gap-1">
+        <p className={`text-xs font-black uppercase tracking-wide leading-tight ${color?.text}`}>
+          Ver archivo<br />de {label}
+        </p>
+        <ArrowRight size={14} className={`shrink-0 transition-transform group-hover:translate-x-0.5 ${color?.text}`} />
+      </div>
     </Link>
   );
 };
@@ -268,9 +270,11 @@ const LandingPage = () => {
           {lnd.heroSubtitle}
         </p>
 
-        {/* BUSCADOR */}
-        <div className="max-w-3xl mx-auto relative z-[30] mb-4" ref={searchRef}>
-          <div className="relative">
+        {/* BUSCADOR + SHORTCUT en fila */}
+        <div className="max-w-6xl mx-auto relative z-[30] mb-4 flex items-start gap-3" ref={searchRef}>
+
+          {/* Buscador — ocupa el resto del espacio */}
+          <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
               <Search className={`transition-colors ${searchTerm ? "text-amber-500" : "text-stone-600"}`} size={22} />
             </div>
@@ -285,40 +289,49 @@ const LandingPage = () => {
                 <X size={22} />
               </button>
             )}
+
+            {/* Resultados */}
+            {showResults && (
+              <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30] overflow-y-auto max-h-[390px] hide-scrollbar
+                ${isLight ? "bg-white/90 border-stone-200" : "bg-stone-900/95 border-white/10"}`}>
+                {filteredDinos.length > 0 ? (
+                  filteredDinos.map((dino) => {
+                    const th = getDietConfig(dino.dieta).color;
+                    return (
+                      <Link key={dino.id} to={`/animal/${dino.nombre.toLowerCase()}`}
+                        className="flex items-center justify-between p-5 hover:bg-amber-600/10 transition-colors border-b border-white/5 last:border-none group/item">
+                        <div className="flex items-center gap-5">
+                          <img src={dino.imagen} alt={dino.nombre} className="w-12 h-12 object-cover rounded-xl border border-white/10" />
+                          <div className="text-left">
+                            <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base ${isLight ? "text-stone-900" : "text-white"}`}>{dino.nombre}</p>
+                            <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1">{dino.subName}</p>
+                          </div>
+                        </div>
+                        <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>
+                          {getDietLabel(dino.dieta, lang)}
+                        </span>
+                      </Link>
+                    );
+                  })
+                ) : (
+                  <div className="p-6 text-stone-500 font-mono text-sm uppercase tracking-[0.2em]">{lnd.noResults}</div>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Resultados */}
-          {showResults && (
-            <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30] overflow-y-auto max-h-[390px] hide-scrollbar
-              ${isLight ? "bg-white/90 border-stone-200" : "bg-stone-900/95 border-white/10"}`}>
-              {filteredDinos.length > 0 ? (
-                filteredDinos.map((dino) => {
-                  const th = getDietConfig(dino.dieta).color;
-                  return (
-                    <Link key={dino.id} to={`/animal/${dino.nombre.toLowerCase()}`}
-                      className="flex items-center justify-between p-5 hover:bg-amber-600/10 transition-colors border-b border-white/5 last:border-none group/item">
-                      <div className="flex items-center gap-5">
-                        <img src={dino.imagen} alt={dino.nombre} className="w-12 h-12 object-cover rounded-xl border border-white/10" />
-                        <div className="text-left">
-                          <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base ${isLight ? "text-stone-900" : "text-white"}`}>{dino.nombre}</p>
-                          <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1">{dino.subName}</p>
-                        </div>
-                      </div>
-                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>
-                        {getDietLabel(dino.dieta, lang)}
-                      </span>
-                    </Link>
-                  );
-                })
-              ) : (
-                <div className="p-6 text-stone-500 font-mono text-sm uppercase tracking-[0.2em]">{lnd.noResults}</div>
-              )}
-            </div>
-          )}
+          {/* Tarjeta archivo — a la derecha, solo aparece si hay filtro activo */}
+          <ArchivoShortcut
+            activeDiet={activeDiet}
+            activeType={activeType}
+            isLight={isLight}
+            lang={lang}
+            typeLabels={typeLabels}
+          />
         </div>
 
         {/* FILTROS */}
-        <div className="max-w-3xl mx-auto mb-6 w-full" ref={filtersRef}>
+        <div className="max-w-6xl mx-auto mb-10 w-full" ref={filtersRef}>
           <div className="flex items-center gap-2 justify-start px-1">
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
@@ -378,15 +391,6 @@ const LandingPage = () => {
             )}
           </div>
         </div>
-
-        {/* TARJETA IR AL ARCHIVO */}
-        <ArchivoShortcut
-          activeDiet={activeDiet}
-          activeType={activeType}
-          isLight={isLight}
-          lang={lang}
-          typeLabels={typeLabels}
-        />
 
         {/* DATO CURIOSO */}
         <DatoCurioso isLight={isLight} />

@@ -4,27 +4,29 @@ import { Link, useLocation } from "react-router-dom";
 import EraCard from "../components/EraCard";
 import { allAnimals } from "../data/allData";
 import { DIET_CONFIG, getDietConfig, getDietLabel } from "../data/dietConfig";
-import { Search, X, ShieldCheck, ChevronDown, Lightbulb, RefreshCw } from "lucide-react";
-import { useUser } from '../context/useUser';
-import { useTranslation } from '../hooks/useTranslation';
+import {
+  Search, X, ShieldCheck, ChevronDown, Lightbulb, RefreshCw, ArrowRight,
+} from "lucide-react";
+import { useUser } from "../context/useUser";
+import { useTranslation } from "../hooks/useTranslation";
 
 const TYPE_THEMES = {
-  Theropod:          { text: "text-red-400",    bg: "bg-red-400/10",    border: "border-red-400/40",    hoverBg: "hover:bg-red-400/10",    hoverText: "hover:text-red-300",    hoverBorder: "hover:border-red-400/40"    },
-  Sauropod:          { text: "text-emerald-400",bg: "bg-emerald-400/10",border: "border-emerald-400/40",hoverBg: "hover:bg-emerald-400/10",hoverText: "hover:text-emerald-300",hoverBorder: "hover:border-emerald-400/40"},
-  Avialae:           { text: "text-sky-400",    bg: "bg-sky-400/10",    border: "border-sky-400/40",    hoverBg: "hover:bg-sky-400/10",    hoverText: "hover:text-sky-300",    hoverBorder: "hover:border-sky-400/40"    },
-  Thyreophoran:      { text: "text-lime-400",   bg: "bg-lime-400/10",   border: "border-lime-400/40",   hoverBg: "hover:bg-lime-400/10",   hoverText: "hover:text-lime-300",   hoverBorder: "hover:border-lime-400/40"   },
-  Plesiosaur:        { text: "text-teal-400",   bg: "bg-teal-400/10",   border: "border-teal-400/40",   hoverBg: "hover:bg-teal-400/10",   hoverText: "hover:text-teal-300",   hoverBorder: "hover:border-teal-400/40"   },
-  Chondrichthyes:    { text: "text-cyan-400",   bg: "bg-cyan-400/10",   border: "border-cyan-400/40",   hoverBg: "hover:bg-cyan-400/10",   hoverText: "hover:text-cyan-300",   hoverBorder: "hover:border-cyan-400/40"   },
-  Basal_arthropod:   { text: "text-orange-400", bg: "bg-orange-400/10", border: "border-orange-400/40", hoverBg: "hover:bg-orange-400/10", hoverText: "hover:text-orange-300", hoverBorder: "hover:border-orange-400/40" },
-  Basal_chordate:    { text: "text-violet-400", bg: "bg-violet-400/10", border: "border-violet-400/40", hoverBg: "hover:bg-violet-400/10", hoverText: "hover:text-violet-300", hoverBorder: "hover:border-violet-400/40" },
-  Mollusca:          { text: "text-pink-400",   bg: "bg-pink-400/10",   border: "border-pink-400/40",   hoverBg: "hover:bg-pink-400/10",   hoverText: "hover:text-pink-300",   hoverBorder: "hover:border-pink-400/40"   },
-  Arthropoda:        { text: "text-amber-400",  bg: "bg-amber-400/10",  border: "border-amber-400/40",  hoverBg: "hover:bg-amber-400/10",  hoverText: "hover:text-amber-300",  hoverBorder: "hover:border-amber-400/40"  },
-  Agnatha:           { text: "text-stone-400",  bg: "bg-stone-400/10",  border: "border-stone-400/40",  hoverBg: "hover:bg-stone-400/10",  hoverText: "hover:text-stone-300",  hoverBorder: "hover:border-stone-400/40"  },
-  Saurischia:        { text: "text-rose-400",   bg: "bg-rose-400/10",   border: "border-rose-400/40",   hoverBg: "hover:bg-rose-400/10",   hoverText: "hover:text-rose-300",   hoverBorder: "hover:border-rose-400/40"   },
-  Abelisauridae:     { text: "text-red-300",    bg: "bg-red-300/10",    border: "border-red-300/40",    hoverBg: "hover:bg-red-300/10",    hoverText: "hover:text-red-200",    hoverBorder: "hover:border-red-300/40"    },
-  Squamata:          { text: "text-yellow-400", bg: "bg-yellow-400/10", border: "border-yellow-400/40", hoverBg: "hover:bg-yellow-400/10", hoverText: "hover:text-yellow-300", hoverBorder: "hover:border-yellow-400/40" },
-  Mammalia:          { text: "text-indigo-400", bg: "bg-indigo-400/10", border: "border-indigo-400/40", hoverBg: "hover:bg-indigo-400/10", hoverText: "hover:text-indigo-300", hoverBorder: "hover:border-indigo-400/40" },
-  Crocodylomorpha:   { text: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/40",  hoverBg: "hover:bg-green-400/10",  hoverText: "hover:text-green-300",  hoverBorder: "hover:border-green-400/40"  },
+  Theropod:        { text: "text-red-400",     bg: "bg-red-400/10",     border: "border-red-400/40",     hoverBg: "hover:bg-red-400/10",     hoverText: "hover:text-red-300",     hoverBorder: "hover:border-red-400/40"     },
+  Sauropod:        { text: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/40", hoverBg: "hover:bg-emerald-400/10", hoverText: "hover:text-emerald-300", hoverBorder: "hover:border-emerald-400/40" },
+  Avialae:         { text: "text-sky-400",     bg: "bg-sky-400/10",     border: "border-sky-400/40",     hoverBg: "hover:bg-sky-400/10",     hoverText: "hover:text-sky-300",     hoverBorder: "hover:border-sky-400/40"     },
+  Thyreophoran:    { text: "text-lime-400",    bg: "bg-lime-400/10",    border: "border-lime-400/40",    hoverBg: "hover:bg-lime-400/10",    hoverText: "hover:text-lime-300",    hoverBorder: "hover:border-lime-400/40"    },
+  Plesiosaur:      { text: "text-teal-400",    bg: "bg-teal-400/10",    border: "border-teal-400/40",    hoverBg: "hover:bg-teal-400/10",    hoverText: "hover:text-teal-300",    hoverBorder: "hover:border-teal-400/40"    },
+  Chondrichthyes:  { text: "text-cyan-400",    bg: "bg-cyan-400/10",    border: "border-cyan-400/40",    hoverBg: "hover:bg-cyan-400/10",    hoverText: "hover:text-cyan-300",    hoverBorder: "hover:border-cyan-400/40"    },
+  Basal_arthropod: { text: "text-orange-400",  bg: "bg-orange-400/10",  border: "border-orange-400/40",  hoverBg: "hover:bg-orange-400/10",  hoverText: "hover:text-orange-300",  hoverBorder: "hover:border-orange-400/40"  },
+  Basal_chordate:  { text: "text-violet-400",  bg: "bg-violet-400/10",  border: "border-violet-400/40",  hoverBg: "hover:bg-violet-400/10",  hoverText: "hover:text-violet-300",  hoverBorder: "hover:border-violet-400/40"  },
+  Mollusca:        { text: "text-pink-400",    bg: "bg-pink-400/10",    border: "border-pink-400/40",    hoverBg: "hover:bg-pink-400/10",    hoverText: "hover:text-pink-300",    hoverBorder: "hover:border-pink-400/40"    },
+  Arthropoda:      { text: "text-amber-400",   bg: "bg-amber-400/10",   border: "border-amber-400/40",   hoverBg: "hover:bg-amber-400/10",   hoverText: "hover:text-amber-300",   hoverBorder: "hover:border-amber-400/40"   },
+  Agnatha:         { text: "text-stone-400",   bg: "bg-stone-400/10",   border: "border-stone-400/40",   hoverBg: "hover:bg-stone-400/10",   hoverText: "hover:text-stone-300",   hoverBorder: "hover:border-stone-400/40"   },
+  Saurischia:      { text: "text-rose-400",    bg: "bg-rose-400/10",    border: "border-rose-400/40",    hoverBg: "hover:bg-rose-400/10",    hoverText: "hover:text-rose-300",    hoverBorder: "hover:border-rose-400/40"    },
+  Abelisauridae:   { text: "text-red-300",     bg: "bg-red-300/10",     border: "border-red-300/40",     hoverBg: "hover:bg-red-300/10",     hoverText: "hover:text-red-200",     hoverBorder: "hover:border-red-300/40"     },
+  Squamata:        { text: "text-yellow-400",  bg: "bg-yellow-400/10",  border: "border-yellow-400/40",  hoverBg: "hover:bg-yellow-400/10",  hoverText: "hover:text-yellow-300",  hoverBorder: "hover:border-yellow-400/40"  },
+  Mammalia:        { text: "text-indigo-400",  bg: "bg-indigo-400/10",  border: "border-indigo-400/40",  hoverBg: "hover:bg-indigo-400/10",  hoverText: "hover:text-indigo-300",  hoverBorder: "hover:border-indigo-400/40"  },
+  Crocodylomorpha: { text: "text-green-400",   bg: "bg-green-400/10",   border: "border-green-400/40",   hoverBg: "hover:bg-green-400/10",   hoverText: "hover:text-green-300",   hoverBorder: "hover:border-green-400/40"   },
 };
 
 // ── Datos curiosos ────────────────────────────────────────────────────────
@@ -62,10 +64,7 @@ const DatoCurioso = ({ isLight }) => {
 
   const nextFact = () => {
     setAnimating(true);
-    setTimeout(() => {
-      setFact(getRandomFact(fact.idx));
-      setAnimating(false);
-    }, 250);
+    setTimeout(() => { setFact(getRandomFact(fact.idx)); setAnimating(false); }, 250);
   };
 
   return (
@@ -80,15 +79,48 @@ const DatoCurioso = ({ isLight }) => {
           <span className="mr-1.5">{fact.emoji}</span>{fact.texto}
         </p>
       </div>
-      <button
-        onClick={nextFact}
+      <button onClick={nextFact}
         className={`shrink-0 p-2 rounded-xl transition-all hover:scale-110 active:scale-95
           ${isLight ? "text-stone-400 hover:text-amber-600 hover:bg-amber-50" : "text-stone-600 hover:text-amber-500 hover:bg-amber-500/10"}`}
-        title="Otro dato"
-      >
+        title="Otro dato">
         <RefreshCw size={15} className={animating ? "animate-spin" : ""} />
       </button>
     </div>
+  );
+};
+
+// ── Tarjeta "Ir al archivo de X" ─────────────────────────────────────────
+const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) => {
+  if (!activeDiet && !activeType) return null;
+
+  const isDiet = !!activeDiet;
+  const dietCfg = activeDiet ? getDietConfig(activeDiet) : null;
+  const typeCfg = activeType ? (TYPE_THEMES[activeType] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
+  const color = dietCfg ? dietCfg.color : typeCfg;
+  const emoji = dietCfg ? dietCfg.emoji : "🦕";
+  const label = activeDiet ? getDietLabel(activeDiet, lang) : (typeLabels[activeType] || activeType);
+  const href = activeDiet ? `/archivo?diet=${encodeURIComponent(activeDiet)}` : `/archivo?tipo=${encodeURIComponent(activeType)}`;
+  const count = allAnimals.filter(a => activeDiet ? a.dieta === activeDiet : a.tipo === activeType).length;
+
+  return (
+    <Link
+      to={href}
+      className={`max-w-3xl mx-auto mb-6 rounded-xl border px-4 py-3 flex items-center gap-3 transition-all hover:scale-[1.01] group
+        ${isLight ? "bg-white border-stone-200 hover:border-amber-400/40" : "bg-white/5 border-white/10 hover:border-amber-500/30"}`}
+    >
+      <span className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-base ${color?.bg} ${color?.border} border`}>
+        {emoji}
+      </span>
+      <div className="flex-1 text-left">
+        <p className={`text-[10px] uppercase tracking-[0.12em] font-bold mb-0.5 ${isLight ? "text-stone-400" : "text-stone-500"}`}>
+          {isDiet ? "Dieta" : "Tipo"} · {count} registros
+        </p>
+        <p className={`text-sm font-black uppercase tracking-wide ${color?.text}`}>
+          Ver archivo de {label}
+        </p>
+      </div>
+      <ArrowRight size={16} className={`shrink-0 transition-transform group-hover:translate-x-1 ${color?.text}`} />
+    </Link>
   );
 };
 
@@ -119,7 +151,7 @@ const FilterDropdown = ({ label, emoji, active, activeLabel, onClear, isOpen, on
       {isOpen && (
         <div className={`absolute top-full left-0 mt-2 w-64 rounded-xl border-2 shadow-2xl z-[25] overflow-hidden
           ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}>
-          <div className="p-2 grid grid-cols-2 gap-1">
+          <div className="p-2 grid grid-cols-2 gap-1 max-h-64 overflow-y-auto hide-scrollbar">
             {children}
           </div>
         </div>
@@ -141,13 +173,13 @@ const LandingPage = () => {
   const location = useLocation();
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
   const { theme, lang } = useUser();
-  const isLight = theme === 'light';
+  const isLight = theme === "light";
   const { t, tSection } = useTranslation();
-  const lnd = tSection('landing');
-  const typeLabels = tSection('typeLabels');
+  const lnd = tSection("landing");
+  const typeLabels = tSection("typeLabels");
 
-  const usedDiets = Object.keys(DIET_CONFIG).filter(diet =>
-    allAnimals.some(a => a.dieta === diet)
+  const usedDiets = Object.keys(DIET_CONFIG).filter((diet) =>
+    allAnimals.some((a) => a.dieta === diet)
   );
 
   useEffect(() => {
@@ -157,8 +189,7 @@ const LandingPage = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (filtersRef.current && !filtersRef.current.contains(e.target)) {
-        setDietOpen(false);
-        setTypeOpen(false);
+        setDietOpen(false); setTypeOpen(false);
       }
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowDropdown(false);
@@ -166,12 +197,8 @@ const LandingPage = () => {
     };
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        setSearchTerm("");
-        setActiveDiet("");
-        setActiveType("");
-        setDietOpen(false);
-        setTypeOpen(false);
-        setShowDropdown(false);
+        setSearchTerm(""); setActiveDiet(""); setActiveType("");
+        setDietOpen(false); setTypeOpen(false); setShowDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -194,10 +221,10 @@ const LandingPage = () => {
   const eras = [
     { id: "paleozoico", name: "PALEOZOICO", age: "541 - 252 m.a.", image: "https://media.istockphoto.com/id/1144091536/es/foto/criaturas-del-período-cámbrico-escena-submarina-con-anomalocaris-opabinia-hallucigenia-pirania.jpg?s=612x612&w=0&k=20&c=XD683S0yCOb2WhXsT3iRx5XGVS7jCNjS3EN4SK0e7uA=", desc: lnd.eras?.paleozoico?.desc },
     { id: "mesozoico", name: "MESOZOICO", age: "252 - 66 m.a.", image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: lnd.eras?.mesozoico?.desc },
-    { id: "cenozoico", name: "CENOZOICO", age: "66 m.a. - " + t('landing.today', {}), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
+    { id: "cenozoico", name: "CENOZOICO", age: "66 m.a. - " + t("landing.today", {}), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
   ];
 
-  const availableTypes = [...new Set(allAnimals.map(a => a.tipo).filter(Boolean))].sort();
+  const availableTypes = [...new Set(allAnimals.map((a) => a.tipo).filter(Boolean))].sort();
 
   const filteredDinos = Array.from(
     new Map(allAnimals.map((dino) => [dino.nombre.toLowerCase(), dino])).values()
@@ -212,16 +239,16 @@ const LandingPage = () => {
   const showResults = showDropdown && (searchTerm || activeDiet || activeType);
 
   return (
-    <div className={`min-h-screen flex flex-col px-4 pt-4 pb-20 relative isolate transition-colors duration-500 ${isLight ? 'bg-[#f5f2ed] text-stone-900' : 'bg-[#141210] text-white'}`}>
+    <div className={`min-h-screen flex flex-col px-4 pt-4 pb-20 relative isolate transition-colors duration-500 ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
 
       {/* Mensaje logout */}
       <div className={`fixed left-0 right-0 z-[40] mx-auto w-full max-w-md px-4 transition-all duration-700 pointer-events-none ${showLogoutMsg ? "top-32 opacity-100 scale-100" : "top-0 opacity-0 scale-95"}`}>
-        <div className={`border border-amber-600/40 backdrop-blur-md rounded-xl shadow-2xl pointer-events-auto overflow-hidden ${isLight ? 'bg-white/95' : 'bg-[#1a1614]/95'}`}>
+        <div className={`border border-amber-600/40 backdrop-blur-md rounded-xl shadow-2xl pointer-events-auto overflow-hidden ${isLight ? "bg-white/95" : "bg-[#1a1614]/95"}`}>
           <div className="px-5 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <ShieldCheck className="text-amber-500" size={18} />
               <div>
-                <p className={`font-bold text-[11px] uppercase tracking-wider ${isLight ? 'text-stone-900' : 'text-white'}`}>{lnd.logoutTitle}</p>
+                <p className={`font-bold text-[11px] uppercase tracking-wider ${isLight ? "text-stone-900" : "text-white"}`}>{lnd.logoutTitle}</p>
                 <p className="text-stone-500 font-mono text-[9px] uppercase tracking-widest">{lnd.logoutSub}</p>
               </div>
             </div>
@@ -237,7 +264,7 @@ const LandingPage = () => {
         <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 italic leading-none uppercase">
           {lnd.heroTitle} <span className="text-amber-600">{lnd.heroTitleAccent}</span>
         </h1>
-        <p className={`max-w-2xl mx-auto text-base md:text-lg mb-10 transition-colors ${isLight ? 'text-stone-600' : 'text-white/60'}`}>
+        <p className={`max-w-2xl mx-auto text-base md:text-lg mb-10 transition-colors ${isLight ? "text-stone-600" : "text-white/60"}`}>
           {lnd.heroSubtitle}
         </p>
 
@@ -250,7 +277,7 @@ const LandingPage = () => {
             <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={lnd.searchPlaceholder?.toUpperCase()}
               className={`w-full border py-5 md:py-6 pl-16 pr-14 rounded-2xl text-sm md:text-base font-mono tracking-widest focus:outline-none focus:border-amber-600/50 transition-all uppercase shadow-2xl
-                ${isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-[#2a2420]/40 border-stone-800 text-white'}`}
+                ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#2a2420]/40 border-stone-800 text-white"}`}
             />
             {searchTerm && (
               <button onClick={() => { setSearchTerm(""); if (!activeDiet && !activeType) setShowDropdown(false); }}
@@ -263,7 +290,7 @@ const LandingPage = () => {
           {/* Resultados */}
           {showResults && (
             <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30] overflow-y-auto max-h-[390px] hide-scrollbar
-              ${isLight ? 'bg-white/90 border-stone-200' : 'bg-stone-900/95 border-white/10'}`}>
+              ${isLight ? "bg-white/90 border-stone-200" : "bg-stone-900/95 border-white/10"}`}>
               {filteredDinos.length > 0 ? (
                 filteredDinos.map((dino) => {
                   const th = getDietConfig(dino.dieta).color;
@@ -273,7 +300,7 @@ const LandingPage = () => {
                       <div className="flex items-center gap-5">
                         <img src={dino.imagen} alt={dino.nombre} className="w-12 h-12 object-cover rounded-xl border border-white/10" />
                         <div className="text-left">
-                          <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base ${isLight ? 'text-stone-900' : 'text-white'}`}>{dino.nombre}</p>
+                          <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base ${isLight ? "text-stone-900" : "text-white"}`}>{dino.nombre}</p>
                           <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1">{dino.subName}</p>
                         </div>
                       </div>
@@ -291,7 +318,7 @@ const LandingPage = () => {
         </div>
 
         {/* FILTROS */}
-        <div className="max-w-3xl mx-auto mb-10 w-full" ref={filtersRef}>
+        <div className="max-w-3xl mx-auto mb-6 w-full" ref={filtersRef}>
           <div className="flex items-center gap-2 justify-start px-1">
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
@@ -299,7 +326,7 @@ const LandingPage = () => {
               activeLabel={getDietLabel(activeDiet, lang)}
               onClear={() => setActiveDiet("")}
               isOpen={dietOpen}
-              onToggle={() => { setDietOpen(d => !d); setTypeOpen(false); }}
+              onToggle={() => { setDietOpen((d) => !d); setTypeOpen(false); }}
               isLight={isLight}
             >
               {usedDiets.map((dieta) => {
@@ -310,10 +337,7 @@ const LandingPage = () => {
                   <button key={dieta}
                     onClick={() => { setActiveDiet(isActive ? "" : dieta); setDietOpen(false); }}
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border transition-all text-left font-black text-[10px] uppercase tracking-wide
-                      ${isActive
-                        ? `${th.bg} ${th.border} ${th.text}`
-                        : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`
-                      }`}>
+                      ${isActive ? `${th.bg} ${th.border} ${th.text}` : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`}`}>
                     <span className="text-base shrink-0">{cfg.emoji}</span>
                     <span>{getDietLabel(dieta, lang)}</span>
                   </button>
@@ -327,7 +351,7 @@ const LandingPage = () => {
               activeLabel={typeLabels[activeType] || activeType}
               onClear={() => setActiveType("")}
               isOpen={typeOpen}
-              onToggle={() => { setTypeOpen(t => !t); setDietOpen(false); }}
+              onToggle={() => { setTypeOpen((t) => !t); setDietOpen(false); }}
               isLight={isLight}
             >
               {availableTypes.map((tipo) => {
@@ -337,10 +361,7 @@ const LandingPage = () => {
                   <button key={tipo}
                     onClick={() => { setActiveType(isActive ? "" : tipo); setTypeOpen(false); }}
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border transition-all text-left font-black text-[10px] uppercase tracking-wide
-                      ${isActive
-                        ? `${th.bg} ${th.border} ${th.text}`
-                        : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`
-                      }`}>
+                      ${isActive ? `${th.bg} ${th.border} ${th.text}` : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`}`}>
                     <span className={`w-2 h-2 rounded-full shrink-0 ${th.bg} ${th.border} border`} />
                     <span>{typeLabels[tipo] || tipo}</span>
                   </button>
@@ -358,9 +379,17 @@ const LandingPage = () => {
           </div>
         </div>
 
+        {/* TARJETA IR AL ARCHIVO */}
+        <ArchivoShortcut
+          activeDiet={activeDiet}
+          activeType={activeType}
+          isLight={isLight}
+          lang={lang}
+          typeLabels={typeLabels}
+        />
+
         {/* DATO CURIOSO */}
         <DatoCurioso isLight={isLight} />
-
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 w-full">

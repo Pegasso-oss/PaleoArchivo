@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { useUser } from "./context/useUser";
 import {
   LandingPage, DinoDetailPage, FavoritesPage, ProfilePage,
+  ArchivoPage,
   PaleozoicoPage, CambricoPage, OrdovicicoPage, SiluricoPage,
   DevonicoPage, CarboniferoPage, PermicoPage,
   MesozoicoPage, TriasicoPage, JurasicoPage, CretacicoPage,
@@ -32,11 +33,9 @@ function App() {
   }, [isLight]);
 
   return (
-    <div
-      className={`min-h-screen flex flex-col selection:bg-amber-500/30 transition-all duration-500 ${
-        isLight ? "light-theme bg-[#f8f6f2] text-stone-900" : "bg-[#1d1914] text-white"
-      }`}
-    >
+    <div className={`min-h-screen flex flex-col selection:bg-amber-500/30 transition-all duration-500 ${
+      isLight ? "light-theme bg-[#f8f6f2] text-stone-900" : "bg-[#1d1914] text-white"
+    }`}>
       {!hideHeader && <Header />}
 
       <div style={{ position: "relative", zIndex: 99999 }}>
@@ -58,6 +57,7 @@ function App() {
           <Route path="/favorites"  element={<FavoritesPage />} />
           <Route path="/perfil"     element={<ProfilePage />} />
           <Route path="/animal/:id" element={<DinoDetailPage />} />
+          <Route path="/archivo"    element={<ArchivoPage />} />
 
           {/* PALEOZOICO */}
           <Route path="/era/paleozoico"             element={<PaleozoicoPage />} />
@@ -69,9 +69,9 @@ function App() {
           <Route path="/era/paleozoico/permico"     element={<PermicoPage />} />
 
           {/* MESOZOICO */}
-          <Route path="/era/mesozoico"          element={<MesozoicoPage />} />
-          <Route path="/era/mesozoico/triasico" element={<TriasicoPage />} />
-          <Route path="/era/mesozoico/jurasico" element={<JurasicoPage />} />
+          <Route path="/era/mesozoico"           element={<MesozoicoPage />} />
+          <Route path="/era/mesozoico/triasico"  element={<TriasicoPage />} />
+          <Route path="/era/mesozoico/jurasico"  element={<JurasicoPage />} />
           <Route path="/era/mesozoico/cretacico" element={<CretacicoPage />} />
 
           {/* CENOZOICO */}
@@ -86,21 +86,19 @@ function App() {
           <Route path="/era/cenozoico/neogeno/mioceno"  element={<MiocenoPage />} />
           <Route path="/era/cenozoico/neogeno/plioceno" element={<PliocenoPage />} />
 
-          <Route path="/era/cenozoico/cuaternario"              element={<CuaternarioPage />} />
-          <Route path="/era/cenozoico/cuaternario/pleistoceno"  element={<PleistocenoPage />} />
-          <Route path="/era/cenozoico/cuaternario/holoceno"     element={<HolocenoPage />} />
+          <Route path="/era/cenozoico/cuaternario"             element={<CuaternarioPage />} />
+          <Route path="/era/cenozoico/cuaternario/pleistoceno" element={<PleistocenoPage />} />
+          <Route path="/era/cenozoico/cuaternario/holoceno"    element={<HolocenoPage />} />
 
         </Routes>
       </main>
 
       {!hideHeader && (
-        <footer
-          className={`py-10 font-mono tracking-[0.3em] uppercase text-[10px] transition-colors duration-500 ${
-            isLight
-              ? "bg-[#e5e2dd] text-stone-500 border-t border-black/5"
-              : "bg-[#0d0a09] text-stone-500 border-t border-white/5 opacity-60"
-          }`}
-        >
+        <footer className={`py-10 font-mono tracking-[0.3em] uppercase text-[10px] transition-colors duration-500 ${
+          isLight
+            ? "bg-[#e5e2dd] text-stone-500 border-t border-black/5"
+            : "bg-[#0d0a09] text-stone-500 border-t border-white/5 opacity-60"
+        }`}>
           <div className="max-w-7xl mx-auto px-4 text-center">
             <p>&copy; 2026 PaleoArchivo Project — Registros Digitales de la Biosfera</p>
           </div>

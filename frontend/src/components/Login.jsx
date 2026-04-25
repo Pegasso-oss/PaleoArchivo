@@ -68,7 +68,7 @@ const Login = () => {
         {/* Top */}
         <div>
           <div className="w-9 h-[3px] bg-amber-600 mb-8" />
-          <p className={`text-[18px] tracking-[0.15em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
+          <p className={`text-[11px] tracking-[0.15em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
             PaleoArchivo
           </p>
         </div>
@@ -102,8 +102,8 @@ const Login = () => {
         >
           {/* Logo pequeño */}
           <div className="flex items-center gap-3 mb-12">
-            <img src={BrachioSkull} alt="Logo" className="w-7 h-7 object-contain opacity-80" />
-            <span className={`text-[11px] tracking-[0.12em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
+            <img src={BrachioSkull} alt="Logo" className="w-10 h-10 object-contain opacity-80" />
+            <span className={`text-[18px] tracking-[0.12em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
               PaleoArchivo
             </span>
           </div>

@@ -107,8 +107,8 @@ const Register = () => {
         >
           {/* Logo pequeño */}
           <div className="flex items-center gap-3 mb-12">
-            <img src={BrachioSkull} alt="Logo" className="w-7 h-7 object-contain opacity-80" />
-            <span className={`text-[11px] tracking-[0.12em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
+            <img src={BrachioSkull} alt="Logo" className="w-10 h-10 object-contain opacity-80" />
+            <span className={`text-[18px] tracking-[0.12em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
               PaleoArchivo
             </span>
           </div>

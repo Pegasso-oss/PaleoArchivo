@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Eye, EyeOff } from "lucide-react";
+import { Lock, User, LogIn, Eye, EyeOff } from "lucide-react";
 import BrachioSkull from "../assets/CBrachio.png";
 import { useUser } from "../context/useUser";
 import { useTranslation } from "../hooks/useTranslation";
@@ -11,7 +11,6 @@ import apiClient from "../api/apiClient";
 const Login = () => {
   const [formData, setFormData] = useState({ identifier: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [focused, setFocused] = useState(null);
   const navigate = useNavigate();
   const { theme } = useUser();
   const { tSection } = useTranslation();
@@ -37,227 +36,115 @@ const Login = () => {
         alert("Error: El servidor no envió el ID de usuario.");
       }
     } catch (err) {
+      console.error("Error en login:", err);
       alert(err.response?.data?.msg || "Error de conexión");
     }
   };
 
-  const dark = {
-    bg: "#0c0b0a",
-    card: "#131211",
-    border: "#2a2520",
-    borderFocus: "#c2832a",
-    text: "#f5e6c8",
-    muted: "#6b5e4e",
-    accent: "#c2832a",
-    input: "#0f0e0d",
-    label: "#4a3f32",
-  };
+  const inputStyles = `w-full border rounded-xl py-4 pl-12 pr-12 text-lg focus:outline-none font-mono transition-all ${
+    isLight
+      ? "bg-stone-50 border-stone-200 text-stone-900 placeholder:text-stone-300 focus:border-amber-500"
+      : "bg-[#0f0e0d] border-[#2a2520] text-[#f5e6c8] placeholder:text-[#2a2520] focus:border-amber-600"
+  }`;
 
-  const light = {
-    bg: "#f7f3ee",
-    card: "#ffffff",
-    border: "#e2d9cc",
-    borderFocus: "#b5722a",
-    text: "#1a1410",
-    muted: "#9b8b78",
-    accent: "#b5722a",
-    input: "#faf8f5",
-    label: "#b0a090",
-  };
+  const labelStyles = "block text-[11px] tracking-[0.12em] font-bold uppercase mb-2 " + (isLight ? "text-stone-400" : "text-[#4a3f32]");
 
-  const c = isLight ? light : dark;
-
-  const fieldStyle = (name) => ({
-    width: "100%",
-    background: c.input,
-    border: `1px solid ${focused === name ? c.borderFocus : c.border}`,
-    borderRadius: "10px",
-    padding: "15px 48px 15px 16px",
-    fontSize: "15px",
-    fontFamily: "inherit",
-    color: c.text,
-    outline: "none",
-    transition: "border-color 0.2s",
-    boxSizing: "border-box",
-  });
+  const eyeStyles = `absolute right-4 top-1/2 -translate-y-1/2 transition-colors hover:scale-110 active:scale-95 ${
+    isLight ? "text-stone-300 hover:text-amber-600" : "text-[#4a3f32] hover:text-amber-500"
+  }`;
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: c.bg,
-      display: "flex",
-      fontFamily: "'DM Mono', 'Fira Code', 'Courier New', monospace",
-    }}>
-      {/* Left panel — decorative */}
-      <div style={{
-        width: "40%",
-        background: isLight ? "#f0ebe3" : "#0f0e0c",
-        borderRight: `1px solid ${c.border}`,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        padding: "48px",
-        position: "relative",
-        overflow: "hidden",
-      }}
-        className="hidden-mobile"
-      >
-        {/* Big skull watermark */}
-        <div style={{
-          position: "absolute",
-          bottom: "-40px",
-          right: "-40px",
-          width: "320px",
-          height: "320px",
-          opacity: 0.06,
-          filter: "grayscale(1)",
-        }}>
-          <img src={BrachioSkull} alt="" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+    <div className={`min-h-screen flex font-mono transition-colors duration-500 ${isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]"}`}>
+
+      {/* Panel izquierdo decorativo */}
+      <div className={`hidden lg:flex w-[40%] flex-col justify-between p-12 border-r relative overflow-hidden ${
+        isLight ? "bg-[#f0ebe3] border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"
+      }`}>
+        {/* Cráneo marca de agua */}
+        <div className="absolute -bottom-10 -right-10 w-72 h-72 opacity-[0.06] grayscale pointer-events-none">
+          <img src={BrachioSkull} alt="" className="w-full h-full object-contain" />
         </div>
 
+        {/* Top */}
         <div>
-          <div style={{
-            width: "36px",
-            height: "3px",
-            background: c.accent,
-            marginBottom: "32px",
-          }} />
-          <p style={{
-            fontSize: "11px",
-            letterSpacing: "0.15em",
-            color: c.muted,
-            textTransform: "uppercase",
-            margin: 0,
-          }}>PaleoArchivo</p>
+          <div className="w-9 h-[3px] bg-amber-600 mb-8" />
+          <p className={`text-[11px] tracking-[0.15em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
+            PaleoArchivo
+          </p>
         </div>
 
+        {/* Centro */}
         <div>
-          <p style={{
-            fontSize: "42px",
-            fontWeight: "700",
-            color: c.text,
-            lineHeight: 1.1,
-            margin: "0 0 16px 0",
-            letterSpacing: "-0.02em",
-          }}>
+          <p className={`text-5xl font-black leading-[1.1] tracking-tight mb-4 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
             250M<br />años<br />de historia
           </p>
-          <p style={{ fontSize: "13px", color: c.muted, margin: 0, lineHeight: 1.7 }}>
+          <p className={`text-sm leading-relaxed ${isLight ? "text-stone-400" : "text-[#6b5e4e]"}`}>
             Accede a tu archivo<br />de investigación.
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "8px" }}>
-          {[1,2,3,4,5].map(i => (
-            <div key={i} style={{
-              width: i === 1 ? "24px" : "8px",
-              height: "3px",
-              background: i === 1 ? c.accent : c.border,
-              borderRadius: "2px",
-            }} />
+        {/* Dots */}
+        <div className="flex gap-2 items-center">
+          <div className="w-6 h-[3px] bg-amber-600 rounded-full" />
+          {[1,2,3,4].map(i => (
+            <div key={i} className={`w-2 h-[3px] rounded-full ${isLight ? "bg-stone-200" : "bg-[#2a2520]"}`} />
           ))}
         </div>
       </div>
 
-      {/* Right panel — form */}
-      <div style={{
-        flex: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "48px 32px",
-      }}>
+      {/* Panel derecho — formulario */}
+      <div className="flex-1 flex items-center justify-center p-8 lg:p-16">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          style={{ width: "100%", maxWidth: "380px" }}
+          className="w-full max-w-sm"
         >
-          {/* Logo small */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "48px" }}>
-            <img src={BrachioSkull} alt="Logo" style={{ width: "28px", height: "28px", objectFit: "contain", opacity: 0.8 }} />
-            <span style={{ fontSize: "12px", letterSpacing: "0.1em", color: c.muted, textTransform: "uppercase" }}>
+          {/* Logo pequeño */}
+          <div className="flex items-center gap-3 mb-12">
+            <img src={BrachioSkull} alt="Logo" className="w-7 h-7 object-contain opacity-80" />
+            <span className={`text-[11px] tracking-[0.12em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
               PaleoArchivo
             </span>
           </div>
 
-          <h1 style={{
-            fontSize: "26px",
-            fontWeight: "700",
-            color: c.text,
-            margin: "0 0 6px 0",
-            letterSpacing: "-0.01em",
-          }}>
+          {/* Título */}
+          <h1 className={`text-3xl font-black tracking-tight mb-1 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
             {lg.title || "Bienvenido"}
           </h1>
-          <p style={{ fontSize: "13px", color: c.muted, margin: "0 0 40px 0" }}>
+          <p className={`text-sm mb-10 ${isLight ? "text-stone-400" : "text-[#6b5e4e]"}`}>
             Introduce tus credenciales para continuar
           </p>
 
-          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <form onSubmit={handleLogin} className="space-y-5">
             {/* Identifier */}
             <div>
-              <label style={{
-                display: "block",
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: c.label,
-                marginBottom: "8px",
-              }}>
-                {lg.userOrEmail || "Usuario o email"}
-              </label>
-              <input
-                type="text"
-                required
-                placeholder={lg.userPlaceholder || "tu@email.com"}
-                onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
-                onFocus={() => setFocused("id")}
-                onBlur={() => setFocused(null)}
-                style={fieldStyle("id")}
-              />
+              <label className={labelStyles}>{lg.userOrEmail || "Usuario o email"}</label>
+              <div className="relative">
+                <User className={`absolute left-4 top-1/2 -translate-y-1/2 ${isLight ? "text-stone-300" : "text-[#4a3f32]"}`} size={18} />
+                <input
+                  type="text" required
+                  placeholder={lg.userPlaceholder || "tu@email.com"}
+                  onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
+                  className={inputStyles}
+                  style={{ paddingRight: "1.25rem" }}
+                />
+              </div>
             </div>
 
             {/* Password */}
             <div>
-              <label style={{
-                display: "block",
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: c.label,
-                marginBottom: "8px",
-              }}>
-                {lg.password || "Contraseña"}
-              </label>
-              <div style={{ position: "relative" }}>
+              <label className={labelStyles}>{lg.password || "Contraseña"}</label>
+              <div className="relative">
+                <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 ${isLight ? "text-stone-300" : "text-[#4a3f32]"}`} size={18} />
                 <input
-                  type={showPassword ? "text" : "password"}
-                  required
+                  type={showPassword ? "text" : "password"} required
                   placeholder="••••••••"
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  onFocus={() => setFocused("pw")}
-                  onBlur={() => setFocused(null)}
-                  style={fieldStyle("pw")}
+                  className={inputStyles}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: "absolute",
-                    right: "14px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: c.muted,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className={eyeStyles}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -265,67 +152,31 @@ const Login = () => {
             {/* Submit */}
             <button
               type="submit"
-              style={{
-                marginTop: "8px",
-                width: "100%",
-                padding: "15px",
-                background: c.accent,
-                border: "none",
-                borderRadius: "10px",
-                color: "#fff",
-                fontSize: "13px",
-                fontFamily: "inherit",
-                fontWeight: "700",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                transition: "opacity 0.2s",
-              }}
-              onMouseEnter={e => e.target.style.opacity = "0.85"}
-              onMouseLeave={e => e.target.style.opacity = "1"}
+              className="w-full mt-2 py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-black uppercase tracking-[0.15em] text-sm transition-all flex items-center justify-center gap-3 group"
             >
-              {lg.submit || "Acceder"}
+              <LogIn size={18} className="group-hover:scale-110 transition-transform" />
+              <span>{lg.submit || "Acceder"}</span>
             </button>
           </form>
 
-          <p style={{
-            marginTop: "32px",
-            fontSize: "12px",
-            color: c.muted,
-            textAlign: "center",
-          }}>
+          {/* Footer */}
+          <p className={`mt-8 text-xs text-center uppercase tracking-widest ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
             {lg.noAccount || "¿No tienes cuenta?"}{" "}
-            <Link to="/register" style={{ color: c.accent, textDecoration: "none", fontWeight: "700" }}>
+            <Link to="/register" className="text-amber-600 font-bold hover:underline">
               {lg.signUp || "Registrarse"}
             </Link>
           </p>
 
-          {/* Back home */}
-          <p style={{ marginTop: "12px", textAlign: "center" }}>
+          <p className="mt-3 text-center">
             <button
               onClick={() => navigate("/")}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "11px",
-                color: c.label,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                fontFamily: "inherit",
-              }}
+              className={`text-[11px] uppercase tracking-widest transition-colors ${isLight ? "text-stone-300 hover:text-stone-500" : "text-[#2a2520] hover:text-[#4a3f32]"}`}
             >
               ← Volver al inicio
             </button>
           </p>
         </motion.div>
       </div>
-
-      <style>{`
-        @media (max-width: 640px) {
-          .hidden-mobile { display: none !important; }
-        }
-      `}</style>
     </div>
   );
 };

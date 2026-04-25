@@ -129,6 +129,18 @@ const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) 
 // ── Componente Dropdown ───────────────────────────────────────────────────
 const FilterDropdown = ({ label, emoji, active, activeLabel, onClear, isOpen, onToggle, isLight, children }) => {
   const th = active;
+  const listRef = useRef(null);
+  const [hasMore, setHasMore] = useState(false);
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    const check = () => setHasMore(el.scrollTop + el.clientHeight < el.scrollHeight - 4);
+    check();
+    el.addEventListener("scroll", check);
+    return () => el.removeEventListener("scroll", check);
+  }, [isOpen]);
+
   return (
     <div className="relative">
       <button onClick={onToggle}
@@ -153,9 +165,24 @@ const FilterDropdown = ({ label, emoji, active, activeLabel, onClear, isOpen, on
       {isOpen && (
         <div className={`absolute top-full left-0 mt-2 w-64 rounded-xl border-2 shadow-2xl z-[25] overflow-hidden
           ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}>
-          <div className="p-2 grid grid-cols-2 gap-1 max-h-64 overflow-y-auto hide-scrollbar">
+          <div
+            ref={listRef}
+            className="p-2 grid grid-cols-2 gap-1 max-h-64 overflow-y-auto hide-scrollbar"
+          >
             {children}
           </div>
+          {/* Indicador de más contenido */}
+          {hasMore && (
+            <div className={`absolute bottom-0 left-0 right-0 flex justify-center pb-1.5 pt-4 pointer-events-none
+              ${isLight
+                ? "bg-gradient-to-t from-white to-transparent"
+                : "bg-gradient-to-t from-[#1a1614] to-transparent"}`}>
+              <div className={`flex items-center justify-center w-6 h-6 rounded-full shadow-lg border
+                ${isLight ? "bg-white border-stone-200 text-stone-400" : "bg-[#2a2520] border-white/10 text-stone-400"}`}>
+                <ChevronDown size={12} />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

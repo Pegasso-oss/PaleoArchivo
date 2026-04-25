@@ -53,8 +53,6 @@ const Header = () => {
 
   const t = translations[language].header;
   const isLight = theme === "light";
-
-  // Color de iconos según tema
   const iconColor = isLight ? "text-blue-500" : "text-amber-500";
 
   useEffect(() => {
@@ -136,9 +134,9 @@ const Header = () => {
 
           <div className="flex items-center gap-2">
 
-            {/* Botón tema — visible en móvil */}
+            {/* Botón tema — siempre visible en móvil y PC */}
             <button onClick={toggleTheme}
-              className={`md:hidden p-2 rounded-lg border transition-all
+              className={`p-2 rounded-lg border transition-all
                 ${isLight ? "bg-white border-stone-200" : "bg-black/40 border-white/10"}`}>
               {isLight
                 ? <Moon size={16} className={iconColor} />
@@ -148,7 +146,7 @@ const Header = () => {
             {isLoggedIn ? (
               <div className="relative" ref={menuRef}>
 
-                {/* Botón usuario — avatar circular si tiene foto, icono si no */}
+                {/* Botón usuario */}
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg shadow-inner transition-all
                     ${isLight ? "bg-white border-amber-500/20 hover:border-amber-500" : "bg-black/80 border-amber-500/40 hover:border-amber-500"}`}
@@ -171,7 +169,6 @@ const Header = () => {
                   <div className={`absolute top-full right-0 mt-3 w-60 border rounded-xl shadow-2xl z-[1000] overflow-hidden
                     ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#1a1614] border-white/10 text-white"}`}>
 
-                    {/* Cabecera */}
                     <div className="px-4 py-3 border-b border-white/5 bg-amber-600/5">
                       <p className="text-[9px] font-black text-amber-500 uppercase tracking-[0.25em]">{username}</p>
                     </div>
@@ -193,25 +190,6 @@ const Header = () => {
                         <User size={15} className={iconColor} />
                         <span className="text-[10px] font-black uppercase tracking-widest">Mi perfil</span>
                       </Link>
-
-                      <div className={`h-px mx-2 my-1 ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
-
-                      {/* Toggle tema */}
-                      <button onClick={toggleTheme}
-                        className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors w-full
-                          ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
-                        <div className="flex items-center gap-3">
-                          {isLight
-                            ? <Sun size={15} className={iconColor} />
-                            : <Moon size={15} className={iconColor} />}
-                          <span className="text-[10px] font-black uppercase tracking-widest">
-                            {isLight ? t.light : t.dark}
-                          </span>
-                        </div>
-                        <div className={`w-7 h-3.5 rounded-full relative transition-colors ${isLight ? "bg-amber-500" : "bg-blue-500"}`}>
-                          <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all ${isLight ? "left-[14px]" : "left-0.5"}`} />
-                        </div>
-                      </button>
 
                       <div className={`h-px mx-2 my-1 ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
 

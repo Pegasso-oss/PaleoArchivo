@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import EraCard from "../components/EraCard";
 import { allAnimals } from "../data/allData";
 import { DIET_CONFIG, getDietConfig, getDietLabel } from "../data/dietConfig";
-import { Search, X, ShieldCheck, ChevronDown } from "lucide-react";
+import { Search, X, ShieldCheck, ChevronDown, Lightbulb, RefreshCw } from "lucide-react";
 import { useUser } from '../context/useUser';
 import { useTranslation } from '../hooks/useTranslation';
 
@@ -25,6 +25,71 @@ const TYPE_THEMES = {
   Squamata:          { text: "text-yellow-400", bg: "bg-yellow-400/10", border: "border-yellow-400/40", hoverBg: "hover:bg-yellow-400/10", hoverText: "hover:text-yellow-300", hoverBorder: "hover:border-yellow-400/40" },
   Mammalia:          { text: "text-indigo-400", bg: "bg-indigo-400/10", border: "border-indigo-400/40", hoverBg: "hover:bg-indigo-400/10", hoverText: "hover:text-indigo-300", hoverBorder: "hover:border-indigo-400/40" },
   Crocodylomorpha:   { text: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/40",  hoverBg: "hover:bg-green-400/10",  hoverText: "hover:text-green-300",  hoverBorder: "hover:border-green-400/40"  },
+};
+
+// ── Datos curiosos ────────────────────────────────────────────────────────
+const DATOS_CURIOSOS = [
+  { emoji: "🦕", texto: "El Argentinosaurus pesaba más de 70 toneladas — más que 10 elefantes africanos juntos." },
+  { emoji: "🦴", texto: "Los huesos de los dinosaurios tenían cavidades de aire, igual que los pájaros modernos." },
+  { emoji: "🌋", texto: "La extinción del Cretácico-Paleógeno fue causada por un asteroide de ~10 km de diámetro." },
+  { emoji: "🐦", texto: "Las aves son dinosaurios. Técnicamente, los dinosaurios no se extinguieron del todo." },
+  { emoji: "🦷", texto: "El T. rex renovaba sus dientes cada 1-2 años. Tenía hasta 60 dientes a la vez." },
+  { emoji: "🧠", texto: "El Estegosaurio tenía un cerebro del tamaño de una nuez pese a medir 9 metros." },
+  { emoji: "⚡", texto: "El Velocirraptor era en realidad del tamaño de un pavo, no como en Jurassic Park." },
+  { emoji: "🌊", texto: "El Mosasaurio podía nadar a más de 30 km/h y alcanzar los 17 metros de longitud." },
+  { emoji: "🕰️", texto: "El período entre T. rex y el Estegosaurio es mayor que entre T. rex y nosotros." },
+  { emoji: "🪨", texto: "El primer fósil de dinosaurio reconocido oficialmente fue descrito en 1824 por William Buckland." },
+  { emoji: "🌡️", texto: "El Mesozoico era tan cálido que no había casquetes polares. Los cocodrilos vivían en el Ártico." },
+  { emoji: "🥚", texto: "Se han encontrado huevos de dinosaurio con embriones perfectamente conservados en Mongolia." },
+  { emoji: "🔵", texto: "El Anomalocaris del Cámbrico era el depredador apex de su era, hace 520 millones de años." },
+  { emoji: "💨", texto: "El Pterosaurio Quetzalcoatlus tenía una envergadura de hasta 10-11 metros — como una avioneta." },
+  { emoji: "🧬", texto: "El ADN no sobrevive más de 1,5 millones de años. Clonar dinosaurios como en JP es imposible." },
+  { emoji: "🐠", texto: "El Coelacanthe, un pez que se creía extinto hace 65 Ma, fue redescubierto vivo en 1938." },
+  { emoji: "🏔️", texto: "Los Himalayas aún no existían cuando caminaban los últimos dinosaurios no aviares." },
+  { emoji: "🦂", texto: "Los escorpiones llevan prácticamente sin cambiar más de 430 millones de años en la Tierra." },
+];
+
+const getRandomFact = (exclude = -1) => {
+  let idx;
+  do { idx = Math.floor(Math.random() * DATOS_CURIOSOS.length); } while (idx === exclude && DATOS_CURIOSOS.length > 1);
+  return { ...DATOS_CURIOSOS[idx], idx };
+};
+
+// ── Componente DatoCurioso ────────────────────────────────────────────────
+const DatoCurioso = ({ isLight }) => {
+  const [fact, setFact] = useState(() => getRandomFact());
+  const [animating, setAnimating] = useState(false);
+
+  const nextFact = () => {
+    setAnimating(true);
+    setTimeout(() => {
+      setFact(getRandomFact(fact.idx));
+      setAnimating(false);
+    }, 250);
+  };
+
+  return (
+    <div className={`max-w-3xl mx-auto mb-10 rounded-2xl border px-5 py-4 flex items-center gap-4 transition-all duration-300
+      ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
+      <div className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${isLight ? "bg-amber-50" : "bg-amber-500/10"}`}>
+        <Lightbulb size={17} className="text-amber-500" />
+      </div>
+      <div className={`flex-1 text-left transition-opacity duration-250 ${animating ? "opacity-0" : "opacity-100"}`}>
+        <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-amber-600 mb-0.5">Dato curioso</p>
+        <p className={`text-sm font-mono leading-snug ${isLight ? "text-stone-700" : "text-stone-300"}`}>
+          <span className="mr-1.5">{fact.emoji}</span>{fact.texto}
+        </p>
+      </div>
+      <button
+        onClick={nextFact}
+        className={`shrink-0 p-2 rounded-xl transition-all hover:scale-110 active:scale-95
+          ${isLight ? "text-stone-400 hover:text-amber-600 hover:bg-amber-50" : "text-stone-600 hover:text-amber-500 hover:bg-amber-500/10"}`}
+        title="Otro dato"
+      >
+        <RefreshCw size={15} className={animating ? "animate-spin" : ""} />
+      </button>
+    </div>
+  );
 };
 
 // ── Componente Dropdown ───────────────────────────────────────────────────
@@ -81,8 +146,6 @@ const LandingPage = () => {
   const lnd = tSection('landing');
   const typeLabels = tSection('typeLabels');
 
-  // Dietas disponibles: solo las que realmente aparecen en los datos,
-  // en el orden definido en dietConfig (que es el orden "canónico").
   const usedDiets = Object.keys(DIET_CONFIG).filter(diet =>
     allAnimals.some(a => a.dieta === diet)
   );
@@ -228,10 +291,8 @@ const LandingPage = () => {
         </div>
 
         {/* FILTROS */}
-        <div className="max-w-3xl mx-auto mb-16 w-full" ref={filtersRef}>
+        <div className="max-w-3xl mx-auto mb-10 w-full" ref={filtersRef}>
           <div className="flex items-center gap-2 justify-start px-1">
-
-            {/* Dropdown Dietas */}
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
               active={activeDiet ? getDietConfig(activeDiet).color : null}
@@ -260,7 +321,6 @@ const LandingPage = () => {
               })}
             </FilterDropdown>
 
-            {/* Dropdown Tipos */}
             <FilterDropdown
               label={lnd.filterTypes} emoji="🦕"
               active={activeType ? TYPE_THEMES[activeType] : null}
@@ -288,7 +348,6 @@ const LandingPage = () => {
               })}
             </FilterDropdown>
 
-            {/* Limpiar filtros */}
             {(activeDiet || activeType) && (
               <button onClick={() => { setActiveDiet(""); setActiveType(""); if (!searchTerm) setShowDropdown(false); }}
                 className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest transition-all
@@ -298,6 +357,10 @@ const LandingPage = () => {
             )}
           </div>
         </div>
+
+        {/* DATO CURIOSO */}
+        <DatoCurioso isLight={isLight} />
+
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 w-full">

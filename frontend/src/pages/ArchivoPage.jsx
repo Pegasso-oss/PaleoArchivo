@@ -32,7 +32,8 @@ const ArchivoPage = () => {
   const navigate = useNavigate();
   const { theme, language } = useUser();
   const { tSection } = useTranslation();
-  const typeLabels = tSection('typeLabels');
+  const typeLabels = tSection("typeLabels");
+  const archivo = tSection("archivo");
   const isLight = theme === "light";
 
   const diet = params.get("diet") || "";
@@ -48,9 +49,7 @@ const ArchivoPage = () => {
     }).sort((a, b) => a.nombre.localeCompare(b.nombre));
   }, [diet, tipo]);
 
-  // Determinar tema de color del filtro activo
   const isDiet = !!diet;
-  const activeKey = diet || tipo;
   const dietCfg = diet ? getDietConfig(diet) : null;
   const typeCfg = tipo ? (TYPE_THEMES[tipo] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
   const activeColor = dietCfg ? dietCfg.color : typeCfg;
@@ -59,38 +58,55 @@ const ArchivoPage = () => {
     ? getDietLabel(diet, language)
     : (typeLabels[tipo] || tipo);
 
+  // Descripción desde translations
+  const description = isDiet
+    ? archivo?.diets?.[diet]
+    : archivo?.types?.[tipo];
+
   return (
     <div className={`min-h-screen px-4 pt-10 pb-20 font-mono transition-colors duration-500 ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
       <div className="max-w-6xl mx-auto">
 
+        {/* Back */}
+        <button
+          onClick={() => navigate(-1)}
+          className={`flex items-center gap-2 text-[11px] uppercase tracking-widest mb-8 transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}
+        >
+          <ArrowLeft size={14} /> Volver
+        </button>
+
         {/* Header */}
         <div className="mb-10">
-          <button
-            onClick={() => navigate(-1)}
-            className={`flex items-center gap-2 text-[11px] uppercase tracking-widest mb-8 transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}
-          >
-            <ArrowLeft size={14} /> Volver
-          </button>
-
-          <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-3 mb-4">
             <span className={`text-[11px] uppercase tracking-[0.15em] font-bold px-3 py-1.5 rounded-lg border ${activeColor?.bg} ${activeColor?.text} ${activeColor?.border}`}>
               {isDiet ? "Dieta" : "Tipo"}
             </span>
+            <span className={`text-[11px] uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+              {filteredAnimals.length} registro{filteredAnimals.length !== 1 ? "s" : ""}
+            </span>
           </div>
 
-          <h1 className={`text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-3 ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
+          <h1 className={`text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-6 ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
             <span className="mr-4">{activeEmoji}</span>
             {activeLabel}
           </h1>
-          <p className={`text-sm ${isLight ? "text-stone-500" : "text-stone-500"}`}>
-            {filteredAnimals.length} registro{filteredAnimals.length !== 1 ? "s" : ""} encontrado{filteredAnimals.length !== 1 ? "s" : ""} en el archivo
-          </p>
 
-          {/* Divider */}
-          <div className={`mt-6 h-px ${isLight ? "bg-stone-200" : "bg-white/5"}`} />
+          {/* Descripción */}
+          {description && (
+            <div className={`max-w-3xl rounded-2xl border px-6 py-5 mb-6 ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
+              <p className={`text-[10px] uppercase tracking-[0.15em] font-bold mb-2 ${activeColor?.text}`}>
+                {isDiet ? "Sobre esta dieta" : "Sobre este grupo"}
+              </p>
+              <p className={`text-sm leading-relaxed ${isLight ? "text-stone-600" : "text-stone-300"}`}>
+                {description}
+              </p>
+            </div>
+          )}
+
+          <div className={`h-px ${isLight ? "bg-stone-200" : "bg-white/5"}`} />
         </div>
 
-        {/* Grid de cards */}
+        {/* Grid */}
         {filteredAnimals.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filteredAnimals.map(dino => (

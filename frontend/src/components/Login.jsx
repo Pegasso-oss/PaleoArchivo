@@ -68,7 +68,7 @@ const Login = () => {
         {/* Top */}
         <div>
           <div className="w-9 h-[3px] bg-amber-600 mb-8" />
-          <p className={`text-[11px] tracking-[0.15em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
+          <p className={`text-[18px] tracking-[0.15em] uppercase ${isLight ? "text-stone-400" : "text-[#4a3f32]"}`}>
             PaleoArchivo
           </p>
         </div>

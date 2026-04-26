@@ -29,7 +29,6 @@ const TYPE_THEMES = {
   Crocodylomorpha: { text: "text-green-400",   bg: "bg-green-400/10",   border: "border-green-400/40",   hoverBg: "hover:bg-green-400/10",   hoverText: "hover:text-green-300",   hoverBorder: "hover:border-green-400/40"   },
 };
 
-// ── Datos curiosos ────────────────────────────────────────────────────────
 const DATOS_CURIOSOS = [
   { emoji: "🦕", texto: "El Argentinosaurus pesaba más de 70 toneladas — más que 10 elefantes africanos juntos." },
   { emoji: "🦴", texto: "Los huesos de los dinosaurios tenían cavidades de aire, igual que los pájaros modernos." },
@@ -68,7 +67,7 @@ const DatoCurioso = ({ isLight }) => {
   };
 
   return (
-    <div className={`max-w-5xl mx-auto mb-10 rounded-2xl border px-5 py-4 flex items-center gap-4 transition-all duration-300
+    <div className={`w-full rounded-2xl border px-5 py-4 flex items-center gap-4 transition-all duration-300
       ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
       <div className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${isLight ? "bg-amber-50" : "bg-amber-500/10"}`}>
         <Lightbulb size={17} className="text-amber-500" />
@@ -103,11 +102,9 @@ const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) 
   const count = allAnimals.filter(a => activeDiet ? a.dieta === activeDiet : a.tipo === activeType).length;
 
   return (
-    <Link
-      to={href}
+    <Link to={href}
       className={`w-full rounded-2xl border px-4 py-3 flex flex-col gap-1.5 transition-all hover:scale-[1.01] group justify-center
-        ${isLight ? "bg-white border-stone-200 hover:border-amber-400/40" : "bg-white/5 border-white/10 hover:border-amber-500/30"}`}
-    >
+        ${isLight ? "bg-white border-stone-200 hover:border-amber-400/40" : "bg-white/5 border-white/10 hover:border-amber-500/30"}`}>
       <div className="flex items-center gap-2">
         <span className={`w-6 h-6 rounded-md flex items-center justify-center text-sm ${color?.bg} ${color?.border} border`}>
           {emoji}
@@ -284,31 +281,28 @@ const LandingPage = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto text-center w-full relative z-10">
-        <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 italic leading-none uppercase">
-          {lnd.heroTitle} <span className="text-amber-600">{lnd.heroTitleAccent}</span>
-        </h1>
-        <p className={`max-w-2xl mx-auto text-base md:text-lg mb-10 transition-colors ${isLight ? "text-stone-600" : "text-white/60"}`}>
-          {lnd.heroSubtitle}
-        </p>
+      {/* Contenido central — todo con el mismo max-w-3xl */}
+      <div className="max-w-3xl mx-auto w-full relative z-10">
+
+        {/* Hero — centrado */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 italic leading-none uppercase">
+            {lnd.heroTitle} <span className="text-amber-600">{lnd.heroTitleAccent}</span>
+          </h1>
+          <p className={`text-base md:text-lg transition-colors ${isLight ? "text-stone-600" : "text-white/60"}`}>
+            {lnd.heroSubtitle}
+          </p>
+        </div>
 
         {/* BUSCADOR */}
-        <div className="max-w-3xl mx-auto relative z-[30] mb-2" ref={searchRef}>
-          {/* Buscador + tarjeta a la derecha en desktop */}
+        <div className="relative z-[30] mb-2" ref={searchRef}>
           <div className="relative">
-            {/* En desktop: tarjeta posicionada absolute a la derecha del buscador */}
+            {/* Shortcut en desktop: absolute a la derecha */}
             {hasFilter && (
               <div className="hidden md:block absolute top-0 left-[calc(100%+12px)] w-52 h-full">
-                <ArchivoShortcut
-                  activeDiet={activeDiet}
-                  activeType={activeType}
-                  isLight={isLight}
-                  lang={lang}
-                  typeLabels={typeLabels}
-                />
+                <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} isLight={isLight} lang={lang} typeLabels={typeLabels} />
               </div>
             )}
-
             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
               <Search className={`transition-colors ${searchTerm ? "text-amber-500" : "text-stone-600"}`} size={22} />
             </div>
@@ -325,20 +319,14 @@ const LandingPage = () => {
             )}
           </div>
 
-          {/* En móvil: tarjeta debajo del buscador */}
+          {/* Shortcut en móvil: debajo */}
           {hasFilter && (
             <div className="md:hidden mt-3">
-              <ArchivoShortcut
-                activeDiet={activeDiet}
-                activeType={activeType}
-                isLight={isLight}
-                lang={lang}
-                typeLabels={typeLabels}
-              />
+              <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} isLight={isLight} lang={lang} typeLabels={typeLabels} />
             </div>
           )}
 
-          {/* Resultados búsqueda */}
+          {/* Resultados */}
           {showResults && (
             <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30] overflow-y-auto max-h-[390px] hide-scrollbar
               ${isLight ? "bg-white/90 border-stone-200" : "bg-stone-900/95 border-white/10"}`}>
@@ -369,7 +357,7 @@ const LandingPage = () => {
         </div>
 
         {/* FILTROS */}
-        <div className="max-w-3xl mx-auto mb-10 w-full" ref={filtersRef}>
+        <div className="mb-6 w-full" ref={filtersRef}>
           <div className="flex items-center gap-2 justify-start px-1">
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
@@ -430,10 +418,13 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* DATO CURIOSO */}
-        <DatoCurioso isLight={isLight} />
+        {/* DATO CURIOSO — misma anchura que el buscador */}
+        <div className="mb-10">
+          <DatoCurioso isLight={isLight} />
+        </div>
       </div>
 
+      {/* ERAS — ancho completo */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         {eras.map((era) => (
           <EraCard key={era.id} id={era.id} name={era.name} age={era.age} image={era.image}>{era.desc}</EraCard>

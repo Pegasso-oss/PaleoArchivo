@@ -7,11 +7,9 @@ import { useFavorites } from "../context/FavoritesContext";
 import { useTranslation } from "../hooks/useTranslation";
 import { allAnimals } from "../data/allData";
 import apiClient from "../api/apiClient";
-import DinoCard from "../components/DinoCard";
 import Toast from "../components/Toast";
 import {
-  User, Mail, Lock, Trash2, Save, ChevronLeft,
-  Star, Eye, EyeOff, AlertTriangle, Pencil, Check, X, Languages,
+  Lock, Trash2, Eye, EyeOff, AlertTriangle, Pencil, Check, X,
 } from "lucide-react";
 
 const AVATARS = [
@@ -25,13 +23,11 @@ const AVATARS = [
   { id: "av8", url: "https://www.mundoprehistorico.com/wp-content/uploads/Compsognathus-01.jpg", label: "Compsognathus" },
 ];
 
-const Section = ({ title, icon, children, isLight }) => (
-  <div className={`rounded-xl border overflow-hidden ${isLight ? "bg-white border-stone-100" : "bg-white/[0.03] border-white/[0.06]"}`}>
-    <div className={`px-5 py-4 flex items-center gap-2 border-b ${isLight ? "border-stone-100 bg-stone-50" : "border-white/[0.06] bg-white/[0.02]"}`}>
-      <span className="text-amber-500">{icon}</span>
-      <h2 className="font-mono text-[11px] font-black uppercase tracking-[0.25em] text-stone-500">{title}</h2>
-    </div>
-    <div className="p-5">{children}</div>
+const Divider = ({ label, isLight }) => (
+  <div className="flex items-center gap-3 my-5">
+    <div className={`flex-1 h-px ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
+    <span className={`text-[9px] tracking-[0.2em] uppercase ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</span>
+    <div className={`flex-1 h-px ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
   </div>
 );
 
@@ -39,8 +35,8 @@ const Field = ({ label, value, onChange, type = "text", placeholder, isLight, ma
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className={`text-[10px] font-black uppercase tracking-[0.2em] ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</label>
+    <div>
+      <label className={`block text-[9px] tracking-[0.16em] uppercase mb-1.5 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</label>
       <div className="relative">
         <input
           type={isPassword && !show ? "password" : "text"}
@@ -48,16 +44,17 @@ const Field = ({ label, value, onChange, type = "text", placeholder, isLight, ma
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
           maxLength={maxLength}
-          className={`w-full font-mono text-sm px-4 py-3 rounded-lg border outline-none transition-all focus:border-amber-500/60 ${isLight ? "bg-stone-50 border-stone-200 text-stone-900 placeholder:text-stone-300" : "bg-black/20 border-white/[0.08] text-white placeholder:text-stone-700"}`}
+          className={`w-full font-mono text-sm px-3 py-2.5 outline-none transition-all border focus:border-amber-500/60
+            ${isLight ? "bg-stone-50 border-stone-200 text-stone-900 placeholder:text-stone-300" : "bg-black/20 border-white/[0.08] text-white placeholder:text-stone-700"}`}
         />
         {isPassword && (
           <button type="button" onClick={() => setShow(s => !s)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-amber-500 transition-colors">
-            {show ? <EyeOff size={15} /> : <Eye size={15} />}
+            {show ? <EyeOff size={13} /> : <Eye size={13} />}
           </button>
         )}
       </div>
-      {maxLength && <p className={`text-[9px] text-right font-mono ${isLight ? "text-stone-300" : "text-stone-700"}`}>{value.length}/{maxLength}</p>}
+      {maxLength && <p className={`text-[9px] text-right font-mono mt-1 ${isLight ? "text-stone-300" : "text-stone-700"}`}>{value.length}/{maxLength}</p>}
     </div>
   );
 };
@@ -65,9 +62,9 @@ const Field = ({ label, value, onChange, type = "text", placeholder, isLight, ma
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { theme: colorTheme, language, setLanguage } = useUser();
-  const { favorites, setFavorites, clearFavorites } = useFavorites();
+  const { favorites, clearFavorites } = useFavorites();
   const { tSection, t } = useTranslation();
-  const pr = tSection('profile');
+  const pr = tSection("profile");
   const isLight = colorTheme === "light";
 
   const [user, setUser] = useState(null);
@@ -92,8 +89,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (!userId || localStorage.getItem("auth") !== "true") {
-      navigate("/login", { replace: true });
-      return;
+      navigate("/login", { replace: true }); return;
     }
     const fetchUser = async () => {
       try {
@@ -104,17 +100,13 @@ const ProfilePage = () => {
         setBio(res.data.bio || "");
         setSelectedAvatar(res.data.avatar || "");
         localStorage.setItem("avatar", res.data.avatar || "");
-      } catch {
-        navigate("/login", { replace: true });
-      } finally {
-        setLoading(false);
-      }
+      } catch { navigate("/login", { replace: true }); }
+      finally { setLoading(false); }
     };
     fetchUser();
   }, []);
 
   const showToast = (msg, type = "success") => setToast({ show: true, msg, type });
-
   const myFavAnimals = allAnimals.filter(a => favorites.includes(String(a.id)));
 
   const handleSaveProfile = async () => {
@@ -124,9 +116,7 @@ const ProfilePage = () => {
       localStorage.setItem("username", res.data.username.toUpperCase());
       localStorage.setItem("avatar", res.data.avatar || "");
       showToast(pr.toast?.profileUpdated);
-    } catch (err) {
-      showToast(err.response?.data?.msg || pr.toast?.saveError, "error");
-    }
+    } catch (err) { showToast(err.response?.data?.msg || pr.toast?.saveError, "error"); }
   };
 
   const handleChangePassword = async () => {
@@ -136,26 +126,20 @@ const ProfilePage = () => {
       await apiClient.put(`/user/${userId}/password`, { currentPassword: currentPass, newPassword: newPass });
       setCurrentPass(""); setNewPass(""); setConfirmPass("");
       showToast(pr.toast?.passwordUpdated);
-    } catch (err) {
-      showToast(err.response?.data?.msg || pr.toast?.passwordError, "error");
-    }
+    } catch (err) { showToast(err.response?.data?.msg || pr.toast?.passwordError, "error"); }
   };
 
   const handleDeleteAccount = async () => {
     if (deleteConfirmText !== user?.username) return showToast(pr.toast?.nameMismatch, "error");
     try {
       await apiClient.delete(`/user/${userId}`, { data: { password: deletePass } });
-      clearFavorites();
-      localStorage.clear();
-      navigate("/", { replace: true });
-      window.location.reload();
-    } catch (err) {
-      showToast(err.response?.data?.msg || pr.toast?.deleteError, "error");
-    }
+      clearFavorites(); localStorage.clear();
+      navigate("/", { replace: true }); window.location.reload();
+    } catch (err) { showToast(err.response?.data?.msg || pr.toast?.deleteError, "error"); }
   };
 
   if (loading) return (
-    <div className={`min-h-screen flex items-center justify-center font-mono text-sm italic tracking-[0.4em] ${isLight ? "bg-[#f5f2ed] text-stone-400" : "bg-[#1d1914] text-amber-600"}`}>
+    <div className={`min-h-screen flex items-center justify-center font-mono text-sm italic tracking-[0.4em] ${isLight ? "bg-[#f7f3ee] text-stone-400" : "bg-[#0c0b0a] text-amber-600"}`}>
       {pr.loading}
     </div>
   );
@@ -164,225 +148,165 @@ const ProfilePage = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-      className={`min-h-screen transition-colors duration-500 ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#1d1914] text-white"}`}
+      className={`min-h-screen font-mono transition-colors duration-500 ${isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]"}`}
     >
       <Toast isVisible={toast.show} message={toast.msg} type={toast.type}
         onClose={() => setToast(t => ({ ...t, show: false }))} />
 
-      <div className="max-w-[1000px] mx-auto px-4 lg:px-8 py-6 pb-28">
+      <div className="max-w-5xl mx-auto px-4 py-8 pb-20">
 
-        <div className="flex items-center mb-8">
-          <button onClick={() => navigate(-1)}
-            className="text-amber-500/80 hover:text-amber-500 font-mono text-xs uppercase tracking-[0.3em] transition-colors flex items-center gap-2 group">
-            <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span> {pr.back}
-          </button>
-        </div>
+        <button onClick={() => navigate(-1)}
+          className={`flex items-center gap-2 text-[10px] uppercase tracking-widest mb-8 transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}>
+          ← {pr.back}
+        </button>
 
-        {/* Cabecera perfil */}
-        <div className={`rounded-xl border overflow-hidden mb-6 ${isLight ? "bg-white border-stone-100" : "bg-white/[0.03] border-white/[0.06]"}`}>
-          <div className="px-6 py-6">
-            <div className="flex items-center gap-5">
-              <div className="relative shrink-0">
-                <div className="w-24 h-24 rounded-full border-2 border-amber-500/40 overflow-hidden bg-stone-800 cursor-pointer"
-                  onClick={() => setShowAvatarPicker(true)}>
-                  <img src={avatarSrc} alt="avatar" className="w-full h-full object-cover" />
-                </div>
-                <button onClick={() => setShowAvatarPicker(true)}
-                  className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-amber-500 flex items-center justify-center shadow-lg">
-                  <Pencil size={12} className="text-black" />
-                </button>
-              </div>
+        {/* Split layout */}
+        <div className={`flex border ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
 
-              <div className="min-w-0 flex-1">
-                <h1 className="text-2xl font-black italic uppercase tracking-tighter leading-tight truncate">
-                  {user?.username}
-                </h1>
-                <p className={`text-xs font-mono mt-0.5 truncate ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-                  {user?.email}
-                </p>
-                {user?.bio && (
-                  <p className={`text-sm font-light leading-relaxed mt-2 line-clamp-2 ${isLight ? "text-stone-600" : "text-stone-400"}`}>
-                    {user.bio}
-                  </p>
-                )}
+          {/* Panel izquierdo */}
+          <div className={`w-48 shrink-0 flex flex-col border-r p-6 ${isLight ? "bg-[#f0ebe3] border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+            <div className="w-8 h-[2px] bg-amber-600 mb-6" />
+
+            {/* Avatar */}
+            <div className="relative w-16 h-16 mb-4 cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
+              <img src={avatarSrc} alt="avatar" className="w-full h-full rounded-full object-cover border border-amber-600/30" />
+              <div className="absolute bottom-0 right-0 w-5 h-5 bg-amber-600 rounded-full flex items-center justify-center">
+                <Pencil size={9} className="text-black" />
               </div>
             </div>
 
-            <div className="flex items-center gap-6 mt-5 pt-5 border-t border-white/[0.06]">
+            <p className={`text-base font-black italic uppercase tracking-tight leading-tight mb-1 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
+              {user?.username}
+            </p>
+            <p className={`text-[10px] mb-6 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{user?.email}</p>
+
+            <div className="mt-auto flex flex-col gap-4">
               <div>
-                <p className="font-mono text-xl font-black text-amber-500">{myFavAnimals.length}</p>
-                <p className={`text-[9px] font-mono uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>{pr.section?.favorites}</p>
+                <p className="text-lg font-black text-amber-600">{myFavAnimals.length}</p>
+                <p className={`text-[9px] tracking-[0.16em] uppercase mt-0.5 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{pr.section?.favorites}</p>
               </div>
-              <div className={`w-px h-8 ${isLight ? "bg-stone-200" : "bg-white/[0.06]"}`} />
-              <p className={`font-mono text-xs ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-                {pr.memberSince} {new Date(user?.createdAt).toLocaleDateString(language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : language === 'it' ? 'it-IT' : 'es-ES', { month: "long", year: "numeric" })}
-              </p>
+              <div>
+                <p className={`text-[9px] tracking-[0.1em] uppercase pt-4 border-t ${isLight ? "text-stone-400 border-stone-200" : "text-stone-600 border-[#2a2520]"}`}>
+                  {pr.memberSince}<br />
+                  {new Date(user?.createdAt).toLocaleDateString(language === "en" ? "en-US" : language === "fr" ? "fr-FR" : language === "it" ? "it-IT" : "es-ES", { month: "long", year: "numeric" })}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Modal avatar */}
-        <AnimatePresence>
-          {showAvatarPicker && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-              onClick={() => setShowAvatarPicker(false)}
-            >
-              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-                onClick={e => e.stopPropagation()}
-                className={`w-full max-w-lg rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}
-              >
-                <div className={`px-5 py-4 flex items-center justify-between border-b ${isLight ? "border-stone-100" : "border-white/[0.06]"}`}>
-                  <span className="font-mono text-[11px] font-black uppercase tracking-[0.25em] text-amber-500">{pr.chooseAvatar}</span>
-                  <button onClick={() => setShowAvatarPicker(false)} className="text-stone-500 hover:text-white transition-colors">
-                    <X size={16} />
-                  </button>
-                </div>
-                <div className="p-5 grid grid-cols-4 gap-3">
-                  {AVATARS.map(av => (
-                    <button key={av.id} onClick={() => { setSelectedAvatar(av.url); setShowAvatarPicker(false); }}
-                      className={`relative rounded-xl overflow-hidden aspect-square border-2 transition-all ${selectedAvatar === av.url ? "border-amber-500 scale-95" : "border-transparent hover:border-amber-500/40"}`}
-                    >
-                      <img src={av.url} alt={av.label} className="w-full h-full object-cover" />
-                      {selectedAvatar === av.url && (
-                        <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
-                          <Check size={20} className="text-amber-500" />
-                        </div>
-                      )}
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
-                        <p className="text-[8px] font-mono text-white text-center truncate">{av.label}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Panel derecho */}
+          <div className={`flex-1 p-6 ${isLight ? "bg-white" : "bg-[#131211]"}`}>
 
-        <div className="flex flex-col gap-5">
-
-          {/* Información del perfil */}
-          <Section title={pr.section?.profileInfo} icon={<User size={13} />} isLight={isLight}>
-            <div className="flex flex-col gap-4">
+            <Divider label={pr.section?.profileInfo} isLight={isLight} />
+            <div className="grid grid-cols-2 gap-3 mb-3">
               <Field label={pr.field?.username} value={username} onChange={setUsername} placeholder={pr.field?.usernamePlaceholder} isLight={isLight} />
               <Field label={pr.field?.email} value={email} onChange={setEmail} placeholder="tu@email.com" isLight={isLight} />
-              <Field label={pr.field?.bio} value={bio} onChange={setBio} placeholder={pr.field?.bioPlaceholder} isLight={isLight} maxLength={300} />
-              <button onClick={handleSaveProfile}
-                className="flex items-center justify-center gap-2 bg-amber-600/10 hover:bg-amber-600/20 border-2 border-amber-600/50 text-amber-500 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all mt-1">
-                <Save size={14} /> {pr.saveChanges}
-              </button>
             </div>
-          </Section>
+            <div className="mb-3">
+              <Field label={pr.field?.bio} value={bio} onChange={setBio} placeholder={pr.field?.bioPlaceholder} isLight={isLight} maxLength={300} />
+            </div>
+            <button onClick={handleSaveProfile}
+              className="w-full py-2.5 bg-amber-600 text-white text-[10px] tracking-[0.14em] uppercase font-black transition-opacity hover:opacity-90">
+              {pr.saveChanges}
+            </button>
 
-          {/* Favoritos */}
-          <Section title={`${pr.section?.favorites} · ${myFavAnimals.length}`} icon={<Star size={13} />} isLight={isLight}>
-            {myFavAnimals.length === 0 ? (
-              <p className={`text-sm font-mono text-center py-6 ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-                {pr.favEmpty}
-              </p>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                  {myFavAnimals.slice(0, 4).map(animal => (
-                    <DinoCard key={animal.id} dino={animal} />
-                  ))}
-                </div>
-                {myFavAnimals.length > 4 && (
-                  <Link to="/favorites"
-                    className={`flex items-center justify-center gap-2 py-2.5 rounded-lg border font-mono text-xs uppercase tracking-widest transition-all ${isLight ? "border-stone-200 text-stone-500 hover:border-stone-400" : "border-white/[0.08] text-stone-500 hover:border-white/20"}`}>
-                    {t('profile.viewAll', { n: myFavAnimals.length })}
-                  </Link>
-                )}
-              </>
-            )}
-          </Section>
+            <Divider label={pr.section?.changePassword} isLight={isLight} />
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <Field label={pr.field?.currentPassword} value={currentPass} onChange={setCurrentPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
+              <Field label={pr.field?.newPassword} value={newPass} onChange={setNewPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
+            </div>
+            <button onClick={handleChangePassword}
+              className={`w-full py-2.5 text-[10px] tracking-[0.14em] uppercase font-black transition-all border
+                ${isLight ? "border-stone-200 text-stone-600 hover:border-amber-500 hover:text-amber-600" : "border-[#2a2520] text-stone-400 hover:border-amber-600 hover:text-amber-500"}`}>
+              {pr.updatePassword}
+            </button>
 
-          {/* Idioma */}
-          <Section title={pr.section?.language} icon={<Languages size={13} />} isLight={isLight}>
-            <div className="flex gap-2">
+            <Divider label={pr.section?.language} isLight={isLight} />
+            <div className="grid grid-cols-4 gap-2">
               {[
-                { code: "es", label: "Español",  activeBg: "bg-red-600",     activeText: "text-white",  activeBorder: "border-red-600"     },
-                { code: "en", label: "English",  activeBg: "bg-white",       activeText: "text-black",  activeBorder: "border-stone-300"   },
-                { code: "fr", label: "Français", activeBg: "bg-blue-700",    activeText: "text-white",  activeBorder: "border-blue-700"    },
-                { code: "it", label: "Italiano", activeBg: "bg-emerald-600", activeText: "text-white",  activeBorder: "border-emerald-600" },
-              ].map(({ code, label, activeBg, activeText, activeBorder }) => (
+                { code: "es", label: "Español",  active: "bg-red-600 text-white border-red-600"     },
+                { code: "en", label: "English",  active: "bg-stone-100 text-stone-900 border-stone-300" },
+                { code: "fr", label: "Français", active: "bg-blue-700 text-white border-blue-700"   },
+                { code: "it", label: "Italiano", active: "bg-emerald-600 text-white border-emerald-600" },
+              ].map(({ code, label, active }) => (
                 <button key={code} onClick={() => setLanguage(code)}
-                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-2
-                    ${language === code
-                      ? `${activeBg} ${activeText} ${activeBorder}`
-                      : isLight
-                        ? "bg-stone-50 border-stone-200 text-stone-500 hover:border-stone-400"
-                        : "bg-white/[0.03] border-white/[0.08] text-stone-500 hover:border-white/20"
-                    }`}>
+                  className={`py-2.5 text-[9px] tracking-[0.1em] uppercase font-black border transition-all
+                    ${language === code ? active : isLight ? "border-stone-200 text-stone-500 hover:border-stone-400" : "border-[#2a2520] text-stone-600 hover:border-stone-500"}`}>
                   {label}
                 </button>
               ))}
             </div>
-          </Section>
 
-          {/* Cambiar contraseña */}
-          <Section title={pr.section?.changePassword} icon={<Lock size={13} />} isLight={isLight}>
-            <div className="flex flex-col gap-4">
-              <Field label={pr.field?.currentPassword} value={currentPass} onChange={setCurrentPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
-              <Field label={pr.field?.newPassword} value={newPass} onChange={setNewPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
-              <Field label={pr.field?.confirmPassword} value={confirmPass} onChange={setConfirmPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
-              <button onClick={handleChangePassword}
-                className="flex items-center justify-center gap-2 bg-amber-600/10 hover:bg-amber-600/20 border-2 border-amber-600/50 text-amber-500 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all mt-1">
-                <Lock size={14} /> {pr.updatePassword}
-              </button>
-            </div>
-          </Section>
-
-          {/* Zona de peligro */}
-          <div className={`rounded-xl border overflow-hidden border-red-500/20 ${isLight ? "bg-red-50" : "bg-red-950/10"}`}>
-            <div className="px-5 py-4 flex items-center gap-2 border-b border-red-500/20">
-              <AlertTriangle size={13} className="text-red-500" />
-              <h2 className="font-mono text-[11px] font-black uppercase tracking-[0.25em] text-red-500">{pr.section?.dangerZone}</h2>
-            </div>
-            <div className="p-5">
-              <p className={`text-sm mb-4 ${isLight ? "text-stone-600" : "text-stone-400"}`}>
-                {pr.dangerDesc}
-              </p>
+            {/* Zona de peligro */}
+            <div className={`flex items-center justify-between mt-6 p-4 border-l-2 border-red-500 ${isLight ? "bg-red-50" : "bg-red-950/10"}`}>
+              <p className={`text-[11px] leading-relaxed ${isLight ? "text-stone-600" : "text-stone-400"}`}>{pr.dangerDesc}</p>
               <button onClick={() => setShowDeleteModal(true)}
-                className="flex items-center gap-2 bg-red-600/10 hover:bg-red-600/20 border-2 border-red-600/40 text-red-500 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all">
-                <Trash2 size={14} /> {pr.deleteAccount}
+                className="ml-4 shrink-0 px-3 py-2 border border-red-500/40 text-red-500 text-[9px] tracking-[0.14em] uppercase font-black bg-red-500/10 hover:bg-red-500/20 transition-all">
+                <Trash2 size={11} className="inline mr-1.5" />{pr.deleteAccount}
               </button>
             </div>
           </div>
-
         </div>
       </div>
+
+      {/* Modal avatar */}
+      <AnimatePresence>
+        {showAvatarPicker && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowAvatarPicker(false)}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className={`w-full max-w-lg border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#131211] border-[#2a2520]"}`}>
+              <div className={`px-5 py-4 flex items-center justify-between border-b ${isLight ? "border-stone-100" : "border-[#2a2520]"}`}>
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-amber-500">{pr.chooseAvatar}</span>
+                <button onClick={() => setShowAvatarPicker(false)} className="text-stone-500 hover:text-white transition-colors"><X size={15} /></button>
+              </div>
+              <div className="p-5 grid grid-cols-4 gap-3">
+                {AVATARS.map(av => (
+                  <button key={av.id} onClick={() => { setSelectedAvatar(av.url); setShowAvatarPicker(false); }}
+                    className={`relative overflow-hidden aspect-square border-2 transition-all ${selectedAvatar === av.url ? "border-amber-500 scale-95" : "border-transparent hover:border-amber-500/40"}`}>
+                    <img src={av.url} alt={av.label} className="w-full h-full object-cover" />
+                    {selectedAvatar === av.url && (
+                      <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
+                        <Check size={18} className="text-amber-500" />
+                      </div>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                      <p className="text-[8px] font-mono text-white text-center truncate">{av.label}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Modal borrar cuenta */}
       <AnimatePresence>
         {showDeleteModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
-          >
+            className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-              className={`w-full max-w-md rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}
-            >
+              className={`w-full max-w-md border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#131211] border-[#2a2520]"}`}>
               <div className="px-5 py-4 bg-red-600/10 border-b border-red-600/20 flex items-center gap-2">
-                <AlertTriangle size={15} className="text-red-500" />
-                <span className="font-mono text-[11px] font-black uppercase tracking-[0.25em] text-red-500">{pr.deleteModal?.title}</span>
+                <AlertTriangle size={13} className="text-red-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-red-500">{pr.deleteModal?.title}</span>
               </div>
-              <div className="p-6 flex flex-col gap-4">
+              <div className="p-5 flex flex-col gap-4">
                 <p className={`text-sm ${isLight ? "text-stone-600" : "text-stone-400"}`}>
                   {pr.deleteModal?.warning} <span className="font-mono font-bold text-red-500">{user?.username}</span> {pr.deleteModal?.warningEnd}
                 </p>
-                <Field label={pr.deleteModal?.writeUsername} value={deleteConfirmText}
-                  onChange={setDeleteConfirmText} placeholder={user?.username} isLight={isLight} />
-                <Field label={pr.deleteModal?.writePassword} value={deletePass}
-                  onChange={setDeletePass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
+                <Field label={pr.deleteModal?.writeUsername} value={deleteConfirmText} onChange={setDeleteConfirmText} placeholder={user?.username} isLight={isLight} />
+                <Field label={pr.deleteModal?.writePassword} value={deletePass} onChange={setDeletePass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
                 <div className="flex gap-3 mt-1">
-                  <button onClick={handleDeleteAccount}
-                    disabled={deleteConfirmText !== user?.username}
-                    className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:cursor-not-allowed text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all">
+                  <button onClick={handleDeleteAccount} disabled={deleteConfirmText !== user?.username}
+                    className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:cursor-not-allowed text-white py-3 font-black text-[9px] uppercase tracking-widest transition-all">
                     {pr.deleteModal?.confirm}
                   </button>
                   <button onClick={() => { setShowDeleteModal(false); setDeletePass(""); setDeleteConfirmText(""); }}
-                    className={`flex-1 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${isLight ? "bg-stone-100 text-stone-600" : "bg-white/5 text-stone-400"}`}>
+                    className={`flex-1 py-3 font-black text-[9px] uppercase tracking-widest transition-all border ${isLight ? "border-stone-200 text-stone-600" : "border-[#2a2520] text-stone-400"}`}>
                     {pr.deleteModal?.cancel}
                   </button>
                 </div>

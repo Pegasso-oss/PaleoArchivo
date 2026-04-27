@@ -358,7 +358,7 @@ const LandingPage = () => {
 
         {/* FILTROS */}
         <div className="mb-6 w-full" ref={filtersRef}>
-          <div className="flex items-center gap-2 justify-start px-1">
+          <div className="flex items-center gap-2 justify-start px-1 flex-wrap">
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
               active={activeDiet ? getDietConfig(activeDiet).color : null}

@@ -1,6 +1,6 @@
 // src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "../context/useUser";
 import { useFavorites } from "../context/FavoritesContext";
@@ -24,9 +24,9 @@ const AVATARS = [
 ];
 
 const Divider = ({ label, isLight }) => (
-  <div className="flex items-center gap-3 my-5">
+  <div className="flex items-center gap-3 my-6">
     <div className={`flex-1 h-px ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
-    <span className={`text-[9px] tracking-[0.2em] uppercase ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</span>
+    <span className={`text-[10px] tracking-[0.2em] uppercase ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</span>
     <div className={`flex-1 h-px ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
   </div>
 );
@@ -36,7 +36,7 @@ const Field = ({ label, value, onChange, type = "text", placeholder, isLight, ma
   const isPassword = type === "password";
   return (
     <div>
-      <label className={`block text-[9px] tracking-[0.16em] uppercase mb-1.5 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</label>
+      <label className={`block text-[10px] tracking-[0.16em] uppercase mb-2 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{label}</label>
       <div className="relative">
         <input
           type={isPassword && !show ? "password" : "text"}
@@ -44,13 +44,13 @@ const Field = ({ label, value, onChange, type = "text", placeholder, isLight, ma
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
           maxLength={maxLength}
-          className={`w-full font-mono text-sm px-3 py-2.5 outline-none transition-all border focus:border-amber-500/60
+          className={`w-full font-mono text-base px-4 py-3 outline-none transition-all border focus:border-amber-500/60
             ${isLight ? "bg-stone-50 border-stone-200 text-stone-900 placeholder:text-stone-300" : "bg-black/20 border-white/[0.08] text-white placeholder:text-stone-700"}`}
         />
         {isPassword && (
           <button type="button" onClick={() => setShow(s => !s)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-amber-500 transition-colors">
-            {show ? <EyeOff size={13} /> : <Eye size={13} />}
+            {show ? <EyeOff size={15} /> : <Eye size={15} />}
           </button>
         )}
       </div>
@@ -153,84 +153,93 @@ const ProfilePage = () => {
       <Toast isVisible={toast.show} message={toast.msg} type={toast.type}
         onClose={() => setToast(t => ({ ...t, show: false }))} />
 
-      <div className="max-w-5xl mx-auto px-4 py-8 pb-20">
+      <div className="max-w-6xl mx-auto px-4 py-10 pb-24">
 
         <button onClick={() => navigate(-1)}
-          className={`flex items-center gap-2 text-[10px] uppercase tracking-widest mb-8 transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}>
+          className={`flex items-center gap-2 text-[11px] uppercase tracking-widest mb-10 transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}>
           ← {pr.back}
         </button>
 
-        {/* Split layout */}
-        <div className={`flex border ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
+        {/* En móvil: columna. En desktop: split */}
+        <div className={`flex flex-col md:flex-row border ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
 
           {/* Panel izquierdo */}
-          <div className={`w-48 shrink-0 flex flex-col border-r p-6 ${isLight ? "bg-[#f0ebe3] border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
-            <div className="w-8 h-[2px] bg-amber-600 mb-6" />
+          <div className={`md:w-64 shrink-0 flex flex-col border-b md:border-b-0 md:border-r p-8
+            ${isLight ? "bg-[#f0ebe3] border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+
+            <div className="w-9 h-[3px] bg-amber-600 mb-8" />
 
             {/* Avatar */}
-            <div className="relative w-16 h-16 mb-4 cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
+            <div className="relative w-20 h-20 mb-5 cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
               <img src={avatarSrc} alt="avatar" className="w-full h-full rounded-full object-cover border border-amber-600/30" />
-              <div className="absolute bottom-0 right-0 w-5 h-5 bg-amber-600 rounded-full flex items-center justify-center">
-                <Pencil size={9} className="text-black" />
+              <div className="absolute bottom-0 right-0 w-6 h-6 bg-amber-600 rounded-full flex items-center justify-center">
+                <Pencil size={11} className="text-black" />
               </div>
             </div>
 
-            <p className={`text-base font-black italic uppercase tracking-tight leading-tight mb-1 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
+            <p className={`text-2xl font-black italic uppercase tracking-tight leading-tight mb-1 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
               {user?.username}
             </p>
-            <p className={`text-[10px] mb-6 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{user?.email}</p>
+            <p className={`text-xs mb-8 break-all ${isLight ? "text-stone-400" : "text-stone-600"}`}>{user?.email}</p>
 
-            <div className="mt-auto flex flex-col gap-4">
+            {/* Stats */}
+            <div className="flex md:flex-col flex-row gap-6 md:gap-5 mt-auto">
               <div>
-                <p className="text-lg font-black text-amber-600">{myFavAnimals.length}</p>
-                <p className={`text-[9px] tracking-[0.16em] uppercase mt-0.5 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{pr.section?.favorites}</p>
+                <p className="text-3xl font-black text-amber-600 leading-none">{myFavAnimals.length}</p>
+                <p className={`text-[10px] tracking-[0.16em] uppercase mt-1 ${isLight ? "text-stone-400" : "text-stone-600"}`}>{pr.section?.favorites}</p>
               </div>
+              <div className={`hidden md:block h-px w-full ${isLight ? "bg-stone-200" : "bg-[#2a2520]"}`} />
               <div>
-                <p className={`text-[9px] tracking-[0.1em] uppercase pt-4 border-t ${isLight ? "text-stone-400 border-stone-200" : "text-stone-600 border-[#2a2520]"}`}>
-                  {pr.memberSince}<br />
-                  {new Date(user?.createdAt).toLocaleDateString(language === "en" ? "en-US" : language === "fr" ? "fr-FR" : language === "it" ? "it-IT" : "es-ES", { month: "long", year: "numeric" })}
+                <p className={`text-[10px] tracking-[0.1em] uppercase ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+                  {pr.memberSince}
+                </p>
+                <p className={`text-sm font-black mt-0.5 ${isLight ? "text-stone-700" : "text-stone-300"}`}>
+                  {new Date(user?.createdAt).toLocaleDateString(
+                    language === "en" ? "en-US" : language === "fr" ? "fr-FR" : language === "it" ? "it-IT" : "es-ES",
+                    { month: "long", year: "numeric" }
+                  )}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Panel derecho */}
-          <div className={`flex-1 p-6 ${isLight ? "bg-white" : "bg-[#131211]"}`}>
+          <div className={`flex-1 p-8 ${isLight ? "bg-white" : "bg-[#131211]"}`}>
 
             <Divider label={pr.section?.profileInfo} isLight={isLight} />
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <Field label={pr.field?.username} value={username} onChange={setUsername} placeholder={pr.field?.usernamePlaceholder} isLight={isLight} />
               <Field label={pr.field?.email} value={email} onChange={setEmail} placeholder="tu@email.com" isLight={isLight} />
             </div>
-            <div className="mb-3">
+            <div className="mb-4">
               <Field label={pr.field?.bio} value={bio} onChange={setBio} placeholder={pr.field?.bioPlaceholder} isLight={isLight} maxLength={300} />
             </div>
             <button onClick={handleSaveProfile}
-              className="w-full py-2.5 bg-amber-600 text-white text-[10px] tracking-[0.14em] uppercase font-black transition-opacity hover:opacity-90">
+              className="w-full py-3.5 bg-amber-600 text-white text-[11px] tracking-[0.16em] uppercase font-black transition-opacity hover:opacity-90">
               {pr.saveChanges}
             </button>
 
             <Divider label={pr.section?.changePassword} isLight={isLight} />
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <Field label={pr.field?.currentPassword} value={currentPass} onChange={setCurrentPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
               <Field label={pr.field?.newPassword} value={newPass} onChange={setNewPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
             </div>
             <button onClick={handleChangePassword}
-              className={`w-full py-2.5 text-[10px] tracking-[0.14em] uppercase font-black transition-all border
+              className={`w-full py-3.5 text-[11px] tracking-[0.16em] uppercase font-black transition-all border
                 ${isLight ? "border-stone-200 text-stone-600 hover:border-amber-500 hover:text-amber-600" : "border-[#2a2520] text-stone-400 hover:border-amber-600 hover:text-amber-500"}`}>
               {pr.updatePassword}
             </button>
 
             <Divider label={pr.section?.language} isLight={isLight} />
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { code: "es", label: "Español",  active: "bg-red-600 text-white border-red-600"     },
-                { code: "en", label: "English",  active: "bg-stone-100 text-stone-900 border-stone-300" },
-                { code: "fr", label: "Français", active: "bg-blue-700 text-white border-blue-700"   },
-                { code: "it", label: "Italiano", active: "bg-emerald-600 text-white border-emerald-600" },
+                { code: "es", label: "Español",  active: "bg-red-600 text-white border-red-600"            },
+                { code: "en", label: "English",  active: "bg-stone-100 text-stone-900 border-stone-300"    },
+                { code: "fr", label: "Français", active: "bg-blue-700 text-white border-blue-700"          },
+                { code: "it", label: "Italiano", active: "bg-emerald-600 text-white border-emerald-600"    },
               ].map(({ code, label, active }) => (
                 <button key={code} onClick={() => setLanguage(code)}
-                  className={`py-2.5 text-[9px] tracking-[0.1em] uppercase font-black border transition-all
+                  className={`py-3 text-[10px] tracking-[0.1em] uppercase font-black border transition-all
                     ${language === code ? active : isLight ? "border-stone-200 text-stone-500 hover:border-stone-400" : "border-[#2a2520] text-stone-600 hover:border-stone-500"}`}>
                   {label}
                 </button>
@@ -238,11 +247,11 @@ const ProfilePage = () => {
             </div>
 
             {/* Zona de peligro */}
-            <div className={`flex items-center justify-between mt-6 p-4 border-l-2 border-red-500 ${isLight ? "bg-red-50" : "bg-red-950/10"}`}>
-              <p className={`text-[11px] leading-relaxed ${isLight ? "text-stone-600" : "text-stone-400"}`}>{pr.dangerDesc}</p>
+            <div className={`flex flex-col md:flex-row md:items-center justify-between mt-8 p-5 border-l-2 border-red-500 gap-4 ${isLight ? "bg-red-50" : "bg-red-950/10"}`}>
+              <p className={`text-sm leading-relaxed ${isLight ? "text-stone-600" : "text-stone-400"}`}>{pr.dangerDesc}</p>
               <button onClick={() => setShowDeleteModal(true)}
-                className="ml-4 shrink-0 px-3 py-2 border border-red-500/40 text-red-500 text-[9px] tracking-[0.14em] uppercase font-black bg-red-500/10 hover:bg-red-500/20 transition-all">
-                <Trash2 size={11} className="inline mr-1.5" />{pr.deleteAccount}
+                className="shrink-0 flex items-center gap-2 px-4 py-3 border border-red-500/40 text-red-500 text-[10px] tracking-[0.14em] uppercase font-black bg-red-500/10 hover:bg-red-500/20 transition-all">
+                <Trash2 size={13} />{pr.deleteAccount}
               </button>
             </div>
           </div>
@@ -258,9 +267,9 @@ const ProfilePage = () => {
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
               onClick={e => e.stopPropagation()}
               className={`w-full max-w-lg border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#131211] border-[#2a2520]"}`}>
-              <div className={`px-5 py-4 flex items-center justify-between border-b ${isLight ? "border-stone-100" : "border-[#2a2520]"}`}>
-                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-amber-500">{pr.chooseAvatar}</span>
-                <button onClick={() => setShowAvatarPicker(false)} className="text-stone-500 hover:text-white transition-colors"><X size={15} /></button>
+              <div className={`px-6 py-4 flex items-center justify-between border-b ${isLight ? "border-stone-100" : "border-[#2a2520]"}`}>
+                <span className="text-[11px] font-black uppercase tracking-[0.25em] text-amber-500">{pr.chooseAvatar}</span>
+                <button onClick={() => setShowAvatarPicker(false)} className="text-stone-500 hover:text-white transition-colors"><X size={16} /></button>
               </div>
               <div className="p-5 grid grid-cols-4 gap-3">
                 {AVATARS.map(av => (
@@ -269,7 +278,7 @@ const ProfilePage = () => {
                     <img src={av.url} alt={av.label} className="w-full h-full object-cover" />
                     {selectedAvatar === av.url && (
                       <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
-                        <Check size={18} className="text-amber-500" />
+                        <Check size={20} className="text-amber-500" />
                       </div>
                     )}
                     <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
@@ -290,11 +299,11 @@ const ProfilePage = () => {
             className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
               className={`w-full max-w-md border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#131211] border-[#2a2520]"}`}>
-              <div className="px-5 py-4 bg-red-600/10 border-b border-red-600/20 flex items-center gap-2">
-                <AlertTriangle size={13} className="text-red-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-red-500">{pr.deleteModal?.title}</span>
+              <div className="px-6 py-4 bg-red-600/10 border-b border-red-600/20 flex items-center gap-3">
+                <AlertTriangle size={15} className="text-red-500" />
+                <span className="text-[11px] font-black uppercase tracking-[0.25em] text-red-500">{pr.deleteModal?.title}</span>
               </div>
-              <div className="p-5 flex flex-col gap-4">
+              <div className="p-6 flex flex-col gap-4">
                 <p className={`text-sm ${isLight ? "text-stone-600" : "text-stone-400"}`}>
                   {pr.deleteModal?.warning} <span className="font-mono font-bold text-red-500">{user?.username}</span> {pr.deleteModal?.warningEnd}
                 </p>
@@ -302,11 +311,11 @@ const ProfilePage = () => {
                 <Field label={pr.deleteModal?.writePassword} value={deletePass} onChange={setDeletePass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
                 <div className="flex gap-3 mt-1">
                   <button onClick={handleDeleteAccount} disabled={deleteConfirmText !== user?.username}
-                    className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:cursor-not-allowed text-white py-3 font-black text-[9px] uppercase tracking-widest transition-all">
+                    className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:cursor-not-allowed text-white py-3.5 font-black text-[10px] uppercase tracking-widest transition-all">
                     {pr.deleteModal?.confirm}
                   </button>
                   <button onClick={() => { setShowDeleteModal(false); setDeletePass(""); setDeleteConfirmText(""); }}
-                    className={`flex-1 py-3 font-black text-[9px] uppercase tracking-widest transition-all border ${isLight ? "border-stone-200 text-stone-600" : "border-[#2a2520] text-stone-400"}`}>
+                    className={`flex-1 py-3.5 font-black text-[10px] uppercase tracking-widest transition-all border ${isLight ? "border-stone-200 text-stone-600" : "border-[#2a2520] text-stone-400"}`}>
                     {pr.deleteModal?.cancel}
                   </button>
                 </div>

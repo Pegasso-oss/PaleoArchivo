@@ -224,11 +224,11 @@ const ProfilePage = () => {
             <div className={`mt-auto pt-5 border-t flex flex-col gap-4 ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
               <div>
                 <p className="text-2xl font-black text-amber-600">{myFavAnimals.length}</p>
-                <p className={`text-[10px] tracking-[0.16em] uppercase mt-0.5 ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+                <p className={`text-[12px] tracking-[0.16em] uppercase mt-0.5 ${isLight ? "text-stone-400" : "text-stone-600"}`}>
                   {pr.section?.favorites}
                 </p>
               </div>
-              <p className={`text-[10px] tracking-[0.1em] uppercase leading-relaxed ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+              <p className={`text-[12px] tracking-[0.1em] uppercase leading-relaxed ${isLight ? "text-stone-400" : "text-stone-600"}`}>
                 {pr.memberSince}<br />{joinDate}
               </p>
             </div>
@@ -240,7 +240,6 @@ const ProfilePage = () => {
           <div className={`flex-1 p-6 md:p-8 ${isLight ? "bg-white" : "bg-[#131211]"}`}>
 
             {/* ── Sección: Información del perfil ── */}
-            <Divider label={pr.section?.profileInfo} isLight={isLight} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <Field label={pr.field?.username} value={username} onChange={setUsername} placeholder={pr.field?.usernamePlaceholder} isLight={isLight} />
               <Field label={pr.field?.email} value={email} onChange={setEmail} placeholder="tu@email.com" isLight={isLight} />

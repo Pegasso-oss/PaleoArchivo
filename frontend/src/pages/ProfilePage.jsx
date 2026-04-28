@@ -207,7 +207,7 @@ const ProfilePage = () => {
           <div className={`flex-1 p-8 ${isLight ? "bg-white" : "bg-[#131211]"}`}>
 
             <Divider label={pr.section?.profileInfo} isLight={isLight} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 rounded-xl">
               <Field label={pr.field?.username} value={username} onChange={setUsername} placeholder={pr.field?.usernamePlaceholder} isLight={isLight} />
               <Field label={pr.field?.email} value={email} onChange={setEmail} placeholder="tu@email.com" isLight={isLight} />
             </div>

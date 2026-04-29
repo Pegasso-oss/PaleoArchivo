@@ -314,11 +314,11 @@ const FavoritesPage = () => {
                             </div>
 
                             {/* Badges derecha: tipo + era */}
-                            <div className="flex items-center gap-2 shrink-0">
+                            <div className="flex flex-col items-end gap-1.5 shrink-0">
                               {/* Tipo */}
                               {animal.tipo && (
                                 <span
-                                  className={`text-[12px] tracking-[0.06em] uppercase px-2 py-0.5 rounded-md font-mono font-bold ${isLight ? "bg-stone-100 text-stone-500" : "bg-stone-800 text-stone-400"}`}
+                                  className={`text-[11px] tracking-[0.06em] uppercase px-2 py-0.5 rounded-md font-mono font-bold ${isLight ? "bg-stone-100 text-stone-500" : "bg-stone-800 text-stone-400"}`}
                                 >
                                   {typeLabels[animal.tipo] || animal.tipo}
                                 </span>
@@ -327,7 +327,7 @@ const FavoritesPage = () => {
                               {/* Era */}
                               {animal.era && (
                                 <span
-                                  className={`text-[12px] tracking-[0.06em] uppercase px-2 py-0.5 rounded-md font-mono font-bold ${isLight ? "bg-amber-100 text-amber-700" : "bg-amber-900/30 text-amber-500"}`}
+                                  className={`text-[11px] tracking-[0.06em] uppercase px-2 py-0.5 rounded-md font-mono font-bold ${isLight ? "bg-amber-100 text-amber-700" : "bg-amber-900/30 text-amber-500"}`}
                                 >
                                   {animal.era}
                                 </span>

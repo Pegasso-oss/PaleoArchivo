@@ -1,3 +1,4 @@
+// src/components/Header.jsx — OPCIÓN C: avatar grande + nombre y subtítulo al lado
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
 import {
@@ -18,22 +19,18 @@ const ROUTE_SUBTITLES = {
   "/era/paleozoico/devonico": "Devónico",
   "/era/paleozoico/carbonifero": "Carbonífero",
   "/era/paleozoico/permico": "Pérmico",
-
   "/era/mesozoico": "Mesozoico",
   "/era/mesozoico/triasico": "Triásico",
   "/era/mesozoico/jurasico": "Jurásico",
   "/era/mesozoico/cretacico": "Cretácico",
-
   "/era/cenozoico": "Cenozoico",
   "/era/cenozoico/paleogeno": "Paleogeno",
   "/era/cenozoico/paleogeno/paleoceno": "Paleoceno",
   "/era/cenozoico/paleogeno/eoceno": "Eoceno",
   "/era/cenozoico/paleogeno/oligoceno": "Oligoceno",
-
   "/era/cenozoico/neogeno": "Neogeno",
   "/era/cenozoico/neogeno/mioceno": "Mioceno",
   "/era/cenozoico/neogeno/plioceno": "Plioceno",
-
   "/era/cenozoico/cuaternario": "Cuaternario",
   "/era/cenozoico/cuaternario/pleistoceno": "Pleistoceno",
   "/era/cenozoico/cuaternario/holoceno": "Holoceno",
@@ -71,9 +68,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+      if (menuRef.current && !menuRef.current.contains(e.target))
         setIsMenuOpen(false);
-      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -97,7 +93,6 @@ const Header = () => {
     if (location.pathname === "/login") return t.login;
     if (location.pathname === "/register") return t.register;
     if (location.pathname === "/perfil") return t.profile;
-
     const animalMatch = matchPath({ path: "/animal/:id" }, location.pathname);
     if (animalMatch) {
       const animal = allAnimals.find(
@@ -105,7 +100,6 @@ const Header = () => {
       );
       return animal ? animal.nombre : animalMatch.params.id;
     }
-
     return ROUTE_SUBTITLES[location.pathname] || t.subtitleDefault;
   };
 
@@ -134,7 +128,7 @@ const Header = () => {
 
           <div className="flex items-center gap-2">
 
-            {/* Botón tema — mismo tamaño que el botón de cuenta */}
+            {/* Botón tema */}
             <button onClick={toggleTheme}
               className={`flex items-center justify-center border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
                 ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}>
@@ -146,33 +140,47 @@ const Header = () => {
             {isLoggedIn ? (
               <div className="relative" ref={menuRef}>
 
-                {/* Botón usuario */}
-                <button onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg shadow-inner transition-all
-                    ${isLight ? "bg-white border-amber-500/20 hover:border-amber-500" : "bg-black/80 border-amber-500/40 hover:border-amber-500"}`}
+                {/* ── OPCIÓN C: avatar grande + columna nombre/subtítulo ── */}
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="flex items-center gap-3 group"
                 >
-                  {avatar ? (
-                    <div className="w-7 h-7 md:w-9 md:h-9 rounded-full overflow-hidden border border-amber-500/40 shrink-0">
-                      <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
-                    </div>
-                  ) : (
-                    <User size={18} className={`${iconColor} md:w-7 md:h-7`} />
-                  )}
-                  <span className={`font-black italic text-[10px] md:text-lg uppercase leading-none ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
-                    {username}
-                  </span>
-                  <ChevronDown size={14} className={`${iconColor} opacity-50 transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
+                  {/* Avatar con badge */}
+                  <div className="relative shrink-0">
+                    {avatar ? (
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-[2.5px] border-amber-500 transition-all group-hover:border-amber-400">
+                        <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full border-[2.5px] border-amber-500 flex items-center justify-center transition-all group-hover:border-amber-400 ${isLight ? "bg-stone-100" : "bg-[#2a2520]"}`}>
+                        <User size={22} className={iconColor} />
+                      </div>
+                    )}
+                    {/* Badge ámbar */}
+                    <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-[#1a1614]" />
+                  </div>
+
+                  {/* Columna nombre + subtítulo — solo en desktop */}
+                  <div className="hidden md:flex flex-col items-start gap-0.5">
+                    <span className={`font-black italic text-sm uppercase leading-none tracking-wide ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
+                      {username}
+                    </span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-amber-500/70">
+                      Investigador
+                    </span>
+                  </div>
+
+                  {/* Chevron */}
+                  <ChevronDown size={13} className={`${iconColor} opacity-50 transition-transform hidden md:block ${isMenuOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {/* Menú desplegable */}
                 {isMenuOpen && (
                   <div className={`absolute top-full right-0 mt-3 w-60 border rounded-xl shadow-2xl z-[1000] overflow-hidden
                     ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#1a1614] border-white/10 text-white"}`}>
-
                     <div className="px-4 py-3 border-b border-white/5 bg-amber-600/5">
                       <p className="text-[9px] font-black text-amber-500 uppercase tracking-[0.25em]">{username}</p>
                     </div>
-
                     <div className="p-1.5 flex flex-col gap-0.5">
                       <Link to="/favorites" onClick={() => setIsMenuOpen(false)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
@@ -180,16 +188,13 @@ const Header = () => {
                         <Star size={15} className={iconColor} />
                         <span className="text-[10px] font-black uppercase tracking-widest">{t.favorites}</span>
                       </Link>
-
                       <Link to="/perfil" onClick={() => setIsMenuOpen(false)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
                           ${isLight ? "hover:bg-blue-500/10 text-stone-700" : "hover:bg-white/5 text-stone-300"}`}>
                         <User size={15} className={iconColor} />
                         <span className="text-[10px] font-black uppercase tracking-widest">Mi perfil</span>
                       </Link>
-
                       <div className={`h-px mx-2 my-1 ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
-
                       <button onClick={() => { setIsMenuOpen(false); setShowConfirm(true); }}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-red-500/70 hover:text-red-500 hover:bg-red-500/5 w-full">
                         <LogOut size={15} />
@@ -204,14 +209,12 @@ const Header = () => {
               <div className="flex items-center gap-1.5 md:gap-4">
                 <Link to="/login"
                   className={`border-2 px-2.5 py-2 md:px-8 md:py-4 rounded-lg transition-all flex items-center gap-2 font-black tracking-widest
-                    ${isLight ? "bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white" : "bg-white/5 border-white/10 text-stone-300 hover:bg-white hover:text-black"}`}
-                >
+                    ${isLight ? "bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-900 hover:text-white" : "bg-white/5 border-white/10 text-stone-300 hover:bg-white hover:text-black"}`}>
                   <LogIn size={14} />
                   <span className="text-[9px] md:text-base uppercase">{t.login}</span>
                 </Link>
                 <Link to="/register"
-                  className="bg-amber-600/10 border-2 border-amber-600/60 px-2.5 py-2 md:px-8 md:py-4 rounded-lg text-amber-500 hover:bg-amber-600 hover:text-white transition-all flex items-center gap-2 font-black shadow-lg"
-                >
+                  className="bg-amber-600/10 border-2 border-amber-600/60 px-2.5 py-2 md:px-8 md:py-4 rounded-lg text-amber-500 hover:bg-amber-600 hover:text-white transition-all flex items-center gap-2 font-black shadow-lg">
                   <LockOpen size={14} />
                   <span className="text-[9px] md:text-base uppercase">{t.register}</span>
                 </Link>
@@ -254,4 +257,4 @@ const Header = () => {
   );
 };
 
-export default Header; 
+export default Header;

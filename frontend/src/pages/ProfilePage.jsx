@@ -1,5 +1,5 @@
 // src/pages/ProfilePage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "../context/useUser";
@@ -9,10 +9,10 @@ import { allAnimals } from "../data/allData";
 import apiClient from "../api/apiClient";
 import Toast from "../components/Toast";
 import {
-  Lock, Trash2, Eye, EyeOff, AlertTriangle, Pencil, Check, X,
+  Lock, Trash2, Eye, EyeOff, AlertTriangle, Pencil, Check, X, Upload, ImagePlus,
 } from "lucide-react";
 
-// ── Avatares disponibles ──────────────────────────────────────────────────
+// ── Avatares predefinidos ─────────────────────────────────────────────────
 const AVATARS = [
   { id: "av1", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eoraptor_BW.jpg/1200px-Eoraptor_BW.jpg", label: "Eoraptor" },
   { id: "av2", url: "https://images.dinosaurpictures.org/Allosaurus/Allosaurus_f614bc6d.jpg", label: "Allosaurus" },
@@ -23,6 +23,8 @@ const AVATARS = [
   { id: "av7", url: "https://static.wikia.nocookie.net/life-on-our-planet/images/a/a0/Cameroceras.jpg", label: "Cameroceras" },
   { id: "av8", url: "https://www.mundoprehistorico.com/wp-content/uploads/Compsognathus-01.jpg", label: "Compsognathus" },
 ];
+
+const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3 MB
 
 // ── Componente separador de sección ──────────────────────────────────────
 const Divider = ({ label, isLight }) => (
@@ -90,6 +92,11 @@ const ProfilePage = () => {
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
+  // ── Subida de foto propia ───────────────────────────────────────────────
+  const fileInputRef = useRef(null);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadPreview, setUploadPreview] = useState(null); // base64 preview
+
   // ── Estado de contraseña ────────────────────────────────────────────────
   const [currentPass, setCurrentPass] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -125,6 +132,43 @@ const ProfilePage = () => {
 
   // ── Helpers ─────────────────────────────────────────────────────────────
   const showToast = (msg, type = "success") => setToast({ show: true, msg, type });
+
+  // ── Manejo de archivo subido ─────────────────────────────────────────────
+  const handleFileChange = (e) => {
+    setUploadError("");
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setUploadError("El archivo debe ser una imagen.");
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setUploadError("La imagen no puede superar los 3 MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target.result;
+      setUploadPreview(base64);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleConfirmUpload = () => {
+    if (!uploadPreview) return;
+    setSelectedAvatar(uploadPreview);
+    setUploadPreview(null);
+    setUploadError("");
+    setShowAvatarPicker(false);
+  };
+
+  const handleCancelUpload = () => {
+    setUploadPreview(null);
+    setUploadError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   // ── Guardar perfil ──────────────────────────────────────────────────────
   const handleSaveProfile = async () => {
@@ -186,19 +230,18 @@ const ProfilePage = () => {
           ← {pr.back}
         </button>
 
-        {/* ── Layout split: apilado en móvil, lado a lado en md+ ── */}
+        {/* ── Layout split ── */}
         <div className={`flex flex-col md:flex-row rounded-2xl overflow-hidden border ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
 
           {/* ╔══════════════════════════════╗
-              ║   PANEL IZQUIERDO — IDENTIDAD ║
+              ║  PANEL IZQUIERDO — IDENTIDAD ║
               ╚══════════════════════════════╝ */}
           <div className={`md:w-56 shrink-0 flex flex-col p-6 md:border-r ${isLight ? "bg-[#f0ebe3] border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
 
-            {/* Acento decorativo */}
             <div className="w-9 h-[3px] bg-amber-600 mb-6" />
 
             {/* Avatar */}
-            <div className="relative w-20 h-20 mb-5 cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
+            <div className="relative w-28 h-28 mb-5 cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
               <img src={avatarSrc} alt="avatar" className="w-full h-full rounded-full object-cover border-2 border-amber-600/30" />
               <div className="absolute bottom-0 right-0 w-6 h-6 bg-amber-600 rounded-full flex items-center justify-center shadow-lg">
                 <Pencil size={11} className="text-black" />
@@ -235,11 +278,10 @@ const ProfilePage = () => {
           </div>
 
           {/* ╔══════════════════════════════╗
-              ║   PANEL DERECHO — FORMULARIOS ║
+              ║  PANEL DERECHO — FORMULARIOS ║
               ╚══════════════════════════════╝ */}
           <div className={`flex-1 p-6 md:p-8 ${isLight ? "bg-white" : "bg-[#131211]"}`}>
 
-            {/* ── Sección: Información del perfil ── */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <Field label={pr.field?.username} value={username} onChange={setUsername} placeholder={pr.field?.usernamePlaceholder} isLight={isLight} />
               <Field label={pr.field?.email} value={email} onChange={setEmail} placeholder="tu@email.com" isLight={isLight} />
@@ -252,7 +294,6 @@ const ProfilePage = () => {
               {pr.saveChanges}
             </button>
 
-            {/* ── Sección: Cambiar contraseña ── */}
             <Divider label={pr.section?.changePassword} isLight={isLight} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <Field label={pr.field?.currentPassword} value={currentPass} onChange={setCurrentPass} type="password" placeholder={pr.field?.passwordPlaceholder} isLight={isLight} />
@@ -265,7 +306,6 @@ const ProfilePage = () => {
               {pr.updatePassword}
             </button>
 
-            {/* ── Sección: Idioma ── */}
             <Divider label={pr.section?.language} isLight={isLight} />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
@@ -286,7 +326,6 @@ const ProfilePage = () => {
               ))}
             </div>
 
-            {/* ── Sección: Zona de peligro ── */}
             <Divider label={pr.section?.dangerZone} isLight={isLight} />
             <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-xl border-l-4 border-red-500 ${isLight ? "bg-red-50" : "bg-red-950/10"}`}>
               <p className={`text-sm leading-relaxed ${isLight ? "text-stone-600" : "text-stone-400"}`}>
@@ -301,36 +340,109 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* ╔════════════════════════════╗
-          ║   MODAL — Selector avatar  ║
-          ╚════════════════════════════╝ */}
+      {/* ╔════════════════════════════════════╗
+          ║   MODAL — Selector / subida avatar ║
+          ╚════════════════════════════════════╝ */}
       <AnimatePresence>
         {showAvatarPicker && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => setShowAvatarPicker(false)}>
+            onClick={() => { setShowAvatarPicker(false); handleCancelUpload(); }}>
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
               onClick={e => e.stopPropagation()}
               className={`w-full max-w-lg rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#131211] border-[#2a2520]"}`}>
+
+              {/* Header */}
               <div className={`px-5 py-4 flex items-center justify-between border-b ${isLight ? "border-stone-100" : "border-[#2a2520]"}`}>
                 <span className="text-[11px] font-black uppercase tracking-[0.25em] text-amber-500">{pr.chooseAvatar}</span>
-                <button onClick={() => setShowAvatarPicker(false)} className="text-stone-500 hover:text-white transition-colors"><X size={16} /></button>
+                <button onClick={() => { setShowAvatarPicker(false); handleCancelUpload(); }}
+                  className="text-stone-500 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
               </div>
-              <div className="p-5 grid grid-cols-4 gap-3">
-                {AVATARS.map(av => (
-                  <button key={av.id} onClick={() => { setSelectedAvatar(av.url); setShowAvatarPicker(false); }}
-                    className={`relative rounded-xl overflow-hidden aspect-square border-2 transition-all ${selectedAvatar === av.url ? "border-amber-500 scale-95" : "border-transparent hover:border-amber-500/40"}`}>
-                    <img src={av.url} alt={av.label} className="w-full h-full object-cover" />
-                    {selectedAvatar === av.url && (
-                      <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
-                        <Check size={20} className="text-amber-500" />
+
+              <div className="p-5 flex flex-col gap-5">
+
+                {/* ── Zona de subida propia ── */}
+                <div>
+                  <p className={`text-[10px] tracking-[0.2em] uppercase mb-3 font-bold ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+                    Tu foto
+                  </p>
+
+                  {/* Input oculto */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+
+                  {/* Preview o zona de drop */}
+                  {uploadPreview ? (
+                    <div className="flex items-center gap-4">
+                      <img src={uploadPreview} alt="preview" className="w-16 h-16 rounded-full object-cover border-2 border-amber-500" />
+                      <div className="flex flex-col gap-2 flex-1">
+                        <p className={`text-xs ${isLight ? "text-stone-500" : "text-stone-400"}`}>
+                          Vista previa — ¿usar esta foto?
+                        </p>
+                        <div className="flex gap-2">
+                          <button onClick={handleConfirmUpload}
+                            className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white text-[10px] uppercase tracking-widest font-black rounded-lg transition-all">
+                            <Check size={12} /> Usar
+                          </button>
+                          <button onClick={handleCancelUpload}
+                            className={`flex items-center gap-1.5 px-3 py-2 text-[10px] uppercase tracking-widest font-black rounded-lg border transition-all ${isLight ? "border-stone-200 text-stone-500" : "border-[#2a2520] text-stone-500"}`}>
+                            <X size={12} /> Cancelar
+                          </button>
+                        </div>
                       </div>
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
-                      <p className="text-[8px] font-mono text-white text-center truncate">{av.label}</p>
                     </div>
-                  </button>
-                ))}
+                  ) : (
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className={`w-full flex items-center justify-center gap-3 py-4 rounded-xl border-2 border-dashed transition-all
+                        ${isLight
+                          ? "border-stone-200 text-stone-400 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50"
+                          : "border-[#2a2520] text-stone-600 hover:border-amber-600/50 hover:text-amber-500 hover:bg-amber-600/5"}`}>
+                      <ImagePlus size={18} />
+                      <span className="text-[11px] uppercase tracking-[0.15em] font-bold">
+                        Subir imagen · máx. 3 MB
+                      </span>
+                    </button>
+                  )}
+
+                  {/* Error */}
+                  {uploadError && (
+                    <p className="text-[11px] text-red-500 font-mono mt-2">{uploadError}</p>
+                  )}
+                </div>
+
+                {/* ── Separador ── */}
+                <div className="flex items-center gap-3">
+                  <div className={`flex-1 h-px ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
+                  <span className={`text-[10px] tracking-[0.2em] uppercase ${isLight ? "text-stone-300" : "text-stone-700"}`}>o elige uno</span>
+                  <div className={`flex-1 h-px ${isLight ? "bg-stone-100" : "bg-white/5"}`} />
+                </div>
+
+                {/* ── Grid de avatares predefinidos ── */}
+                <div className="grid grid-cols-4 gap-3">
+                  {AVATARS.map(av => (
+                    <button key={av.id} onClick={() => { setSelectedAvatar(av.url); setUploadPreview(null); setShowAvatarPicker(false); }}
+                      className={`relative rounded-xl overflow-hidden aspect-square border-2 transition-all ${selectedAvatar === av.url ? "border-amber-500 scale-95" : "border-transparent hover:border-amber-500/40"}`}>
+                      <img src={av.url} alt={av.label} className="w-full h-full object-cover" />
+                      {selectedAvatar === av.url && (
+                        <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
+                          <Check size={20} className="text-amber-500" />
+                        </div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                        <p className="text-[8px] font-mono text-white text-center truncate">{av.label}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
               </div>
             </motion.div>
           </motion.div>

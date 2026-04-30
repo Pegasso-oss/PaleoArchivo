@@ -14,7 +14,7 @@ import {
 
 // ── Avatares predefinidos ─────────────────────────────────────────────────
 const AVATARS = [
-  { id: "av1", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eoraptor_BW.jpg/1200px-Eoraptor_BW.jpg", label: "Eoraptor" },
+  { id: "av1", url: "https://i.ytimg.com/vi/7j8krOd0-KA/maxresdefault.jpg", label: "Eoraptor" },
   { id: "av2", url: "https://images.dinosaurpictures.org/Allosaurus/Allosaurus_f614bc6d.jpg", label: "Allosaurus" },
   { id: "av3", url: "https://www.mundoprehistorico.com/wp-content/uploads/Archaeopteryx-01.jpg", label: "Archaeopteryx" },
   { id: "av4", url: "https://www.mundoprehistorico.com/wp-content/uploads/Stegosaurus-01.jpg", label: "Estegosaurus" },
@@ -251,9 +251,6 @@ const ProfilePage = () => {
             {/* Nombre y email */}
             <p className={`text-xl font-black italic uppercase tracking-tight leading-tight mb-1 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
               {user?.username}
-            </p>
-            <p className={`text-xs mb-6 break-all ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-              {user?.email}
             </p>
 
             {/* Bio */}

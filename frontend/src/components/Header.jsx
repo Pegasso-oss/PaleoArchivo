@@ -1,4 +1,4 @@
-// src/components/Header.jsx — OPCIÓN C: avatar grande + nombre y subtítulo al lado
+// src/components/Header.jsx — OPCIÓN C: avatar grande + nombre (sin badge ni rol)
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
 import {
@@ -140,38 +140,29 @@ const Header = () => {
             {isLoggedIn ? (
               <div className="relative" ref={menuRef}>
 
-                {/* ── OPCIÓN C: avatar grande + columna nombre/subtítulo ── */}
+                {/* ── Botón usuario: avatar + nombre + chevron ── */}
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="flex items-center gap-3 group"
                 >
-                  {/* Avatar con badge */}
-                  <div className="relative shrink-0">
-                    {avatar ? (
-                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-[2.5px] border-amber-500 transition-all group-hover:border-amber-400">
-                        <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
-                      </div>
-                    ) : (
-                      <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full border-[2.5px] border-amber-500 flex items-center justify-center transition-all group-hover:border-amber-400 ${isLight ? "bg-stone-100" : "bg-[#2a2520]"}`}>
-                        <User size={22} className={iconColor} />
-                      </div>
-                    )}
-                    {/* Badge ámbar */}
-                    <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-[#1a1614]" />
-                  </div>
+                  {/* Avatar */}
+                  {avatar ? (
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-[2.5px] border-amber-500 transition-all group-hover:border-amber-400 shrink-0">
+                      <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full border-[2.5px] border-amber-500 flex items-center justify-center transition-all group-hover:border-amber-400 shrink-0 ${isLight ? "bg-stone-100" : "bg-[#2a2520]"}`}>
+                      <User size={22} className={iconColor} />
+                    </div>
+                  )}
 
-                  {/* Columna nombre + subtítulo — solo en desktop */}
-                  <div className="hidden md:flex flex-col items-start gap-0.5">
-                    <span className={`font-black italic text-sm uppercase leading-none tracking-wide ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
-                      {username}
-                    </span>
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-amber-500/70">
-                      Investigador
-                    </span>
-                  </div>
+                  {/* Nombre — solo desktop */}
+                  <span className={`hidden md:block font-black italic text-lg uppercase leading-none tracking-wide ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
+                    {username}
+                  </span>
 
-                  {/* Chevron */}
-                  <ChevronDown size={13} className={`${iconColor} opacity-50 transition-transform hidden md:block ${isMenuOpen ? "rotate-180" : ""}`} />
+                  {/* Chevron — solo desktop */}
+                  <ChevronDown size={18} className={`hidden md:block ${iconColor} opacity-50 transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {/* Menú desplegable */}

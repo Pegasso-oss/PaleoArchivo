@@ -13,7 +13,7 @@ export const dinosaurios = [
     extincion: "252 m.a.",
     imagen: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Eurypterus_Paleoart.jpg",
     descripcion: "Eran los mayores artrópodos que jamás hayan existido. Aunque se asemejan a los escorpiones, vivían en el lecho marino y utilizaban sus pinzas y apéndices para cazar peces y otros invertebrados en el lodo.",
-    rival: [7],
+    rival: [{ id: 7, rol: "depredador" }],
   },
   {
     id: 7,
@@ -29,7 +29,7 @@ export const dinosaurios = [
     extincion: "443 m.a.",
     imagen: "https://static.wikia.nocookie.net/life-on-our-planet/images/a/a0/Cameroceras.jpg",
     descripcion: "Uno de los depredadores más grandes del Ordovícico. Este pariente lejano de los calamares modernos vivía dentro de una concha cónica recta y gigante, acechando en las profundidades marinas.",
-    rival: [6],
+    rival: [{ id: 6, rol: "presa" }],
   },
   {
     id: 8,

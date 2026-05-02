@@ -15,7 +15,7 @@ export const dinosaurios = [
     extincion: "70 m.a.",
     imagen: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgqJXLVnWXSIDxGaGvtvbiX_TM5ddccoiKtZexw0EHY0ZdAFKNLe0LCusrctnd_aM3SrnnasdQ5GDFI3CEK5PVxQ07jQpc4TTZVDg0mdNGLH4JLVjbFh6FobVdjfp5Bb2mclYJx8lPNlA3f/s1600/Sibbick+Aucasaurus+attacking+titanosaurs+o1_1280.jpg",
     descripcion: "Un depredador de tamaño medio emparentado con el Carnotaurus, pero con brazos aún más pequeños y sin cuernos. Es famoso por el hallazgo de su esqueleto casi completo en la formación Anacleto, en Argentina.",
-    rival: [90],
+    rival: [{ id: 90, rol: "competidor" }],
   },
   {
     id: 21,
@@ -50,7 +50,7 @@ export const dinosaurios = [
     extincion: "72 m.a.",
     imagen: "https://imgur.com/eLeQ2Jx.png",
     descripcion: "El abelisáurido más icónico, famoso por sus dos cuernos sobre los ojos y sus brazos extremadamente reducidos, los más pequeños de cualquier depredador bípedo conocido. Era probablemente el predador más rápido de su ecosistema, capaz de alcanzar los 50 km/h según estudios biomecánicos de su musculatura caudal.",
-    rival: [20],
+    rival: [{ id: 20, rol: "competidor" }],
   },
   {
     id: 91,

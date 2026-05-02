@@ -15,7 +15,7 @@ export const dinosaurios = [
     extincion: "58 m.a.",
     imagen: "https://img.freepik.com/premium-photo/titanoboa-snake-jungle_871710-294.jpg",
     descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios.",
-    rival: [24],
+    rival: [{ id: 24, rol: "presa" }],
   },
   {
     id: 23,
@@ -50,7 +50,7 @@ export const dinosaurios = [
     extincion: "35 m.a.",
     imagen: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Coryphodon.jpg",
     descripcion: "Uno de los primeros grandes mamíferos. Tenía un cerebro diminuto en relación a su cuerpo, pero fue un superviviente exitoso en climas pantanosos.",
-    rival: [22],
+    rival: [{ id: 22, rol: "depredador" }],
   },
   {
     id: 25,

@@ -95,10 +95,11 @@ const Header = () => {
     if (location.pathname === "/perfil") return t.profile;
     const animalMatch = matchPath({ path: "/animal/:id" }, location.pathname);
     if (animalMatch) {
+      const decodedId = decodeURIComponent(animalMatch.params.id);
       const animal = allAnimals.find(
         (a) => a.nombre.toLowerCase() === animalMatch.params.id.toLowerCase()
       );
-      return animal ? animal.nombre : animalMatch.params.id;
+      return animal ? animal.nombre : decodeURIComponent(animalMatch.params.id);
     }
     return ROUTE_SUBTITLES[location.pathname] || t.subtitleDefault;
   };

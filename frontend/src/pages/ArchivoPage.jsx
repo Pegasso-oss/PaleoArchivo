@@ -27,6 +27,54 @@ const TYPE_THEMES = {
   Crocodylomorpha: { text: "text-green-400",   bg: "bg-green-400/10",   border: "border-green-400/40"   },
 };
 
+const SIZE_THEMES = {
+  pequeño: { text: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/40"  },
+  mediano: { text: "text-blue-400",   bg: "bg-blue-400/10",   border: "border-blue-400/40"   },
+  grande:  { text: "text-orange-400", bg: "bg-orange-400/10", border: "border-orange-400/40" },
+  gigante: { text: "text-red-400",    bg: "bg-red-400/10",    border: "border-red-400/40"    },
+};
+
+const SIZE_LABELS = {
+  pequeño: { es: "Pequeño", en: "Small",  fr: "Petit", it: "Piccolo" },
+  mediano: { es: "Mediano", en: "Medium", fr: "Moyen", it: "Medio"   },
+  grande:  { es: "Grande",  en: "Large",  fr: "Grand", it: "Grande"  },
+  gigante: { es: "Gigante", en: "Giant",  fr: "Géant", it: "Gigante" },
+};
+
+const SIZE_EMOJIS = {
+  pequeño: "🔬",
+  mediano: "📏",
+  grande:  "📐",
+  gigante: "🦕",
+};
+
+const SIZE_RANGES = {
+  pequeño: { min: 0,   max: 1        },
+  mediano: { min: 1,   max: 5        },
+  grande:  { min: 5,   max: 12       },
+  gigante: { min: 12,  max: Infinity },
+};
+
+const parseLongitudMetros = (longitud) => {
+  if (!longitud) return null;
+  const str = String(longitud).toLowerCase();
+  const cmMatch = str.match(/([\d.]+)\s*cm/);
+  if (cmMatch) return parseFloat(cmMatch[1]) / 100;
+  const rangeMatch = str.match(/([\d.]+)\s*[-–]\s*([\d.]+)/);
+  if (rangeMatch) return parseFloat(rangeMatch[2]);
+  const numMatch = str.match(/([\d.]+)/);
+  if (numMatch) return parseFloat(numMatch[1]);
+  return null;
+};
+
+const matchesSize = (longitud, sizeId) => {
+  const metros = parseLongitudMetros(longitud);
+  if (metros === null) return false;
+  const range = SIZE_RANGES[sizeId];
+  if (!range) return false;
+  return metros >= range.min && metros < range.max;
+};
+
 const ArchivoPage = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
@@ -38,6 +86,7 @@ const ArchivoPage = () => {
 
   const diet = params.get("diet") || "";
   const tipo = params.get("tipo") || "";
+  const size = params.get("size") || "";
 
   const filteredAnimals = useMemo(() => {
     return Array.from(
@@ -45,57 +94,73 @@ const ArchivoPage = () => {
     ).filter(a => {
       if (diet) return a.dieta === diet;
       if (tipo) return a.tipo === tipo;
+      if (size) return matchesSize(a.longitud, size);
       return true;
     }).sort((a, b) => a.nombre.localeCompare(b.nombre));
-  }, [diet, tipo]);
+  }, [diet, tipo, size]);
 
   const isDiet = !!diet;
-  const dietCfg = diet ? getDietConfig(diet) : null;
-  const typeCfg = tipo ? (TYPE_THEMES[tipo] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
-  const activeColor = dietCfg ? dietCfg.color : typeCfg;
-  const activeEmoji = dietCfg ? dietCfg.emoji : "🦕";
+  const isTipo = !!tipo;
+  const isSize = !!size;
+
+  const dietCfg   = diet ? getDietConfig(diet) : null;
+  const typeCfg   = tipo ? (TYPE_THEMES[tipo] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
+  const sizeCfg   = size ? (SIZE_THEMES[size] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
+
+  const activeColor = dietCfg ? dietCfg.color : isTipo ? typeCfg : sizeCfg;
+  const activeEmoji = dietCfg ? dietCfg.emoji : isTipo ? "🦕" : (SIZE_EMOJIS[size] || "📏");
   const activeLabel = diet
     ? getDietLabel(diet, language)
-    : (typeLabels[tipo] || tipo);
+    : isTipo
+      ? (typeLabels[tipo] || tipo)
+      : (SIZE_LABELS[size]?.[language] || SIZE_LABELS[size]?.es || size);
+
+  const filterLabel = isDiet ? "Dieta" : isTipo ? "Tipo" : { es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[language] || "Tamaño";
+  const sectionLabel = isDiet ? "Sobre esta dieta" : isTipo ? "Sobre este grupo" : { es: "Sobre este tamaño", en: "About this size", fr: "Sur cette taille", it: "Su questa dimensione" }[language] || "Sobre este tamaño";
 
   // Descripción desde translations
   const description = isDiet
     ? archivo?.diets?.[diet]
-    : archivo?.types?.[tipo];
+    : isTipo
+      ? archivo?.types?.[tipo]
+      : archivo?.sizes?.[size];
 
   return (
-    <div className={`min-h-screen px-4 pt-10 pb-20 font-mono transition-colors duration-500 ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
+    <div className={`min-h-screen px-4 pt-10 pb-20 font-mono transition-colors duration-500
+      ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
       <div className="max-w-6xl mx-auto">
 
         {/* Back */}
-        <button
-          onClick={() => navigate(-1)}
-          className={`flex items-center gap-2 text-[11px] uppercase tracking-widest mb-8 transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}
-        >
+        <button onClick={() => navigate(-1)}
+          className={`flex items-center gap-2 text-[11px] uppercase tracking-widest mb-8 transition-colors
+            ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}>
           <ArrowLeft size={14} /> Volver
         </button>
 
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <span className={`text-[11px] uppercase tracking-[0.15em] font-bold px-3 py-1.5 rounded-lg border ${activeColor?.bg} ${activeColor?.text} ${activeColor?.border}`}>
-              {isDiet ? "Dieta" : "Tipo"}
+            <span className={`text-[11px] uppercase tracking-[0.15em] font-bold px-3 py-1.5 rounded-lg border
+              ${activeColor?.bg} ${activeColor?.text} ${activeColor?.border}`}>
+              {filterLabel}
             </span>
             <span className={`text-[11px] uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>
               {filteredAnimals.length} registro{filteredAnimals.length !== 1 ? "s" : ""}
             </span>
           </div>
 
-          <h1 className={`text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-6 ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
+          <h1 className={`text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-6
+            ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
             <span className="mr-4">{activeEmoji}</span>
             {activeLabel}
           </h1>
 
           {/* Descripción */}
           {description && (
-            <div className={`max-w-3xl rounded-2xl border px-6 py-5 mb-6 ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
+            <div className={`max-w-3xl rounded-2xl border px-6 py-5 mb-6
+              ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
               <p className={`text-[10px] uppercase tracking-[0.15em] font-bold mb-2 ${activeColor?.text}`}>
-                {isDiet ? "Sobre esta dieta" : "Sobre este grupo"}
+                {sectionLabel}
               </p>
               <p className={`text-sm leading-relaxed ${isLight ? "text-stone-600" : "text-stone-300"}`}>
                 {description}
@@ -114,7 +179,8 @@ const ArchivoPage = () => {
             ))}
           </div>
         ) : (
-          <div className={`text-center py-24 text-sm uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+          <div className={`text-center py-24 text-sm uppercase tracking-widest
+            ${isLight ? "text-stone-400" : "text-stone-600"}`}>
             No hay registros para este filtro
           </div>
         )}

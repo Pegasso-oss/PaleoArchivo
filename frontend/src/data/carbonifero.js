@@ -49,6 +49,7 @@ export const dinosaurios = [
     extincion: "312 m.a.",
     imagen: "https://i.redd.it/hik48ocf4xk91.jpg",
     descripcion: "El reptil más antiguo conocido con certeza. Vivía dentro de tocones huecos de licopodios gigantes caídos en Nova Scotia. Su aparición marca un hito evolutivo clave: el desarrollo del huevo amniota, que liberó a los vertebrados de reproducirse en el agua.",
+    rival: [{ id: 78, rol: "depredador" }, {id: 79, rol: "competidor"}],
   },
   {
     id: 37,
@@ -83,6 +84,7 @@ export const dinosaurios = [
     extincion: "295 m.a.",
     imagen: "https://p.turbosquid.com/ts-thumb/bR/0LM9E1/RiPhIyNT/eryops_stage/jpg/1425867111/1920x1080/fit_q87/7b3be09a54c0d670ecc23c85a7fc737491477d59/eryops_stage.jpg",
     descripcion: "Uno de los mayores depredadores terrestres del Carbonífero tardío y Pérmico temprano. Este anfibio primitivo tenía una constitución robusta y dientes cónicos para atrapar peces y pequeños tetrápodos. Su esqueleto casi completo lo convierte en uno de los anfibios fósiles más estudiados.",
+    rival: [{ id: 36, rol: "presa" }],
   },
   {
     id: 79,
@@ -100,6 +102,7 @@ export const dinosaurios = [
     extincion: "302 m.a.",
     imagen: "https://static.wikia.nocookie.net/walkingwith/images/2/29/PetrolacosaurusMain.jpg/revision/latest?cb=20131115071807",
     descripcion: "El diápsido más antiguo conocido, antecesor de lagartos, serpientes, cocodrilos y dinosaurios. Ágil y esbelto, cazaba insectos en los bosques de helechos del Carbonífero. Sus dos pares de fenestras temporales en el cráneo definen el plan corporal que dominaría los continentes durante 300 millones de años.",
+    rival: [{id: 36, rol: "competidor"}],
   },
   {
     id: 80,

@@ -13,7 +13,10 @@ export const dinosaurios = [
     extincion: "145 m.a.",
     imagen: "https://images.dinosaurpictures.org/Allosaurus/Allosaurus_f614bc6d.jpg",
     descripcion: "Era un gran terópodo típico, con un cráneo grande y un cuello corto una cola larga y miembros superiores reducidos.",
-    rival: [13, 17],
+    rival: [
+      { id: 13, rol: "presa" },
+      { id: 17, rol: "competidor" },
+    ],
   },
   {
     id: 11,
@@ -59,7 +62,7 @@ export const dinosaurios = [
     extincion: "150 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Stegosaurus-01.jpg",
     descripcion: "Es uno de los dinosaurios más icónicos y fácilmente reconocibles del período Jurásico.",
-    rival: [10],
+    rival: [{ id: 10, rol: "depredador" }],
   },
   {
     id: 14,
@@ -120,7 +123,7 @@ export const dinosaurios = [
     extincion: "148 m.a.",
     imagen: "https://t4.ftcdn.net/jpg/02/99/62/13/360_F_299621374_zcgKdN8VRjc1FR5uvwUmXLvLMoV4YYSN.jpg",
     descripcion: "Se distingue por un pequeño cuerno en el hocico y una fila de placas óseas que recorren su espalda.",
-    rival: [10],
+    rival: [{ id: 10, rol: "competidor" }],
   },
   {
     id: 18,
@@ -136,7 +139,7 @@ export const dinosaurios = [
     extincion: "145 m.a.",
     imagen: "https://static.wikia.nocookie.net/dinosaurs/images/0/0d/PliosaurusMarkWitton.jpg",
     descripcion: "Fue un gigantesco reptil marino. Sus mandíbulas eran enormes, con dientes triangulares capaces de ejercer una presión inmensa.",
-    rival: [87],
+    rival: [{ id: 87, rol: "depredador" }],
   },
   {
     id: 19,
@@ -169,7 +172,7 @@ export const dinosaurios = [
     extincion: "155 m.a.",
     imagen: "https://imgur.com/dXOpDeX.png",
     descripcion: "Posiblemente el pez óseo más grande que jamás ha existido, con estimaciones que lo sitúan entre 9 y 16 metros. A pesar de su tamaño colosal era un filtrador de plancton, convergente con las ballenas jorobadas actuales. Sus restos aparecen frecuentemente con marcas de mordidas de Pliosaurus, su principal depredador.",
-    rival: [18],
+    rival: [{ id: 18, rol: "presa" }],
   },
   {
     id: 88,

@@ -15,7 +15,7 @@ export const dinosaurios = [
     extincion: "358 m.a.",
     imagen: "https://www.mundoprehistorico.com/wp-content/uploads/Dunkleosteus-01.jpg",
     descripcion: "El depredador ápice de los mares devónicos. En lugar de dientes tenía placas óseas que funcionaban como cizallas, capaces de ejercer una fuerza de mordida estimada en 7.400 newtons. Podía abrir la boca en milisegundos creando una succión devastadora.",
-    rival: [75],
+    rival: [{ id: 75, rol: "competidor" }],
   },
   {
     id: 31,
@@ -84,7 +84,7 @@ export const dinosaurios = [
     extincion: "370 m.a.",
     imagen: "https://static.wikia.nocookie.net/prehistrico/images/d/dd/6-10.jpg/revision/latest?cb=20190317220253&path-prefix=es",
     descripcion: "Uno de los tiburones más primitivos conocidos y el principal competidor del Dunkleosteus en los mares devónicos. Ágil y rápido, con aletas rígidas triangulares y dientes multicúspides, representó el inicio del linaje de los condrictios que domina los océanos hasta hoy. Sus fósiles preservan incluso músculo y piel.",
-    rival: [30],
+    rival: [{ id: 30, rol: "competidor" }],
   },
   {
     id: 76,

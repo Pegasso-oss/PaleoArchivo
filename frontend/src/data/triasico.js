@@ -15,7 +15,7 @@ export const dinosaurios = [
     extincion: "231 m.a.",
     imagen: "https://i.ytimg.com/vi/7j8krOd0-KA/maxresdefault.jpg",
     descripcion: "Uno de los dinosaurios más primitivos conocidos. Bípedo y de pequeño tamaño, habitó lo que hoy es Argentina hace unos 231 millones de años. Su esqueleto casi completo lo convierte en una pieza clave para entender el origen de los dinosaurios.",
-    rival: [84],
+    rival: [{ id: 84, rol: "depredador" }],
   },
   {
     id: 84,
@@ -33,7 +33,10 @@ export const dinosaurios = [
     extincion: "203 m.a.",
     imagen: "https://imgur.com/PeGQhYC.png",
     descripcion: "Uno de los dinosaurios más antiguos y mejor conocidos. En Ghost Ranch, Nuevo México, se encontró un cementerio con cientos de esqueletos, algunos con restos de juveniles de la misma especie en el estómago, lo que sugiere canibalismo. Ágil y veloz, fue el depredador dominante del Triásico tardío de Norteamérica.",
-    rival: [9, 85],
+    rival: [
+      { id: 9, rol: "presa" },
+      { id: 85, rol: "competidor" },
+    ],
   },
   {
     id: 85,
@@ -51,7 +54,7 @@ export const dinosaurios = [
     extincion: "203 m.a.",
     imagen: "https://imgur.com/nsAXbmV.png",
     descripcion: "El mayor depredador terrestre del Triásico tardío de Norteamérica, un arcosaurio relacionado con los cocodrilos pero de postura más erguida. Compitió directamente con los primeros dinosaurios carnívoros como el Coelophysis por los mismos recursos. Su extinción al final del Triásico despejó el camino para el dominio de los dinosaurios.",
-    rival: [84],
+    rival: [{ id: 84, rol: "competidor" }],
   },
   {
     id: 86,

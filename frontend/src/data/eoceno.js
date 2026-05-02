@@ -32,7 +32,7 @@ export const dinosaurios = [
     extincion: "37 m.a.",
     imagen: "https://survivetheark.com/uploads/monthly_2023_06/uintatherium.jpg.a6275475b7e5861f96116ac2700a9840.jpg",
     descripcion: "Un mamífero del tamaño de un rinoceronte con seis protuberancias óseas en el cráneo y enormes colmillos en los machos. A pesar de su aspecto intimidante era un herbívoro pacífico de las praderas norteamericanas, uno de los grandes mamíferos más antiguos conocidos.",
-    rival: [44],
+    rival: [{ id: 44, rol: "depredador" }],
   },
   {
     id: 44,
@@ -50,7 +50,7 @@ export const dinosaurios = [
     extincion: "36 m.a.",
     imagen: "https://a-z-animals.com/media/2022/11/shutterstock_1629904135.jpg",
     descripcion: "El mamífero carnívoro terrestre más grande conocido, aunque solo se ha hallado su cráneo de casi un metro de longitud. Pariente lejano de hipopótamos y ballenas, probablemente era un carroñero oportunista y cazador de grandes presas en las llanuras de Mongolia.",
-    rival: [43],
+    rival: [{ id: 43, rol: "presa" }],
   },
   {
     id: 45,

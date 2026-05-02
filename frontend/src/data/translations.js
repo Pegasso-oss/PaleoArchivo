@@ -330,6 +330,12 @@ export const translations = {
         Mammalia:        "Los mamíferos prehistóricos incluyen desde los pequeños insectívoros que convivieron con los dinosaurios hasta la megafauna del Pleistoceno: mamuts lanudos, rinocerontes lanudos, perezosos gigantes y el Paraceratherium, el mamífero terrestre más grande conocido.",
         Crocodylomorpha: "Los crocodilomorfos son el linaje de arcosaurios que dio origen a los cocodrilos modernos. En el Mesozoico existían formas terrestres, marinas e incluso bípedas. El Sarcosuchus del Cretácico podía superar los 12 metros.",
       },
+      sizes: {
+        pequeño:  "Los animales de pequeño tamaño (menos de 1 metro) representan algunos de los organismos más primitivos y especializados del registro fósil. Su reducido tamaño les permitía explotar nichos ecológicos inaccesibles para los grandes depredadores, y en muchos casos su abundancia los convierte en fósiles índice clave para datar estratos geológicos.",
+        mediano:  "Los animales de tamaño mediano (1 a 5 metros) constituyen el grueso de la biodiversidad prehistórica. Ágiles y versátiles, ocupaban roles de depredadores secundarios, herbívoros generalistas y omnívoros oportunistas en casi todos los ecosistemas del pasado.",
+        grande:   "Los animales de gran tamaño (5 a 12 metros) representan algunos de los depredadores y herbívoros más icónicos de la historia de la vida. Su masa corporal les otorgaba ventajas defensivas y de acceso a recursos, aunque también los hacía más vulnerables a los cambios ambientales y las extinciones masivas.",
+        gigante:  "Los gigantes prehistóricos (más de 12 metros) son los animales más grandes que han poblado la Tierra. Desde los saurópodos titanosáuridos hasta el Megalodon y el Livyatan, estos colosos dominaron sus ecosistemas durante millones de años y siguen siendo objeto de fascinación científica y popular.",
+      },
     },
   },
 
@@ -624,6 +630,12 @@ export const translations = {
         Squamata:        "Squamates include lizards and snakes, the most diverse group of reptiles today. In the Mesozoic they included mosasaurs, enormous marine reptiles that could exceed 17 metres and dominated the Late Cretaceous oceans.",
         Mammalia:        "Prehistoric mammals range from the small insectivores that coexisted with dinosaurs to the Pleistocene megafauna: woolly mammoths, woolly rhinos, giant ground sloths, and Paraceratherium, the largest known land mammal.",
         Crocodylomorpha: "Crocodylomorphs are the archosaur lineage that gave rise to modern crocodiles. In the Mesozoic there were terrestrial, marine, and even bipedal forms. The Cretaceous Sarcosuchus could exceed 12 metres.",
+      },
+      sizes: {
+        pequeño:  "Small animals (under 1 metre) represent some of the most primitive and specialised organisms in the fossil record. Their reduced size allowed them to exploit ecological niches inaccessible to large predators, and in many cases their abundance makes them key index fossils for dating geological strata.",
+        mediano:  "Medium-sized animals (1 to 5 metres) make up the bulk of prehistoric biodiversity. Agile and versatile, they occupied roles as secondary predators, generalist herbivores and opportunistic omnivores in almost all past ecosystems.",
+        grande:   "Large animals (5 to 12 metres) represent some of the most iconic predators and herbivores in the history of life. Their body mass gave them defensive advantages and access to resources, though it also made them more vulnerable to environmental changes and mass extinctions.",
+        gigante:  "Prehistoric giants (over 12 metres) are the largest animals to have ever inhabited the Earth. From titanosaur sauropods to Megalodon and Livyatan, these colossi dominated their ecosystems for millions of years and remain objects of scientific and popular fascination.",
       },
     },
   },
@@ -921,6 +933,12 @@ export const translations = {
         Mammalia:        "Les mammifères préhistoriques vont des petits insectivores qui coexistaient avec les dinosaures à la mégafaune du Pléistocène : mammouths laineux, rhinocéros laineux, paresseux géants et le Paraceratherium, le plus grand mammifère terrestre connu.",
         Crocodylomorpha: "Les crocodylomorphes sont le lignage d'archosaures à l'origine des crocodiles modernes. Au Mésozoïque, il existait des formes terrestres, marines et même bipèdes. Le Sarcosuchus du Crétacé pouvait dépasser 12 mètres.",
       },
+      sizes: {
+        pequeño:  "Les animaux de petite taille (moins d'1 mètre) représentent certains des organismes les plus primitifs et spécialisés du registre fossile. Leur taille réduite leur permettait d'exploiter des niches écologiques inaccessibles aux grands prédateurs, et dans de nombreux cas leur abondance en fait des fossiles indices clés pour dater les strates géologiques.",
+        mediano:  "Les animaux de taille moyenne (1 à 5 mètres) constituent l'essentiel de la biodiversité préhistorique. Agiles et polyvalents, ils occupaient des rôles de prédateurs secondaires, d'herbivores généralistes et d'omnivores opportunistes dans presque tous les écosystèmes du passé.",
+        grande:   "Les grands animaux (5 à 12 mètres) représentent certains des prédateurs et herbivores les plus emblématiques de l'histoire de la vie. Leur masse corporelle leur conférait des avantages défensifs et un accès aux ressources, bien qu'elle les ait également rendus plus vulnérables aux changements environnementaux et aux extinctions massives.",
+        gigante:  "Les géants préhistoriques (plus de 12 mètres) sont les plus grands animaux ayant jamais peuplé la Terre. Des sauropodes titanosauridés au Megalodon et au Livyatan, ces colosses ont dominé leurs écosystèmes pendant des millions d'années et continuent de fasciner scientifiques et grand public.",
+      },
     },
   },
 
@@ -1216,6 +1234,12 @@ export const translations = {
         Squamata:        "Gli squamati includono lucertole e serpenti, il gruppo di rettili più diversificato oggi. Nel Mesozoico comprendevano i mosasauri, enormi rettili marini che potevano superare i 17 metri e dominavano gli oceani del Cretaceo tardivo.",
         Mammalia:        "I mammiferi preistorici vanno dai piccoli insettivori che convivevano con i dinosauri alla megafauna del Pleistocene: mammut lanosi, rinoceronti lanosi, bradipi giganti e il Paraceratherium, il più grande mammifero terrestre conosciuto.",
         Crocodylomorpha: "I crocodilomorfi sono il lignaggio di arcosauri che ha dato origine ai coccodrilli moderni. Nel Mesozoico esistevano forme terrestri, marine e persino bipedi. Il Sarcosuchus del Cretaceo poteva superare i 12 metri.",
+      },
+      sizes: {
+        pequeño:  "Gli animali di piccola taglia (meno di 1 metro) rappresentano alcuni degli organismi più primitivi e specializzati del registro fossile. Le loro dimensioni ridotte permettevano loro di sfruttare nicchie ecologiche inaccessibili ai grandi predatori, e in molti casi la loro abbondanza li rende fossili indice fondamentali per datare gli strati geologici.",
+        mediano:  "Gli animali di taglia media (da 1 a 5 metri) costituiscono la maggior parte della biodiversità preistorica. Agili e versatili, occupavano ruoli di predatori secondari, erbivori generalisti e onnivori opportunisti in quasi tutti gli ecosistemi del passato.",
+        grande:   "Gli animali di grossa taglia (da 5 a 12 metri) rappresentano alcuni dei predatori ed erbivori più iconici della storia della vita. La loro massa corporea conferiva vantaggi difensivi e di accesso alle risorse, sebbene li rendesse anche più vulnerabili ai cambiamenti ambientali e alle estinzioni di massa.",
+        gigante:  "I giganti preistorici (oltre 12 metri) sono gli animali più grandi che abbiano mai popolato la Terra. Dai sauropodi titanosauridi al Megalodon e al Livyatan, questi colossi hanno dominato i loro ecosistemi per milioni di anni e continuano ad affascinare scienziati e appassionati.",
       },
     },
   },

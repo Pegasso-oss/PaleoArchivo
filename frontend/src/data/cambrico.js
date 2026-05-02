@@ -13,7 +13,7 @@ export const dinosaurios = [
     extincion: "252 m.a.",
     imagen: "https://images.newscientist.com/wp-content/uploads/2023/09/27132703/SEI_173479939.jpg",
     descripcion: "Eran especies de Artrópodos marinos, caracterizados por su cuerpo dividido en tres tagmas y tres lóbulos.",
-    rival: [2],
+    rival: [{ id: 2, rol: "depredador" }],
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ export const dinosaurios = [
     extincion: "485 m.a.",
     imagen: "https://media.istockphoto.com/id/1144090474/es/foto/anomalocaris-criatura-prehistórica-del-período-cámbrico.jpg?s=612x612&w=0&k=20&c=9WEQ__lzJlxZIEqe-CWLDFqS5qqhk8WRfe0eWoGXtcE=",
     descripcion: "Fue uno de los mayores depredadores de la explosión cámbrica conocido por ser uno de los primeros animales llamados como \"Superdepredadores\"",
-    rival: [1],
+    rival: [{ id: 1, rol: "presa" }],
   },
   {
     id: 3,

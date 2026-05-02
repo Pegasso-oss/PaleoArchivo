@@ -29,6 +29,35 @@ const TYPE_THEMES = {
   Crocodylomorpha: { text: "text-green-400",   bg: "bg-green-400/10",   border: "border-green-400/40",   hoverBg: "hover:bg-green-400/10",   hoverText: "hover:text-green-300",   hoverBorder: "hover:border-green-400/40"   },
 };
 
+// ── Tamaños ───────────────────────────────────────────────────────────────
+const SIZE_CATEGORIES = [
+  { id: "pequeño", label: { es: "Pequeño", en: "Small",  fr: "Petit", it: "Piccolo" }, emoji: "🔬", theme: { text: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/40",  hoverBg: "hover:bg-green-400/10",  hoverText: "hover:text-green-300",  hoverBorder: "hover:border-green-400/40"  } },
+  { id: "mediano", label: { es: "Mediano", en: "Medium", fr: "Moyen", it: "Medio"   }, emoji: "📏", theme: { text: "text-blue-400",   bg: "bg-blue-400/10",   border: "border-blue-400/40",   hoverBg: "hover:bg-blue-400/10",   hoverText: "hover:text-blue-300",   hoverBorder: "hover:border-blue-400/40"   } },
+  { id: "grande",  label: { es: "Grande",  en: "Large",  fr: "Grand", it: "Grande"  }, emoji: "📐", theme: { text: "text-orange-400", bg: "bg-orange-400/10", border: "border-orange-400/40", hoverBg: "hover:bg-orange-400/10", hoverText: "hover:text-orange-300", hoverBorder: "hover:border-orange-400/40" } },
+  { id: "gigante", label: { es: "Gigante", en: "Giant",  fr: "Géant", it: "Gigante" }, emoji: "🦕", theme: { text: "text-red-400",    bg: "bg-red-400/10",    border: "border-red-400/40",    hoverBg: "hover:bg-red-400/10",    hoverText: "hover:text-red-300",    hoverBorder: "hover:border-red-400/40"    } },
+];
+
+const parseLongitudMetros = (longitud) => {
+  if (!longitud) return null;
+  const str = String(longitud).toLowerCase();
+  const cmMatch = str.match(/([\d.]+)\s*cm/);
+  if (cmMatch) return parseFloat(cmMatch[1]) / 100;
+  const rangeMatch = str.match(/([\d.]+)\s*[-–]\s*([\d.]+)/);
+  if (rangeMatch) return parseFloat(rangeMatch[2]);
+  const numMatch = str.match(/([\d.]+)/);
+  if (numMatch) return parseFloat(numMatch[1]);
+  return null;
+};
+
+const getSizeCategory = (longitud) => {
+  const metros = parseLongitudMetros(longitud);
+  if (metros === null) return null;
+  if (metros < 1)  return "pequeño";
+  if (metros < 5)  return "mediano";
+  if (metros < 12) return "grande";
+  return "gigante";
+};
+
 const DATOS_CURIOSOS = [
   { emoji: "🦕", texto: "El Argentinosaurus pesaba más de 70 toneladas — más que 10 elefantes africanos juntos." },
   { emoji: "🦴", texto: "Los huesos de los dinosaurios tenían cavidades de aire, igual que los pájaros modernos." },
@@ -87,7 +116,8 @@ const DatoCurioso = ({ isLight }) => {
   return (
     <div className={`w-full rounded-2xl border px-5 py-4 flex items-center gap-4 transition-all duration-300
       ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
-      <div className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${isLight ? "bg-amber-50" : "bg-amber-500/10"}`}>
+      <div className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center
+        ${isLight ? "bg-amber-50" : "bg-amber-500/10"}`}>
         <Lightbulb size={17} className="text-amber-500" />
       </div>
       <div className={`flex-1 text-left transition-opacity duration-250 ${animating ? "opacity-0" : "opacity-100"}`}>
@@ -107,17 +137,36 @@ const DatoCurioso = ({ isLight }) => {
 };
 
 // ── ArchivoShortcut ───────────────────────────────────────────────────────
-const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) => {
-  if (!activeDiet && !activeType) return null;
+const ArchivoShortcut = ({ activeDiet, activeType, activeSize, isLight, lang, typeLabels }) => {
+  if (!activeDiet && !activeType && !activeSize) return null;
 
   const isDiet = !!activeDiet;
-  const dietCfg = activeDiet ? getDietConfig(activeDiet) : null;
-  const typeCfg = activeType ? (TYPE_THEMES[activeType] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
-  const color = dietCfg ? dietCfg.color : typeCfg;
-  const emoji = dietCfg ? dietCfg.emoji : "🦕";
-  const label = activeDiet ? getDietLabel(activeDiet, lang) : (typeLabels[activeType] || activeType);
-  const href = activeDiet ? `/archivo?diet=${encodeURIComponent(activeDiet)}` : `/archivo?tipo=${encodeURIComponent(activeType)}`;
-  const count = allAnimals.filter(a => activeDiet ? a.dieta === activeDiet : a.tipo === activeType).length;
+  const isTipo = !!activeType;
+  const isSize = !!activeSize;
+
+  const dietCfg   = activeDiet ? getDietConfig(activeDiet) : null;
+  const typeCfg   = activeType ? (TYPE_THEMES[activeType] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
+  const sizeCfgFull = activeSize ? SIZE_CATEGORIES.find(s => s.id === activeSize) : null;
+  const sizeCfg   = sizeCfgFull?.theme;
+
+  const color = isDiet ? dietCfg.color : isTipo ? typeCfg : sizeCfg;
+  const emoji = isDiet ? dietCfg.emoji : isTipo ? "🦕" : (sizeCfgFull?.emoji || "📏");
+  const label = isDiet
+    ? getDietLabel(activeDiet, lang)
+    : isTipo
+      ? (typeLabels[activeType] || activeType)
+      : (sizeCfgFull?.label[lang] || sizeCfgFull?.label.es || activeSize);
+  const href = isDiet
+    ? `/archivo?diet=${encodeURIComponent(activeDiet)}`
+    : isTipo
+      ? `/archivo?tipo=${encodeURIComponent(activeType)}`
+      : `/archivo?size=${encodeURIComponent(activeSize)}`;
+  const filterType = isDiet ? "Dieta" : isTipo ? "Tipo" : { es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[lang] || "Tamaño";
+  const count = allAnimals.filter(a => {
+    if (isDiet) return a.dieta === activeDiet;
+    if (isTipo) return a.tipo === activeType;
+    return getSizeCategory(a.longitud) === activeSize;
+  }).length;
 
   return (
     <Link to={href}
@@ -128,7 +177,7 @@ const ArchivoShortcut = ({ activeDiet, activeType, isLight, lang, typeLabels }) 
           {emoji}
         </span>
         <p className={`text-[10px] uppercase tracking-[0.1em] font-bold ${isLight ? "text-stone-400" : "text-stone-500"}`}>
-          {isDiet ? "Dieta" : "Tipo"} · {count} registros
+          {filterType} · {count} registros
         </p>
       </div>
       <div className="flex items-center justify-between gap-1">
@@ -200,34 +249,38 @@ const FilterDropdown = ({ label, emoji, active, activeLabel, onClear, isOpen, on
 
 // ── LandingPage ───────────────────────────────────────────────────────────
 const LandingPage = () => {
-  const [activeDiet, setActiveDiet] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [activeDiet, setActiveDiet]     = useState("");
+  const [activeType, setActiveType]     = useState("");
+  const [activeSize, setActiveSize]     = useState("");
+  const [searchTerm, setSearchTerm]     = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [activeType, setActiveType] = useState("");
-  const [dietOpen, setDietOpen] = useState(false);
-  const [typeOpen, setTypeOpen] = useState(false);
+  const [dietOpen, setDietOpen]         = useState(false);
+  const [typeOpen, setTypeOpen]         = useState(false);
+  const [sizeOpen, setSizeOpen]         = useState(false);
   const filtersRef = useRef(null);
-  const searchRef = useRef(null);
-  const location = useLocation();
+  const searchRef  = useRef(null);
+  const location   = useLocation();
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
   const { theme, lang } = useUser();
   const isLight = theme === "light";
   const { t, tSection } = useTranslation();
-  const lnd = tSection("landing");
+  const lnd        = tSection("landing");
   const typeLabels = tSection("typeLabels");
 
   const usedDiets = Object.keys(DIET_CONFIG).filter((diet) =>
     allAnimals.some((a) => a.dieta === diet)
   );
 
+  const activeSizeCfg = SIZE_CATEGORIES.find(s => s.id === activeSize);
+
   useEffect(() => {
-    if (searchTerm || activeDiet || activeType) setShowDropdown(true);
-  }, [searchTerm, activeDiet, activeType]);
+    if (searchTerm || activeDiet || activeType || activeSize) setShowDropdown(true);
+  }, [searchTerm, activeDiet, activeType, activeSize]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (filtersRef.current && !filtersRef.current.contains(e.target)) {
-        setDietOpen(false); setTypeOpen(false);
+        setDietOpen(false); setTypeOpen(false); setSizeOpen(false);
       }
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowDropdown(false);
@@ -235,8 +288,8 @@ const LandingPage = () => {
     };
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        setSearchTerm(""); setActiveDiet(""); setActiveType("");
-        setDietOpen(false); setTypeOpen(false); setShowDropdown(false);
+        setSearchTerm(""); setActiveDiet(""); setActiveType(""); setActiveSize("");
+        setDietOpen(false); setTypeOpen(false); setSizeOpen(false); setShowDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -258,8 +311,8 @@ const LandingPage = () => {
 
   const eras = [
     { id: "paleozoico", name: "PALEOZOICO", age: "541 - 252 m.a.", image: "https://media.istockphoto.com/id/1144091536/es/foto/criaturas-del-período-cámbrico-escena-submarina-con-anomalocaris-opabinia-hallucigenia-pirania.jpg?s=612x612&w=0&k=20&c=XD683S0yCOb2WhXsT3iRx5XGVS7jCNjS3EN4SK0e7uA=", desc: lnd.eras?.paleozoico?.desc },
-    { id: "mesozoico", name: "MESOZOICO", age: "252 - 66 m.a.", image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: lnd.eras?.mesozoico?.desc },
-    { id: "cenozoico", name: "CENOZOICO", age: "66 m.a. - " + t("landing.today", {}), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
+    { id: "mesozoico",  name: "MESOZOICO",  age: "252 - 66 m.a.",  image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: lnd.eras?.mesozoico?.desc  },
+    { id: "cenozoico",  name: "CENOZOICO",  age: "66 m.a. - " + t("landing.today", {}), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc  },
   ];
 
   const availableTypes = [...new Set(allAnimals.map((a) => a.tipo).filter(Boolean))].sort();
@@ -269,20 +322,25 @@ const LandingPage = () => {
   ).filter((dino) => {
     const search = searchTerm.toLowerCase().trim();
     const matchSearch = !search || dino.nombre.toLowerCase().startsWith(search);
-    const matchDiet = !activeDiet || dino.dieta === activeDiet;
-    const matchType = !activeType || dino.tipo === activeType;
-    return matchSearch && matchDiet && matchType;
+    const matchDiet   = !activeDiet || dino.dieta === activeDiet;
+    const matchType   = !activeType || dino.tipo === activeType;
+    const matchSize   = !activeSize || getSizeCategory(dino.longitud) === activeSize;
+    return matchSearch && matchDiet && matchType && matchSize;
   }).sort((a, b) => a.nombre.localeCompare(b.nombre)).slice(0, 8);
 
-  const showResults = showDropdown && (searchTerm || activeDiet || activeType);
-  const hasFilter = !!(activeDiet || activeType);
+  const showResults = showDropdown && (searchTerm || activeDiet || activeType || activeSize);
+  const hasFilter   = !!(activeDiet || activeType || activeSize);
+  const anyFilter   = hasFilter;
 
   return (
-    <div className={`min-h-screen flex flex-col px-4 pt-4 pb-20 relative isolate transition-colors duration-500 ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
+    <div className={`min-h-screen flex flex-col px-4 pt-4 pb-20 relative isolate transition-colors duration-500
+      ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
 
       {/* Mensaje logout */}
-      <div className={`fixed left-0 right-0 z-[40] mx-auto w-full max-w-md px-4 transition-all duration-700 pointer-events-none ${showLogoutMsg ? "top-32 opacity-100 scale-100" : "top-0 opacity-0 scale-95"}`}>
-        <div className={`border border-amber-600/40 backdrop-blur-md rounded-xl shadow-2xl pointer-events-auto overflow-hidden ${isLight ? "bg-white/95" : "bg-[#1a1614]/95"}`}>
+      <div className={`fixed left-0 right-0 z-[40] mx-auto w-full max-w-md px-4 transition-all duration-700 pointer-events-none
+        ${showLogoutMsg ? "top-32 opacity-100 scale-100" : "top-0 opacity-0 scale-95"}`}>
+        <div className={`border border-amber-600/40 backdrop-blur-md rounded-xl shadow-2xl pointer-events-auto overflow-hidden
+          ${isLight ? "bg-white/95" : "bg-[#1a1614]/95"}`}>
           <div className="px-5 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <ShieldCheck className="text-amber-500" size={18} />
@@ -299,10 +357,10 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Contenido central — todo con el mismo max-w-3xl */}
+      {/* Contenido central */}
       <div className="max-w-3xl mx-auto w-full relative z-10">
 
-        {/* Hero — centrado */}
+        {/* Hero */}
         <div className="text-center mb-10">
           <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-6 italic leading-none uppercase">
             {lnd.heroTitle} <span className="text-amber-600">{lnd.heroTitleAccent}</span>
@@ -315,10 +373,11 @@ const LandingPage = () => {
         {/* BUSCADOR */}
         <div className="relative z-[30] mb-2" ref={searchRef}>
           <div className="relative">
-            {/* Shortcut en desktop: absolute a la derecha */}
             {hasFilter && (
               <div className="hidden md:block absolute top-0 left-[calc(100%+12px)] w-52 h-full">
-                <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} isLight={isLight} lang={lang} typeLabels={typeLabels} />
+                <ArchivoShortcut
+                  activeDiet={activeDiet} activeType={activeType} activeSize={activeSize}
+                  isLight={isLight} lang={lang} typeLabels={typeLabels} />
               </div>
             )}
             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
@@ -326,42 +385,48 @@ const LandingPage = () => {
             </div>
             <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={lnd.searchPlaceholder?.toUpperCase()}
-              className={`w-full border py-5 md:py-6 pl-16 pr-14 rounded-2xl text-sm md:text-base font-mono tracking-widest focus:outline-none focus:border-amber-600/50 transition-all uppercase shadow-2xl
+              className={`w-full border py-5 md:py-6 pl-16 pr-14 rounded-2xl text-sm md:text-base font-mono tracking-widest
+                focus:outline-none focus:border-amber-600/50 transition-all uppercase shadow-2xl
                 ${isLight ? "bg-white border-stone-200 text-stone-900" : "bg-[#2a2420]/40 border-stone-800 text-white"}`}
             />
             {searchTerm && (
-              <button onClick={() => { setSearchTerm(""); if (!activeDiet && !activeType) setShowDropdown(false); }}
+              <button onClick={() => { setSearchTerm(""); if (!anyFilter) setShowDropdown(false); }}
                 className="absolute inset-y-0 right-6 flex items-center text-stone-500 hover:text-amber-500">
                 <X size={22} />
               </button>
             )}
           </div>
 
-          {/* Shortcut en móvil: debajo */}
+          {/* Shortcut móvil */}
           {hasFilter && (
             <div className="md:hidden mt-3">
-              <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} isLight={isLight} lang={lang} typeLabels={typeLabels} />
+              <ArchivoShortcut
+                activeDiet={activeDiet} activeType={activeType} activeSize={activeSize}
+                isLight={isLight} lang={lang} typeLabels={typeLabels} />
             </div>
           )}
 
           {/* Resultados */}
           {showResults && (
-            <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30] overflow-y-auto max-h-[390px] hide-scrollbar
+            <div className={`absolute top-full left-0 w-full mt-2 backdrop-blur-xl rounded-2xl border shadow-2xl z-[30]
+              overflow-y-auto max-h-[390px] hide-scrollbar
               ${isLight ? "bg-white/90 border-stone-200" : "bg-stone-900/95 border-white/10"}`}>
               {filteredDinos.length > 0 ? (
                 filteredDinos.map((dino) => {
                   const th = getDietConfig(dino.dieta).color;
                   return (
-                    <Link key={dino.id} to={`/animal/${dino.nombre.toLowerCase()}`}
+                    <Link key={dino.id} to={`/animal/${encodeURIComponent(dino.nombre.toLowerCase())}`}
                       className="flex items-center justify-between p-5 hover:bg-amber-600/10 transition-colors border-b border-white/5 last:border-none group/item">
                       <div className="flex items-center gap-5">
                         <img src={dino.imagen} alt={dino.nombre} className="w-12 h-12 object-cover rounded-xl border border-white/10" />
                         <div className="text-left">
-                          <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base ${isLight ? "text-stone-900" : "text-white"}`}>{dino.nombre}</p>
+                          <p className={`font-black uppercase italic group-hover/item:text-amber-500 transition-colors text-base
+                            ${isLight ? "text-stone-900" : "text-white"}`}>{dino.nombre}</p>
                           <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1">{dino.subName}</p>
                         </div>
                       </div>
-                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>
+                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border
+                        ${th.bg} ${th.text} ${th.border} uppercase tracking-tighter shrink-0`}>
                         {getDietLabel(dino.dieta, lang)}
                       </span>
                     </Link>
@@ -377,15 +442,16 @@ const LandingPage = () => {
         {/* FILTROS */}
         <div className="mb-6 w-full" ref={filtersRef}>
           <div className="flex items-center gap-2 justify-start px-1 flex-wrap">
+
+            {/* Dieta */}
             <FilterDropdown
               label={lnd.filterDiets} emoji="🦴"
               active={activeDiet ? getDietConfig(activeDiet).color : null}
               activeLabel={getDietLabel(activeDiet, lang)}
               onClear={() => setActiveDiet("")}
               isOpen={dietOpen}
-              onToggle={() => { setDietOpen((d) => !d); setTypeOpen(false); }}
-              isLight={isLight}
-            >
+              onToggle={() => { setDietOpen(d => !d); setTypeOpen(false); setSizeOpen(false); }}
+              isLight={isLight}>
               {usedDiets.map((dieta) => {
                 const cfg = getDietConfig(dieta);
                 const th = cfg.color;
@@ -402,15 +468,15 @@ const LandingPage = () => {
               })}
             </FilterDropdown>
 
+            {/* Tipo */}
             <FilterDropdown
               label={lnd.filterTypes} emoji="🦕"
               active={activeType ? TYPE_THEMES[activeType] : null}
               activeLabel={typeLabels[activeType] || activeType}
               onClear={() => setActiveType("")}
               isOpen={typeOpen}
-              onToggle={() => { setTypeOpen((t) => !t); setDietOpen(false); }}
-              isLight={isLight}
-            >
+              onToggle={() => { setTypeOpen(t => !t); setDietOpen(false); setSizeOpen(false); }}
+              isLight={isLight}>
               {availableTypes.map((tipo) => {
                 const th = TYPE_THEMES[tipo] || { text: "text-stone-400", bg: "bg-stone-400/10", border: "border-stone-400/40", hoverBg: "hover:bg-stone-400/10", hoverText: "hover:text-stone-300", hoverBorder: "hover:border-stone-400/40" };
                 const isActive = activeType === tipo;
@@ -426,8 +492,35 @@ const LandingPage = () => {
               })}
             </FilterDropdown>
 
-            {(activeDiet || activeType) && (
-              <button onClick={() => { setActiveDiet(""); setActiveType(""); if (!searchTerm) setShowDropdown(false); }}
+            {/* Tamaño */}
+            <FilterDropdown
+              label={lnd.filterSizes || "Tamaño"} emoji="📏"
+              active={activeSizeCfg ? activeSizeCfg.theme : null}
+              activeLabel={activeSizeCfg ? (activeSizeCfg.label[lang] || activeSizeCfg.label.es) : ""}
+              onClear={() => setActiveSize("")}
+              isOpen={sizeOpen}
+              onToggle={() => { setSizeOpen(s => !s); setDietOpen(false); setTypeOpen(false); }}
+              isLight={isLight}>
+              {SIZE_CATEGORIES.map((size) => {
+                const th = size.theme;
+                const isActive = activeSize === size.id;
+                const label = size.label[lang] || size.label.es;
+                return (
+                  <button key={size.id}
+                    onClick={() => { setActiveSize(isActive ? "" : size.id); setSizeOpen(false); }}
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border transition-all text-left font-black text-[10px] uppercase tracking-wide
+                      ${isActive ? `${th.bg} ${th.border} ${th.text}` : `border-transparent ${th.hoverBg} ${th.hoverText} ${th.hoverBorder} ${isLight ? "text-stone-600" : "text-stone-400"}`}`}>
+                    <span className="text-base shrink-0">{size.emoji}</span>
+                    <span>{label}</span>
+                  </button>
+                );
+              })}
+            </FilterDropdown>
+
+            {/* Limpiar */}
+            {anyFilter && (
+              <button
+                onClick={() => { setActiveDiet(""); setActiveType(""); setActiveSize(""); if (!searchTerm) setShowDropdown(false); }}
                 className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest transition-all
                   ${isLight ? "text-stone-400 hover:text-stone-600" : "text-stone-600 hover:text-stone-400"}`}>
                 <X size={24} /> {lnd.clearFilters}
@@ -436,13 +529,13 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* DATO CURIOSO — misma anchura que el buscador */}
+        {/* DATO CURIOSO */}
         <div className="mb-10">
           <DatoCurioso isLight={isLight} />
         </div>
       </div>
 
-      {/* ERAS — ancho completo */}
+      {/* ERAS */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         {eras.map((era) => (
           <EraCard key={era.id} id={era.id} name={era.name} age={era.age} image={era.image}>{era.desc}</EraCard>

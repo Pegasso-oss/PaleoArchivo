@@ -15,7 +15,7 @@ export const dinosaurios = [
     extincion: "272 m.a.",
     imagen: "https://i.redd.it/3887bmjjdy2a1.jpg",
     descripcion: "El superdepredador del Pérmico temprano y uno de los sinápsidos más icónicos. Su imponente vela dorsal, formada por espinas neurales elongadas cubiertas de piel, le servía probablemente para termorregulación. Aunque parece un dinosaurio, está más emparentado con los mamíferos.",
-    rival: [81],
+    rival: [{ id: 81, rol: "competidor" }],
   },
   {
     id: 39,
@@ -48,9 +48,9 @@ export const dinosaurios = [
     metodo: "Permineralización",
     material: "Capas de Beaufort",
     extincion: "252 m.a.",
-    imagen: "https://i.imgur.com/VcdpPDg.png",
+    imagen: "https://i.imgur.com/VcdpPDg.png",    
     descripcion: "El depredador ápice del Pérmico tardío. Sus colmillos de dientes de sable, los mayores de su época, podían alcanzar los 15 centímetros. Era un terápside avanzado con rasgos que anticipaban a los mamíferos: postura erguida y posiblemente metabolismo elevado.",
-    rival: [82],
+    rival: [{ id: 82, rol: "presa" }],
   },
   {
     id: 41,
@@ -66,7 +66,7 @@ export const dinosaurios = [
     metodo: "Permineralización",
     material: "Arenisca de Beaufort",
     extincion: "240 m.a.",
-    imagen: "https://imgur.com/pqGqh9D.png",
+    imagen: "https://www.elpulgardelpanda.com/wp-content/uploads/2020/05/Portada-Victor-O.-Leshyk-702x526.jpg",
     descripcion: "El animal que sobrevivió al mayor apocalipsis de la historia de la Tierra: la extinción masiva del Pérmico-Triásico, que eliminó el 96% de las especies marinas y el 70% de las terrestres. Tras la catástrofe, representaba hasta el 95% de los vertebrados terrestres del planeta.",
   },
   {
@@ -85,7 +85,7 @@ export const dinosaurios = [
     extincion: "270 m.a.",
     imagen: "https://imgur.com/9imx3WV.png",
     descripcion: "Un sinápsido primitivo contemporáneo del Dimetrodon que competía con él por recursos en las llanuras del Pérmico temprano. Más esbelto y con un hocico largo lleno de dientes cónicos, era probablemente un cazador piscívoro y de pequeños tetrápodos. Su postura aún semierecta contrasta con la postura más avanzada del Dimetrodon.",
-    rival: [38],
+    rival: [{ id: 38, rol: "competidor" }],
   },
   {
     id: 82,
@@ -103,7 +103,7 @@ export const dinosaurios = [
     extincion: "252 m.a.",
     imagen: "https://imgur.com/SfVov7D.png",
     descripcion: "Un pareiasaurio de cuerpo barrilado cubierto de placas óseas dérmicas que le daban una protección formidable. Era la presa favorita del Gorgonops en las llanuras del Pérmico tardío de Rusia. A pesar de su aspecto pesado era un herbívoro exitoso que formaba manadas para protegerse de los depredadores con colmillos de sable.",
-    rival: [40],
+    rival: [{ id: 40, rol: "depredador" }],
   },
   {
     id: 83,

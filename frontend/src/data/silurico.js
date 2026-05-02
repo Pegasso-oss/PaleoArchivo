@@ -49,6 +49,7 @@ export const dinosaurios = [
     extincion: "419 m.a.",
     imagen: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiAhkOlB0Y5Mhqd_83PE-cxVZjaWqAacfpG77cF1U6UO-cke4uZPGhwSRyyWFO96kAWLRS-T25tCWpJqAcEuBmBX7aPg026HcnKPNeYVgvmkwkrzpw5b9rLcoXij_8shEywnNLSOFDojSdH/w1200-h630-p-k-no-nu/Birkenia_NT.jpg",
     descripcion: "Pez primitivo sin mandíbulas cubierto de escamas superpuestas. Nadaba de forma activa en ambientes de agua dulce y estuarios.",
+    rival: [{ id: 73, rol: "depredador" }],
   },
   {
     id: 29,
@@ -67,7 +68,7 @@ export const dinosaurios = [
     imagen: "https://www.vistaalmar.es/images/stories/fotos-30/entelognathus-primordialis.jpg",
     descripcion: "Un descubrimiento revolucionario. Es el primer animal conocido con los huesos de la mandíbula que heredamos los vertebrados modernos.",
   },
-  {
+ {
     id: 72,
     nombre: "CEPHALASPIS",
     subName: "Cabeza de Escudo",
@@ -100,7 +101,7 @@ export const dinosaurios = [
     extincion: "419 m.a.",
     imagen: "https://t4.ftcdn.net/jpg/00/87/47/99/360_F_87479912_WnwvNLy3PRdZIQPwGwgaVO7E1VHGzAkL.jpg",
     descripcion: "Un euriptérido de agua dulce del Silúrico tardío, pariente de los escorpiones marinos pero adaptado a entornos fluviales y lacustres. Depredador activo de pequeños peces sin mandíbula como la Birkenia, fue uno de los primeros grandes depredadores en colonizar las aguas continentales.",
-    rival: [28],
+    rival: [{ id: 28, rol: "presa" }],
   },
   {
     id: 74,

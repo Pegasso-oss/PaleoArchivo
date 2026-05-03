@@ -125,3 +125,5 @@ PaleoArchivo/
 - [ ] Ampliar catálogo con más especies por periodo
 
 🌐 **[Ver en producción](https://paleoarchivo.vercel.app)**
+
+🐦 **[Twitter / X](https://twitter.com/PaleoArchivo)**

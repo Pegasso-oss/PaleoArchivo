@@ -31,6 +31,7 @@ const Login = () => {
         localStorage.setItem("auth", "true");
         localStorage.setItem("username", response.data.username.toUpperCase());
         localStorage.setItem("userId", idFinal);
+        localStorage.setItem("avatar", response.data.avatar || "");
         window.location.href = "/";
       } else {
         alert("Error: El servidor no envió el ID de usuario.");

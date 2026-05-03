@@ -104,7 +104,7 @@ const getRandomFact = (exclude = -1) => {
 };
 
 // ── DatoCurioso ───────────────────────────────────────────────────────────
-const DatoCurioso = ({ isLight }) => {
+const DatoCurioso = ({ isLight, lang }) => {
   const [fact, setFact] = useState(() => getRandomFact());
   const [animating, setAnimating] = useState(false);
 
@@ -121,7 +121,7 @@ const DatoCurioso = ({ isLight }) => {
         <Lightbulb size={17} className="text-amber-500" />
       </div>
       <div className={`flex-1 text-left transition-opacity duration-250 ${animating ? "opacity-0" : "opacity-100"}`}>
-        <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-amber-600 mb-0.5">Dato curioso</p>
+        <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-amber-600 mb-0.5">{{ es: "Dato curioso", en: "Fun fact", fr: "Le saviez-vous", it: "Lo sapevi" }[lang] || "Dato curioso"}</p>
         <p className={`text-sm font-mono leading-snug ${isLight ? "text-stone-700" : "text-stone-300"}`}>
           <span className="mr-1.5">{fact.emoji}</span>{fact.texto}
         </p>
@@ -182,7 +182,7 @@ const ArchivoShortcut = ({ activeDiet, activeType, activeSize, isLight, lang, ty
       </div>
       <div className="flex items-center justify-between gap-1">
         <p className={`text-xs font-black uppercase tracking-wide leading-tight ${color?.text}`}>
-          Ver archivo de {label}
+          {{ es: "Ver archivo de", en: "Browse", fr: "Voir", it: "Vedi" }[lang] || "Ver archivo de"} {label}
         </p>
         <ArrowRight size={14} className={`shrink-0 transition-transform group-hover:translate-x-0.5 ${color?.text}`} />
       </div>
@@ -261,7 +261,7 @@ const LandingPage = () => {
   const searchRef  = useRef(null);
   const location   = useLocation();
   const [showLogoutMsg, setShowLogoutMsg] = useState(false);
-  const { theme, lang } = useUser();
+  const { theme, language: lang } = useUser();
   const isLight = theme === "light";
   const { t, tSection } = useTranslation();
   const lnd        = tSection("landing");
@@ -494,7 +494,7 @@ const LandingPage = () => {
 
             {/* Tamaño */}
             <FilterDropdown
-              label={lnd.filterSizes || "Tamaño"} emoji="📏"
+              label={lnd.filterSizes || { es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[lang] || "Tamaño"} emoji="📏"
               active={activeSizeCfg ? activeSizeCfg.theme : null}
               activeLabel={activeSizeCfg ? (activeSizeCfg.label[lang] || activeSizeCfg.label.es) : ""}
               onClear={() => setActiveSize("")}
@@ -531,7 +531,7 @@ const LandingPage = () => {
 
         {/* DATO CURIOSO */}
         <div className="mb-10">
-          <DatoCurioso isLight={isLight} />
+          <DatoCurioso isLight={isLight} lang={lang} />
         </div>
       </div>
 

@@ -14,6 +14,7 @@ import {
 } from "./pages/pages.js";
 
 import Header   from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 import Login    from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import Toast    from "./components/Toast.jsx";
@@ -93,17 +94,7 @@ function App() {
         </Routes>
       </main>
 
-      {!hideHeader && (
-        <footer className={`py-10 font-mono tracking-[0.3em] uppercase text-[10px] transition-colors duration-500 ${
-          isLight
-            ? "bg-[#e5e2dd] text-stone-500 border-t border-black/5"
-            : "bg-[#0d0a09] text-stone-500 border-t border-white/5 opacity-60"
-        }`}>
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <p>&copy; 2026 PaleoArchivo Project — Registros Digitales de la Biosfera</p>
-          </div>
-        </footer>
-      )}
+      {!hideHeader && <Footer />}
     </div>
   );
 }

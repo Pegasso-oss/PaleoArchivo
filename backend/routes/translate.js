@@ -4,6 +4,18 @@ const router = express.Router();
 
 const LIBRE_TRANSLATE_URL = process.env.LIBRE_TRANSLATE_URL || 'https://paleoarchivo-translate.onrender.com';
 
+const waitForLibreTranslate = async (fetch, maxWait = 60000) => {
+  const start = Date.now();
+  while (Date.now() - start < maxWait) {
+    try {
+      const res = await fetch(`${LIBRE_TRANSLATE_URL}/languages`, { method: 'GET' });
+      if (res.ok) return true;
+    } catch {}
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  return false;
+};
+
 router.post('/', async (req, res) => {
   const { text, target } = req.body;
 
@@ -17,8 +29,12 @@ router.post('/', async (req, res) => {
 
   try {
     const fetch = (await import('node-fetch')).default;
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
+    // Esperar a que LibreTranslate esté despierto
+    const ready = await waitForLibreTranslate(fetch);
+    if (!ready) {
+      return res.status(503).json({ msg: 'Servicio de traducción no disponible' });
+    }
 
     const response = await fetch(`${LIBRE_TRANSLATE_URL}/translate`, {
       method: 'POST',
@@ -29,10 +45,7 @@ router.post('/', async (req, res) => {
         target,
         format: 'text',
       }),
-      signal: controller.signal,
     });
-
-    clearTimeout(timeout);
 
     const data = await response.json();
 
@@ -43,10 +56,6 @@ router.post('/', async (req, res) => {
 
     res.json({ translated: data.translatedText });
   } catch (err) {
-    if (err.name === 'AbortError') {
-      console.error('LibreTranslate timeout — servicio dormido');
-      return res.status(503).json({ msg: 'Servicio de traducción no disponible temporalmente' });
-    }
     console.error('Error en /translate:', err.message);
     res.status(500).json({ msg: 'Error de servidor' });
   }

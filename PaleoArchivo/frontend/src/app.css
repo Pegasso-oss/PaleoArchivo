@@ -1,0 +1,25 @@
+/* src/app.css */
+
+/* Regla ultra-agresiva para el fondo */
+html.light-theme,
+.light-theme body,
+.light-theme #root,
+.light-theme main,
+.light-theme .min-h-screen {
+  background-color: #f5f2ed !important;
+  background: #f5f2ed !important;
+}
+
+/* Regla ultra-agresiva para los textos */
+.light-theme h1, 
+.light-theme p, 
+.light-theme span:not(.text-amber-600),
+.light-theme div:not(.text-amber-600) {
+  color: #1c1917 !important;
+}
+
+/* Para que las letras del buscador no sean blancas */
+.light-theme input {
+  color: #1c1917 !important;
+  background-color: #ffffff !important;
+}

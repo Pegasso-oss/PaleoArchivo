@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- LIMPIEZA GLOBAL --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Adiós barra de desplazamiento lateral */
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* --- ESTILOS DE ERA CARD --- */
+/* Quitamos el borde blanco/gris y lo forzamos a ámbar */
+.EraCard {
+  border: 1px solid rgba(217, 119, 6, 0.3) !important; /* Ámbar sutil */
+  box-shadow: none !important;
+  transition: all 0.3s ease;
+}
+
+.EraCard:hover {
+  border-color: #d97706 !important; /* Ámbar intenso al pasar el ratón */
+  box-shadow: 0 0 20px rgba(217, 119, 6, 0.2) !important;
+}
+
+/* --- TEMAS --- */
+.light-theme {
+  --bg-main: #f8f6f2;
+  --bg-card: #ffffff;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-theme header {
+  background-color: #f8f6f2 !important;
+  border-bottom: 2px solid #d97706 !important;
+  backdrop-filter: none !important;
+  isolation: auto !important;
+}
+
+/* Ajuste del degradado de la EraCard en modo claro */
+.light-theme .EraCard_gradient { 
+  background: linear-gradient(to top, #d97706 10%, rgba(248, 246, 242, 0.8) 30%, transparent 100%) !important;
+}
+
+/* --- PORTALES Y TOASTS --- */
+body > div[style*="position: fixed"] {
+  z-index: 2147483647 !important;
+}
+
+/* Esto es mano de santo contra la barra lateral */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}

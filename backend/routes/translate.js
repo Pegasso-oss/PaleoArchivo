@@ -16,6 +16,9 @@ router.post('/', async (req, res) => {
   }
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
     const response = await fetch(`${LIBRE_TRANSLATE_URL}/translate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -25,7 +28,10 @@ router.post('/', async (req, res) => {
         target,
         format: 'text',
       }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     const data = await response.json();
 
@@ -36,6 +42,10 @@ router.post('/', async (req, res) => {
 
     res.json({ translated: data.translatedText });
   } catch (err) {
+    if (err.name === 'AbortError') {
+      console.error('LibreTranslate timeout — servicio dormido');
+      return res.status(503).json({ msg: 'Servicio de traducción no disponible temporalmente' });
+    }
     console.error('Error en /translate:', err.message);
     res.status(500).json({ msg: 'Error de servidor' });
   }

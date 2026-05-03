@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 
+const LIBRE_TRANSLATE_URL = process.env.LIBRE_TRANSLATE_URL || 'https://paleoarchivo-translate.onrender.com';
+
 router.post('/', async (req, res) => {
   const { text, target } = req.body;
 
@@ -14,21 +16,25 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${process.env.GOOGLE_TRANSLATE_KEY}`;
-    const response = await fetch(url, {
+    const response = await fetch(`${LIBRE_TRANSLATE_URL}/translate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q: text, source: 'es', target, format: 'text' }),
+      body: JSON.stringify({
+        q: text,
+        source: 'es',
+        target,
+        format: 'text',
+      }),
     });
 
     const data = await response.json();
 
     if (data.error) {
-      console.error('Error de Google Translate:', data.error.message);
-      return res.status(500).json({ msg: data.error.message });
+      console.error('Error de LibreTranslate:', data.error);
+      return res.status(500).json({ msg: data.error });
     }
 
-    res.json({ translated: data.data.translations[0].translatedText });
+    res.json({ translated: data.translatedText });
   } catch (err) {
     console.error('Error en /translate:', err.message);
     res.status(500).json({ msg: 'Error de servidor' });

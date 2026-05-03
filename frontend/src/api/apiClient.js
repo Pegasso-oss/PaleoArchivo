@@ -19,4 +19,8 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
+export const baseClient = axios.create({
+  baseURL: BASE_URL,
+});
+
 export default apiClient;

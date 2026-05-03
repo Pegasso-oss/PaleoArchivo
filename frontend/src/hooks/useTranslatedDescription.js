@@ -11,7 +11,6 @@ const useTranslatedDescription = (text, language) => {
   const abortRef = useRef(null);
 
   useEffect(() => {
-    // Español — no hace falta traducir
     if (!text || language === 'es' || text === null) {
       setTranslated(text);
       return;
@@ -19,13 +18,11 @@ const useTranslatedDescription = (text, language) => {
 
     const cacheKey = `${language}::${text.slice(0, 40)}`;
 
-    // Usar caché si ya está traducido
     if (cache[cacheKey]) {
       setTranslated(cache[cacheKey]);
       return;
     }
 
-    // Abortar llamada anterior si el idioma cambió rápido
     if (abortRef.current) abortRef.current.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -39,7 +36,6 @@ const useTranslatedDescription = (text, language) => {
       })
       .catch(err => {
         if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
-          // Si falla, mostrar el texto original en español
           setTranslated(text);
         }
       })

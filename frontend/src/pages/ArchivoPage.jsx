@@ -107,15 +107,21 @@ const ArchivoPage = () => {
   const typeCfg   = tipo ? (TYPE_THEMES[tipo] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
   const sizeCfg   = size ? (SIZE_THEMES[size] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
 
-  const activeColor = dietCfg ? dietCfg.color : isTipo ? typeCfg : sizeCfg;
-  const activeEmoji = dietCfg ? dietCfg.emoji : isTipo ? "🦕" : (SIZE_EMOJIS[size] || "📏");
-  const activeLabel = diet
-    ? getDietLabel(diet, language)
-    : isTipo
-      ? (typeLabels[tipo] || tipo)
-      : (SIZE_LABELS[size]?.[language] || SIZE_LABELS[size]?.es || size);
+  const noFilter = !isDiet && !isTipo && !isSize;
 
-  const filterLabel = isDiet ? "Dieta" : isTipo ? "Tipo" : { es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[language] || "Tamaño";
+  const activeColor = dietCfg ? dietCfg.color : isTipo ? typeCfg : isSize ? sizeCfg : { text: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/40" };
+  const activeEmoji = noFilter ? "🗂️" : (dietCfg ? dietCfg.emoji : isTipo ? "🦕" : (SIZE_EMOJIS[size] || "📏"));
+  const activeLabel = noFilter
+    ? { es: "Todas las especies", en: "All species", fr: "Toutes les espèces", it: "Tutte le specie" }[language] || "Todas las especies"
+    : diet
+      ? getDietLabel(diet, language)
+      : isTipo
+        ? (typeLabels[tipo] || tipo)
+        : (SIZE_LABELS[size]?.[language] || SIZE_LABELS[size]?.es || size);
+
+  const filterLabel = noFilter
+    ? { es: "Archivo completo", en: "Full archive", fr: "Archive complète", it: "Archivio completo" }[language] || "Archivo completo"
+    : isDiet ? "Dieta" : isTipo ? "Tipo" : { es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[language] || "Tamaño";
   const sectionLabel = isDiet ? "Sobre esta dieta" : isTipo ? "Sobre este grupo" : { es: "Sobre este tamaño", en: "About this size", fr: "Sur cette taille", it: "Su questa dimensione" }[language] || "Sobre este tamaño";
 
   // Descripción desde translations
@@ -128,11 +134,10 @@ const ArchivoPage = () => {
   return (
     <div className={`min-h-screen px-4 pt-10 pb-20 font-mono transition-colors duration-500
       ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
-      <div className="max-w-6xl mx-auto">
-
+      <div className="max-w-[1720px] mx-auto">
         {/* Back */}
         <button onClick={() => navigate(-1)}
-          className={`flex items-center gap-2 text-[11px] uppercase tracking-widest mb-8 transition-colors
+          className={`flex items-center gap-2 text-[13px] uppercase tracking-widest mb-8 transition-colors
             ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}>
           <ArrowLeft size={14} /> Volver
         </button>
@@ -144,20 +149,20 @@ const ArchivoPage = () => {
               ${activeColor?.bg} ${activeColor?.text} ${activeColor?.border}`}>
               {filterLabel}
             </span>
-            <span className={`text-[11px] uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>
+            <span className={`text-[13px] uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>
               {filteredAnimals.length} registro{filteredAnimals.length !== 1 ? "s" : ""}
             </span>
           </div>
 
           <h1 className={`text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-6
             ${isLight ? "text-stone-900" : "text-[#fef3c7]"}`}>
-            <span className="mr-4">{activeEmoji}</span>
+            {!noFilter && <span className="mr-4">{activeEmoji}</span>}
             {activeLabel}
           </h1>
 
           {/* Descripción */}
           {description && (
-            <div className={`max-w-3xl rounded-2xl border px-6 py-5 mb-6
+            <div className={`max-w-5xl rounded-2xl border px-6 py-5 mb-6
               ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
               <p className={`text-[10px] uppercase tracking-[0.15em] font-bold mb-2 ${activeColor?.text}`}>
                 {sectionLabel}
@@ -173,7 +178,7 @@ const ArchivoPage = () => {
 
         {/* Grid */}
         {filteredAnimals.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10">
             {filteredAnimals.map(dino => (
               <DinoCard key={dino.id} dino={dino} />
             ))}

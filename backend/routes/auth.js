@@ -193,4 +193,23 @@ router.post('/favorites/add', authMiddleware, async (req, res) => {
   }
 });
 
+// --- TOP FAVORITOS GLOBAL ---
+// Agrega todos los favoritos de todos los usuarios y devuelve los más populares
+router.get('/top-favorites', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 5;
+    const result = await User.aggregate([
+      { $unwind: "$favorites" },
+      { $group: { _id: "$favorites.id", nombre: { $first: "$favorites.nombre" }, count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: limit },
+      { $project: { _id: 0, id: "$_id", nombre: 1, count: 1 } }
+    ]);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error de servidor' });
+  }
+});
+
 module.exports = router;

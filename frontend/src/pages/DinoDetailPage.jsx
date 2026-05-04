@@ -70,10 +70,10 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language }) => {
   const isLoggedIn = localStorage.getItem("auth") === "true";
 
   const labels = {
-    es: { title: "Literatura Científica", loading: "Buscando...", empty: "No se encontraron publicaciones indexadas.", scholar: "Ver en Google Scholar", authors: "et al.", noAuthors: "Autor desconocido", btn: "Literatura científica", lockedTitle: "Acceso restringido", lockedMsg: "Inicia sesión para acceder a la literatura científica indexada.", lockedBtn: "Entendido" },
-    en: { title: "Scientific Literature",    loading: "Searching...", empty: "No indexed publications found.",             scholar: "View on Google Scholar",  authors: "et al.", noAuthors: "Unknown author",    btn: "Scientific literature",  lockedTitle: "Restricted access",  lockedMsg: "Log in to access indexed scientific literature.",                    lockedBtn: "Got it"   },
-    fr: { title: "Littérature Scientifique", loading: "Recherche...", empty: "Aucune publication indexée trouvée.",         scholar: "Voir sur Google Scholar",  authors: "et al.", noAuthors: "Auteur inconnu",    btn: "Littérature scientifique", lockedTitle: "Accès restreint",    lockedMsg: "Connectez-vous pour accéder à la littérature scientifique indexée.", lockedBtn: "Compris"  },
-    it: { title: "Letteratura Scientifica",  loading: "Ricerca...",   empty: "Nessuna pubblicazione indicizzata trovata.", scholar: "Vedi su Google Scholar",   authors: "et al.", noAuthors: "Autore sconosciuto", btn: "Letteratura scientifica",  lockedTitle: "Accesso limitato",   lockedMsg: "Accedi per visualizzare la letteratura scientifica indicizzata.",    lockedBtn: "Capito"  },
+    es: { title: "Literatura Científica", loading: "Buscando...", empty: "No se encontraron publicaciones indexadas.", scholar: "Ver en Google Scholar", authors: "et al.", noAuthors: "Autor desconocido", btn: "Literatura científica", lockedTitle: "Acceso restringido", lockedMsg: "Inicia sesión para acceder a la literatura científica indexada.", lockedBtn: "Entendido", showVerb: "mostrar", showMore: "más" },
+    en: { title: "Scientific Literature",    loading: "Searching...", empty: "No indexed publications found.",             scholar: "View on Google Scholar",  authors: "et al.", noAuthors: "Unknown author",    btn: "Scientific literature",  lockedTitle: "Restricted access",  lockedMsg: "Log in to access indexed scientific literature.",                    lockedBtn: "Got it",   showVerb: "show",     showMore: "more"      },
+    fr: { title: "Littérature Scientifique", loading: "Recherche...", empty: "Aucune publication indexée trouvée.",         scholar: "Voir sur Google Scholar",  authors: "et al.", noAuthors: "Auteur inconnu",    btn: "Littérature scientifique", lockedTitle: "Accès restreint",    lockedMsg: "Connectez-vous pour accéder à la littérature scientifique indexée.", lockedBtn: "Compris",  showVerb: "afficher", showMore: "de plus"   },
+    it: { title: "Letteratura Scientifica",  loading: "Ricerca...",   empty: "Nessuna pubblicazione indicizzata trovata.", scholar: "Vedi su Google Scholar",   authors: "et al.", noAuthors: "Autore sconosciuto", btn: "Letteratura scientifica",  lockedTitle: "Accesso limitato",   lockedMsg: "Accedi per visualizzare la letteratura scientifica indicizzata.",    lockedBtn: "Capito", showVerb: "mostra",   showMore: "in più"   },
   };
   const l = labels[language] || labels.es;
 
@@ -186,7 +186,7 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language }) => {
                   <Link to="/login" onClick={() => setShowLoginModal(false)}
                     className="px-5 py-2.5 rounded-xl border-2 font-black text-[11px] uppercase tracking-widest transition-all hover:opacity-80"
                     style={{ borderColor: hex, color: hex }}>
-                    {language === "en" ? "Log in" : language === "fr" ? "Se connecter" : language === "it" ? "Accedi" : "Iniciar sesión"}
+                    {dd.loginToAccess}
                   </Link>
                 </div>
               </div>
@@ -286,10 +286,7 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language }) => {
                           ? "border-t border-stone-100 text-stone-400 hover:text-stone-700 hover:bg-stone-50"
                           : "border-t border-white/[0.06] text-stone-600 hover:text-stone-300 hover:bg-white/[0.02]"}`}>
                       <ChevronDown size={13} />
-                      {language === "en" ? `show ${Math.min(3, papers.length - visible)} more` :
-                       language === "fr" ? `afficher ${Math.min(3, papers.length - visible)} de plus` :
-                       language === "it" ? `mostra ${Math.min(3, papers.length - visible)} in più` :
-                       `mostrar ${Math.min(3, papers.length - visible)} más`}
+                      `${l.showVerb} ${Math.min(3, papers.length - visible)} ${l.showMore}`
                     </button>
                   )}
                 </div>
@@ -561,7 +558,7 @@ const DinoDetailPage = () => {
           <div className={`mt-8 pt-6 border-t ${isLight ? "border-stone-200" : "border-white/[0.07]"}`}>
             <p className="font-mono text-[14px] uppercase tracking-[0.3em] text-stone-500 mb-4 flex items-center gap-2">
               <Swords size={18} style={{ color: hex }} />
-              {language === "en" ? "Biological Rivalry" : language === "fr" ? "Rivalité Biologique" : language === "it" ? "Rivalità Biologica" : "Rivalidad Biológica"}
+              {dd.biologicalRivalry}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {rivals.map(rival => {

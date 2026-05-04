@@ -12,7 +12,7 @@ const useTranslatedDescription = (text, language) => {
 
   useEffect(() => {
     if (!text || language === 'es' || text === null) {
-      setTranslated(text);
+      setTranslated(text || '');
       return;
     }
 

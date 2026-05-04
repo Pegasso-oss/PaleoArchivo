@@ -2,8 +2,6 @@
 const express = require('express');
 const router = express.Router();
 
-const LIBRE_TRANSLATE_URL = process.env.LIBRE_TRANSLATE_URL || 'https://paleoarchivo-translate.onrender.com';
-
 router.post('/', async (req, res) => {
   const { text, target } = req.body;
 
@@ -16,36 +14,17 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
-
-    const response = await fetch(`${LIBRE_TRANSLATE_URL}/translate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        q: text,
-        source: 'es',
-        target,
-        format: 'text',
-      }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeout);
-
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|${target}&de=mosqueraalberto70@gmail.com`;
+    const response = await fetch(url);
     const data = await response.json();
 
-    if (data.error) {
-      console.error('Error de LibreTranslate:', data.error);
-      return res.status(500).json({ msg: data.error });
+    if (data.responseStatus !== 200) {
+      console.error('Error de MyMemory:', data.responseDetails);
+      return res.status(500).json({ msg: data.responseDetails || 'Error de traducción' });
     }
 
-    res.json({ translated: data.translatedText });
+    res.json({ translated: data.responseData.translatedText });
   } catch (err) {
-    if (err.name === 'AbortError') {
-      console.error('LibreTranslate timeout — servicio dormido');
-      return res.status(503).json({ msg: 'Servicio de traducción no disponible temporalmente' });
-    }
     console.error('Error en /translate:', err.message);
     res.status(500).json({ msg: 'Error de servidor' });
   }

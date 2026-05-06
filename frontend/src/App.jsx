@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { useUser } from "./context/useUser";
 import {
   LandingPage, DinoDetailPage, FavoritesPage, ProfilePage,
-  ArchivoPage,
+  ArchivoPage, TopFavoritosPage,
   PaleozoicoPage, CambricoPage, OrdovicicoPage, SiluricoPage,
   DevonicoPage, CarboniferoPage, PermicoPage,
   MesozoicoPage, TriasicoPage, JurasicoPage, CretacicoPage,
@@ -13,11 +13,12 @@ import {
   CuaternarioPage, PleistocenoPage, HolocenoPage,
 } from "./pages/pages.js";
 
-import Header   from "./components/Header.jsx";
-import Footer from "./components/Footer.jsx";
-import Login    from "./components/Login.jsx";
-import Register from "./components/Register.jsx";
-import Toast    from "./components/Toast.jsx";
+import Header        from "./components/Header.jsx";
+import Footer        from "./components/Footer.jsx";
+import Login         from "./components/Login.jsx";
+import Register      from "./components/Register.jsx";
+import Toast         from "./components/Toast.jsx";
+import TimelineModal from "./components/TimelineModal.jsx";
 
 function App() {
   const location = useLocation();
@@ -52,13 +53,14 @@ function App() {
         <Routes>
 
           {/* PERSONAL */}
-          <Route path="/"           element={<LandingPage />} />
-          <Route path="/login"      element={<Login />} />
-          <Route path="/register"   element={<Register />} />
-          <Route path="/favorites"  element={<FavoritesPage />} />
-          <Route path="/perfil"     element={<ProfilePage />} />
-          <Route path="/animal/:id" element={<DinoDetailPage />} />
-          <Route path="/archivo"    element={<ArchivoPage />} />
+          <Route path="/"              element={<LandingPage />} />
+          <Route path="/login"         element={<Login />} />
+          <Route path="/register"      element={<Register />} />
+          <Route path="/favorites"     element={<FavoritesPage />} />
+          <Route path="/perfil"        element={<ProfilePage />} />
+          <Route path="/animal/:id"    element={<DinoDetailPage />} />
+          <Route path="/archivo"       element={<ArchivoPage />} />
+          <Route path="/top-favoritos" element={<TopFavoritosPage />} />
 
           {/* PALEOZOICO */}
           <Route path="/era/paleozoico"             element={<PaleozoicoPage />} />
@@ -95,6 +97,9 @@ function App() {
       </main>
 
       {!hideHeader && <Footer />}
+
+      {/* Modal cronología — fuera del layout, se gestiona solo */}
+      <TimelineModal />
     </div>
   );
 }

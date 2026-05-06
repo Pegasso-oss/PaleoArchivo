@@ -65,6 +65,95 @@ const getRandomFact = (list, exclude = -1) => {
   return { ...list[idx], idx };
 };
 
+// ── Cronología del sidebar ─────────────────────────────────────────────────
+const TIMELINE_ERAS = [
+  {
+    era: { es: "Paleozoico", en: "Paleozoic", fr: "Paléozoïque", it: "Paleozoico" },
+    periodos: [
+      { name: { es: "Cámbrico",    en: "Cambrian",    fr: "Cambrien",    it: "Cambriano"    }, ma: "538", color: "bg-cyan-500"   },
+      { name: { es: "Ordovícico",  en: "Ordovician",  fr: "Ordovicien",  it: "Ordoviciano"  }, ma: "485", color: "bg-sky-500"    },
+      { name: { es: "Silúrico",    en: "Silurian",    fr: "Silurien",    it: "Siluriano"    }, ma: "444", color: "bg-teal-500"   },
+      { name: { es: "Devónico",    en: "Devonian",    fr: "Dévonien",    it: "Devoniano"    }, ma: "419", color: "bg-green-500"  },
+      { name: { es: "Carbonífero", en: "Carboniferous",fr:"Carbonifère", it: "Carbonifero"  }, ma: "359", color: "bg-lime-500"   },
+      { name: { es: "Pérmico",     en: "Permian",     fr: "Permien",     it: "Permiano"     }, ma: "299", color: "bg-yellow-500" },
+    ],
+  },
+  {
+    era: { es: "Mesozoico", en: "Mesozoic", fr: "Mésozoïque", it: "Mesozoico" },
+    periodos: [
+      { name: { es: "Triásico",   en: "Triassic",   fr: "Trias",      it: "Triassico"  }, ma: "252", color: "bg-orange-500" },
+      { name: { es: "Jurásico",   en: "Jurassic",   fr: "Jurassique", it: "Giurassico" }, ma: "201", color: "bg-amber-500"  },
+      { name: { es: "Cretácico",  en: "Cretaceous", fr: "Crétacé",    it: "Cretaceo"   }, ma: "145", color: "bg-red-500"    },
+    ],
+  },
+  {
+    era: { es: "Cenozoico", en: "Cenozoic", fr: "Cénozoïque", it: "Cenozoico" },
+    periodos: [
+      { name: { es: "Paleógeno",   en: "Paleogene",   fr: "Paléogène",   it: "Paleogene"   }, ma: "66",  color: "bg-violet-500" },
+      { name: { es: "Neógeno",     en: "Neogene",     fr: "Néogène",     it: "Neogene"     }, ma: "23",  color: "bg-indigo-500" },
+      { name: { es: "Cuaternario", en: "Quaternary",  fr: "Quaternaire", it: "Quaternario" }, ma: "2.6", color: "bg-blue-500"   },
+    ],
+  },
+];
+
+const SidebarCronologia = ({ isLight, lang }) => {
+  const label = { es: "Escala temporal", en: "Time scale", fr: "Échelle temporelle", it: "Scala temporale" }[lang] || "Escala temporal";
+
+  return (
+    <div className={"rounded-xl border overflow-hidden " + (isLight ? "border-stone-200 bg-white/50" : "border-[#2a2520] bg-[#0c0b0a]/50")}>
+      {/* cabecera */}
+      <div className={"px-4 py-3 border-b " + (isLight ? "border-stone-200" : "border-[#2a2520]")}>
+        <p className={"text-[10px] uppercase tracking-[0.2em] " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{label}</p>
+      </div>
+
+      {/* eras */}
+      <div className="flex flex-col">
+        {TIMELINE_ERAS.map((bloque, bi) => (
+          <div key={bi}>
+            {/* separador de era */}
+            <div className={"px-4 pt-3 pb-1.5 flex items-center gap-2 " + (bi > 0 ? "border-t " + (isLight ? "border-stone-100" : "border-[#1a1814]") : "")}>
+              <span className={"text-[9px] uppercase tracking-[0.18em] font-bold " + (isLight ? "text-stone-300" : "text-[#3a3028]")}>
+                {bloque.era[lang] || bloque.era.es}
+              </span>
+              <div className={"flex-1 h-px " + (isLight ? "bg-stone-100" : "bg-[#2a2520]")} />
+            </div>
+
+            {/* periodos */}
+            <div className="px-4 pb-2 flex flex-col gap-0.5">
+              {bloque.periodos.map(({ name, ma, color }) => (
+                <div key={ma}
+                  className={"flex items-center justify-between gap-3 px-2 py-2 rounded-lg transition-all group/tl cursor-default " + (isLight ? "hover:bg-stone-50" : "hover:bg-white/[0.03]")}>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className={"w-2 h-2 rounded-full shrink-0 transition-transform group-hover/tl:scale-125 " + color} />
+                    <span className={"text-[11px] font-bold uppercase tracking-wide truncate transition-colors group-hover/tl:text-amber-500 " + (isLight ? "text-stone-600" : "text-[#6b5e4e]")}>
+                      {name[lang] || name.es}
+                    </span>
+                  </div>
+                  <span className={"text-[11px] font-mono font-bold shrink-0 tabular-nums " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+                    {ma}<span className={"text-[9px] font-normal " + (isLight ? "text-stone-300" : "text-[#3a3028]")}>Ma</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* pie */}
+      <div className={"px-4 py-2.5 border-t flex items-center justify-between " + (isLight ? "border-stone-100" : "border-[#1a1814]")}>
+        <span className={"text-[9px] uppercase tracking-widest " + (isLight ? "text-stone-300" : "text-[#3a3028]")}>
+          538 Ma — presente
+        </span>
+        <div className="flex gap-1">
+          {["bg-cyan-500","bg-amber-500","bg-blue-500"].map(c => (
+            <div key={c} className={"w-1.5 h-1.5 rounded-full " + c} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // DatoCurioso
 const DatoCurioso = ({ isLight, lang }) => {
   const { tSection } = useTranslation();
@@ -173,14 +262,6 @@ const FilterDropdown = ({ label, emoji, active, activeLabel, onClear, isOpen, on
   );
 };
 
-// StatBadge
-const StatBadge = ({ label, value, isLight }) => (
-  <div className={"flex flex-col items-center px-4 py-2 rounded-lg border " + (isLight ? "border-stone-200 bg-stone-50" : "border-[#2a2520] bg-[#0f0e0d]")}>
-    <span className="text-amber-600 font-black text-lg font-mono leading-none">{value}</span>
-    <span className={"text-[9px] uppercase tracking-[0.15em] mt-0.5 " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{label}</span>
-  </div>
-);
-
 // SidebarAnimalSorpresa
 const SidebarAnimalSorpresa = ({ isLight, lang }) => {
   const navigate = useNavigate();
@@ -255,7 +336,7 @@ const SidebarTopFavoritos = ({ isLight, lang }) => {
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
         <p className={"text-[12px] uppercase tracking-[0.2em] " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{labels.title[lang] || labels.title.es}</p>
         {topList.length > 0 && (
-          <Link to="/archivo" className="text-[9px] uppercase tracking-widest font-bold text-amber-600 hover:text-amber-500 transition-colors">
+          <Link to="/top-favoritos" className="text-[9px] uppercase tracking-widest font-bold text-amber-600 hover:text-amber-500 transition-colors">
             {labels.viewAll[lang] || labels.viewAll.es} →
           </Link>
         )}
@@ -316,10 +397,9 @@ const LandingPage = () => {
       if (footer) setFooterHeight(footer.getBoundingClientRect().height);
     };
     measure();
-    // Re-measure after a tick in case footer renders late
-    const t = setTimeout(measure, 100);
+    const timer = setTimeout(measure, 100);
     window.addEventListener("resize", measure);
-    return () => { clearTimeout(t); window.removeEventListener("resize", measure); };
+    return () => { clearTimeout(timer); window.removeEventListener("resize", measure); };
   }, []);
 
   const usedDiets = Object.keys(DIET_CONFIG).filter((diet) => allAnimals.some((a) => a.dieta === diet));
@@ -396,88 +476,59 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Layout: dos columnas independientes, pegadas al header */}
+      {/* Layout: dos columnas independientes */}
       <div className={"flex overflow-hidden " + (isLight ? "bg-[#f0ebe3]" : "bg-[#0f0e0c]")}
         style={{ height: `calc(120vh - ${headerHeight}px - ${footerHeight}px + 53.2px)` }}>
 
-        {/* ── Sidebar — scroll propio, nunca se mueve con la página ── */}
+        {/* ── Sidebar ── */}
         <aside className={"hidden lg:flex w-[300px] shrink-0 flex-col overflow-y-auto overflow-x-hidden hide-scrollbar border-r " + (isLight ? "bg-[#f0ebe3] border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]")}>
           <div className="flex flex-col gap-5 px-6 py-7 min-h-full">
 
-              {/* Logo */}
-              <div>
-                <div className="w-9 h-[3px] bg-amber-600 mb-4" />
-                <p className={"text-[10px] tracking-[0.2em] uppercase mb-1 " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>PaleoArchivo</p>
-                <p className={"text-[11px] leading-relaxed " + (isLight ? "text-stone-500" : "text-[#4a3f32]")}>
-                  {{ es: "Registro digital de vida prehistórica", en: "Digital record of prehistoric life", fr: "Registre numérique de la vie préhistorique", it: "Registro digitale della vita preistorica" }[lang] || "Registro digital de vida prehistórica"}
-                </p>
-              </div>
+            {/* Logo */}
+            <div>
+              <div className="w-9 h-[3px] bg-amber-600 mb-4" />
+              <p className={"text-[10px] tracking-[0.2em] uppercase mb-1 " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>PaleoArchivo</p>
+              <p className={"text-[11px] leading-relaxed " + (isLight ? "text-stone-500" : "text-[#4a3f32]")}>
+                {{ es: "Registro digital de vida prehistórica", en: "Digital record of prehistoric life", fr: "Registre numérique de la vie préhistorique", it: "Registro digitale della vita preistorica" }[lang] || "Registro digital de vida prehistórica"}
+              </p>
+            </div>
 
-              {/* Stats */}
-              <div className={"rounded-xl border p-3.5 " + (isLight ? "border-stone-200 bg-white/50" : "border-[#2a2520] bg-[#0c0b0a]/50")}>
-                <p className={"text-[9px] uppercase tracking-[0.2em] mb-2.5 " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
-                  {{ es: "El archivo", en: "The archive", fr: "L'archive", it: "L'archivio" }[lang] || "El archivo"}
-                </p>
-                <div className="flex flex-col gap-1.5">
-                  {[
-                    { v: allAnimals.length, l: { es: "especies catalogadas", en: "catalogued species", fr: "espèces cataloguées", it: "specie catalogate" } },
-                    { v: "16", l: { es: "periodos geológicos", en: "geological periods", fr: "périodes géologiques", it: "periodi geologici" } },
-                    { v: Object.keys(DIET_CONFIG).length, l: { es: "tipos de dieta", en: "diet types", fr: "types de régime", it: "tipi di dieta" } },
-                    { v: "4Ga", l: { es: "años de historia", en: "years of history", fr: "ans d'histoire", it: "anni di storia" } },
-                  ].map(({ v, l }) => (
-                    <div key={String(v)} className="flex items-baseline justify-between gap-2">
-                      <span className={"text-[10px] leading-snug " + (isLight ? "text-stone-500" : "text-[#6b5e4e]")}>{l[lang] || l.es}</span>
-                      <span className="text-amber-600 font-black text-sm font-mono shrink-0">{v}</span>
-                    </div>
-                  ))}
-                </div>
+            {/* Stats */}
+            <div className={"rounded-xl border p-3.5 " + (isLight ? "border-stone-200 bg-white/50" : "border-[#2a2520] bg-[#0c0b0a]/50")}>
+              <p className={"text-[9px] uppercase tracking-[0.2em] mb-2.5 " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+                {{ es: "El archivo", en: "The archive", fr: "L'archive", it: "L'archivio" }[lang] || "El archivo"}
+              </p>
+              <div className="flex flex-col gap-1.5">
+                {[
+                  { v: allAnimals.length, l: { es: "Especies catalogadas", en: "Catalogued species", fr: "Espèces cataloguées", it: "Specie catalogate" } },
+                  { v: "16", l: { es: "Periodos geológicos", en: "Geological periods", fr: "Périodes géologiques", it: "Periodi geologici" } },
+                  { v: Object.keys(DIET_CONFIG).length, l: { es: "Tipos de dieta", en: "Diet types", fr: "Types de régime", it: "Tipi di dieta" } },
+                  { v: "4Ga", l: { es: "Años de historia", en: "Years of history", fr: "Ans d'histoire", it: "Anni di storia" } },
+                ].map(({ v, l }) => (
+                  <div key={String(v)} className="flex items-baseline justify-between gap-2">
+                    <span className={"text-[10px] leading-snug " + (isLight ? "text-stone-500" : "text-[#6b5e4e]")}>{l[lang] || l.es}</span>
+                    <span className="text-amber-600 font-black text-sm font-mono shrink-0">{v}</span>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <SidebarAnimalSorpresa isLight={isLight} lang={lang} />
-              <SidebarTopFavoritos isLight={isLight} lang={lang} />
+            <SidebarAnimalSorpresa isLight={isLight} lang={lang} />
+            <SidebarTopFavoritos isLight={isLight} lang={lang} />
 
-              {/* Cronología */}
-              <div className={"rounded-xl border p-3.5 " + (isLight ? "border-stone-200 bg-white/50" : "border-[#2a2520] bg-[#0c0b0a]/50")}>
-                <p className={"text-[11px] uppercase tracking-[0.2em] mb-3 " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
-                  {{ es: "Escala temporal", en: "Time scale", fr: "Échelle temporelle", it: "Scala temporale" }[lang] || "Escala temporal"}
-                </p>
-                <div className="relative flex flex-col">
-                  <div className={"absolute left-[5px] top-1 bottom-1 w-px " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
-                  {[
-                    { name: "CÁMBRICO",    ma: "541", color: "bg-cyan-500"   },
-                    { name: "ORDOVÍCICO",  ma: "485", color: "bg-sky-500"    },
-                    { name: "SILÚRICO",    ma: "444", color: "bg-teal-500"   },
-                    { name: "DEVÓNICO",    ma: "419", color: "bg-green-500"  },
-                    { name: "CARBONÍFERO", ma: "359", color: "bg-lime-500"   },
-                    { name: "PÉRMICO",     ma: "299", color: "bg-yellow-500" },
-                    { name: "TRIÁSICO",    ma: "252", color: "bg-orange-500" },
-                    { name: "JURÁSICO",    ma: "201", color: "bg-amber-500"  },
-                    { name: "CRETÁCICO",   ma: "145", color: "bg-red-500"    },
-                    { name: "PALEÓGENO",   ma: "66",  color: "bg-violet-500" },
-                    { name: "NEÓGENO",     ma: "23",  color: "bg-indigo-500" },
-                    { name: "CUATERNARIO", ma: "2.6", color: "bg-blue-500"   },
-                  ].map(({ name, ma, color }) => (
-                    <div key={name} className="flex items-center gap-3 py-[4px] group/tl">
-                      <div className={"w-[11px] h-[11px] rounded-full shrink-0 border-2 z-10 transition-all group-hover/tl:scale-125 " + color + " " + (isLight ? "border-[#f0ebe3]" : "border-[#0f0e0c]")} />
-                      <div className="flex items-baseline justify-between flex-1 gap-1 min-w-0">
-                        <span className={"text-[11px] font-bold uppercase tracking-wide truncate transition-colors group-hover/tl:text-amber-500 " + (isLight ? "text-stone-500" : "text-[#6b5e4e]")}>{name}</span>
-                        <span className={"text-[11px] font-mono shrink-0 " + (isLight ? "text-stone-300" : "text-[#3a3028]")}>{ma}Ma</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {/* ── Cronología rediseñada ── */}
+            <SidebarCronologia isLight={isLight} lang={lang} />
 
-              {/* Dots */}
-              <div className="flex gap-2 items-center">
-                <div className="w-6 h-[3px] bg-amber-600 rounded-full" />
-                {[1,2,3,4].map(i => (<div key={i} className={"w-2 h-[3px] rounded-full " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />))}
-              </div>
+            {/* Dots */}
+            <div className="flex gap-2 items-center">
+              <div className="w-6 h-[3px] bg-amber-600 rounded-full" />
+              {[1,2,3,4].map(i => (<div key={i} className={"w-2 h-[3px] rounded-full " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />))}
+            </div>
 
-              {/* Cráneo — empujado al fondo con mt-auto */}
-              <div className="flex justify-center pt-6 pb-2 pointer-events-none select-none">
-                <img src={BrachioSkull} alt="" className={"w-40 h-40 object-contain grayscale " + (isLight ? "opacity-[0.06]" : "opacity-[0.08]")} />
-              </div>
+            {/* Cráneo */}
+            <div className="flex justify-center pt-6 pb-2 pointer-events-none select-none">
+              <img src={BrachioSkull} alt="" className={"w-40 h-40 object-contain grayscale " + (isLight ? "opacity-[0.06]" : "opacity-[0.08]")} />
+            </div>
 
           </div>
         </aside>
@@ -502,7 +553,7 @@ const LandingPage = () => {
           </Link>
         </div>
 
-        {/* Contenido principal — scroll propio */}
+        {/* Contenido principal */}
         <div className={"flex-1 overflow-y-auto overflow-x-hidden px-6 lg:px-6 pt-8 pb-20 min-w-0 " + (isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]")}>
 
           {/* Cabecera */}
@@ -521,10 +572,9 @@ const LandingPage = () => {
             </p>
           </div>
 
-          {/* Divisor */}
           <div className={"h-px w-full mb-8 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
 
-          {/* Buscador + ArchivoShortcut */}
+          {/* Buscador */}
           <div className="flex gap-3 items-stretch mb-3" ref={searchRef}>
             <div className="relative flex-1 min-w-0">
               <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">

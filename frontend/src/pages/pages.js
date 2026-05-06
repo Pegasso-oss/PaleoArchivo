@@ -1,9 +1,10 @@
 // Páginas generales
-export { default as LandingPage }     from './LandingPage';
-export { default as DinoDetailPage }  from './DinoDetailPage';
-export { default as FavoritesPage }   from './FavoritesPage';
-export { default as ProfilePage }     from './ProfilePage';
-export { default as ArchivoPage }     from './ArchivoPage';
+export { default as LandingPage }       from './LandingPage';
+export { default as DinoDetailPage }    from './DinoDetailPage';
+export { default as FavoritesPage }     from './FavoritesPage';
+export { default as ProfilePage }       from './ProfilePage';
+export { default as ArchivoPage }       from './ArchivoPage';
+export { default as TopFavoritosPage }  from './TopFavoritosPage';
 
 // ── PALEOZOICO ──────────────────────────────────────────────────────────────
 export { default as PaleozoicoPage }  from './PaleozoicoPage';

@@ -222,6 +222,8 @@ export const translations = {
       addedFav: "Añadido a favoritos",
       removedFav: "Eliminado de favoritos",
       connectionError: "Error de conexión",
+      biologicalRivalry: "Rivalidad biológica",
+      loginToAccess: "Iniciar sesión",
     },
 
     // ── FAVORITES ─────────────────────────────────────────────────────────
@@ -439,6 +441,7 @@ export const translations = {
     ],
 
     landing: {
+      heroTitle: "Explore",
       heroTitleAccent: "the past",
       heroSubtitle:
         "Select a geological era to access fossil records and biological reconstructions.",
@@ -570,6 +573,8 @@ export const translations = {
       addedFav: "Added to favorites",
       removedFav: "Removed from favorites",
       connectionError: "Connection error",
+      biologicalRivalry: "Biological rivalry",
+      loginToAccess: "Log in",
     },
 
     favorites: {
@@ -911,6 +916,8 @@ export const translations = {
       addedFav: "Ajouté aux favoris",
       removedFav: "Retiré des favoris",
       connectionError: "Erreur de connexion",
+      biologicalRivalry: "Rivalité biologique",
+      loginToAccess: "Se connecter",
     },
 
     favorites: {
@@ -1253,6 +1260,8 @@ export const translations = {
       addedFav: "Aggiunto ai preferiti",
       removedFav: "Rimosso dai preferiti",
       connectionError: "Errore di connessione",
+      biologicalRivalry: "Rivalità biologica",
+      loginToAccess: "Accedi",
     },
 
     favorites: {

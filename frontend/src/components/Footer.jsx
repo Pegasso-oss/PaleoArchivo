@@ -14,12 +14,21 @@ const GitHubIcon = ({ size = 16 }) => (
   </svg>
 );
 
+const FOOTER_COPYRIGHT = {
+  es: "Registros Digitales de la Biosfera",
+  en: "Digital Records of the Biosphere",
+  fr: "Registres Numériques de la Biosphère",
+  it: "Registri Digitali della Biosfera",
+};
+
 const Footer = () => {
-  const { theme } = useUser();
+  const { theme, language } = useUser();
   const isLight = theme === "light";
 
   const linkClass = `flex items-center gap-3 font-mono font-black uppercase tracking-[0.2em] text-sm transition-colors
     ${isLight ? "text-stone-500 hover:text-amber-600" : "text-stone-500 hover:text-amber-500"}`;
+
+  const copyright = FOOTER_COPYRIGHT[language] || FOOTER_COPYRIGHT.es;
 
   return (
     <footer className={`py-10 font-mono transition-colors duration-500
@@ -34,11 +43,11 @@ const Footer = () => {
             PaleoArchivo
           </p>
           <p className={`text-[10px] uppercase tracking-[0.25em] ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-            &copy; 2026 — Registros Digitales de la Biosfera
+            &copy; 2026 — {copyright}
           </p>
         </div>
 
-        {/* Derecha — links en lista vertical */}
+        {/* Derecha — links */}
         <div className="flex flex-col gap-3">
           <a href="https://twitter.com/PaleoArchivo" target="_blank" rel="noopener noreferrer" className={linkClass}>
             <TwitterIcon size={16} />

@@ -41,18 +41,13 @@ const SIZE_LABELS = {
   gigante: { es: "Gigante", en: "Giant",  fr: "Géant", it: "Gigante" },
 };
 
-const SIZE_EMOJIS = {
-  pequeño: "🔬",
-  mediano: "📏",
-  grande:  "📐",
-  gigante: "🦕",
-};
+const SIZE_EMOJIS = { pequeño: "🔬", mediano: "📏", grande: "📐", gigante: "🦕" };
 
 const SIZE_RANGES = {
-  pequeño: { min: 0,   max: 1        },
-  mediano: { min: 1,   max: 5        },
-  grande:  { min: 5,   max: 12       },
-  gigante: { min: 12,  max: Infinity },
+  pequeño: { min: 0,  max: 1        },
+  mediano: { min: 1,  max: 5        },
+  grande:  { min: 5,  max: 12       },
+  gigante: { min: 12, max: Infinity },
 };
 
 const parseLongitudMetros = (longitud) => {
@@ -88,6 +83,23 @@ const ArchivoPage = () => {
   const tipo = params.get("tipo") || "";
   const size = params.get("size") || "";
 
+  // Strings hardcodeados traducidos
+  const i18n = {
+    back:       { es: "Volver",               en: "Back",             fr: "Retour",            it: "Indietro"          },
+    records:    { es: "registro",             en: "record",           fr: "enregistrement",    it: "registro"          },
+    recordsP:   { es: "registros",            en: "records",          fr: "enregistrements",   it: "registri"          },
+    noRecords:  { es: "No hay registros para este filtro", en: "No records for this filter", fr: "Aucun enregistrement pour ce filtre", it: "Nessun registro per questo filtro" },
+    aboutDiet:  { es: "Sobre esta dieta",     en: "About this diet",  fr: "Sur ce régime",     it: "Su questa dieta"   },
+    aboutType:  { es: "Sobre este grupo",     en: "About this group", fr: "Sur ce groupe",     it: "Su questo gruppo"  },
+    aboutSize:  { es: "Sobre este tamaño",    en: "About this size",  fr: "Sur cette taille",  it: "Su questa taglia"  },
+    allSpecies: { es: "Todas las especies",   en: "All species",      fr: "Toutes les espèces",it: "Tutte le specie"   },
+    fullArchive:{ es: "Archivo completo",     en: "Full archive",     fr: "Archive complète",  it: "Archivio completo" },
+    diet:       { es: "Dieta",                en: "Diet",             fr: "Régime",            it: "Dieta"             },
+    type:       { es: "Tipo",                 en: "Type",             fr: "Type",              it: "Tipo"              },
+    size:       { es: "Tamaño",               en: "Size",             fr: "Taille",            it: "Dimensione"        },
+  };
+  const s = (key) => i18n[key]?.[language] ?? i18n[key]?.es ?? key;
+
   const filteredAnimals = useMemo(() => {
     return Array.from(
       new Map(allAnimals.map(a => [a.nombre.toLowerCase(), a])).values()
@@ -102,17 +114,16 @@ const ArchivoPage = () => {
   const isDiet = !!diet;
   const isTipo = !!tipo;
   const isSize = !!size;
-
-  const dietCfg   = diet ? getDietConfig(diet) : null;
-  const typeCfg   = tipo ? (TYPE_THEMES[tipo] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
-  const sizeCfg   = size ? (SIZE_THEMES[size] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
-
   const noFilter = !isDiet && !isTipo && !isSize;
+
+  const dietCfg = diet ? getDietConfig(diet) : null;
+  const typeCfg = tipo ? (TYPE_THEMES[tipo] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
+  const sizeCfg = size ? (SIZE_THEMES[size] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
 
   const activeColor = dietCfg ? dietCfg.color : isTipo ? typeCfg : isSize ? sizeCfg : { text: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/40" };
   const activeEmoji = noFilter ? "🗂️" : (dietCfg ? dietCfg.emoji : isTipo ? "🦕" : (SIZE_EMOJIS[size] || "📏"));
   const activeLabel = noFilter
-    ? { es: "Todas las especies", en: "All species", fr: "Toutes les espèces", it: "Tutte le specie" }[language] || "Todas las especies"
+    ? s("allSpecies")
     : diet
       ? getDietLabel(diet, language)
       : isTipo
@@ -120,11 +131,14 @@ const ArchivoPage = () => {
         : (SIZE_LABELS[size]?.[language] || SIZE_LABELS[size]?.es || size);
 
   const filterLabel = noFilter
-    ? { es: "Archivo completo", en: "Full archive", fr: "Archive complète", it: "Archivio completo" }[language] || "Archivo completo"
-    : isDiet ? "Dieta" : isTipo ? "Tipo" : { es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[language] || "Tamaño";
-  const sectionLabel = isDiet ? "Sobre esta dieta" : isTipo ? "Sobre este grupo" : { es: "Sobre este tamaño", en: "About this size", fr: "Sur cette taille", it: "Su questa dimensione" }[language] || "Sobre este tamaño";
+    ? s("fullArchive")
+    : isDiet ? s("diet") : isTipo ? s("type") : s("size");
 
-  // Descripción desde translations
+  const sectionLabel = isDiet ? s("aboutDiet") : isTipo ? s("aboutType") : s("aboutSize");
+
+  const recordCount = filteredAnimals.length;
+  const recordWord = recordCount === 1 ? s("records") : s("recordsP");
+
   const description = isDiet
     ? archivo?.diets?.[diet]
     : isTipo
@@ -135,11 +149,12 @@ const ArchivoPage = () => {
     <div className={`min-h-screen px-4 pt-10 pb-20 font-mono transition-colors duration-500
       ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#141210] text-white"}`}>
       <div className="max-w-[1720px] mx-auto">
+
         {/* Back */}
         <button onClick={() => navigate(-1)}
           className={`flex items-center gap-2 text-[13px] uppercase tracking-widest mb-8 transition-colors
             ${isLight ? "text-stone-400 hover:text-stone-700" : "text-stone-600 hover:text-stone-300"}`}>
-          <ArrowLeft size={14} /> Volver
+          <ArrowLeft size={14} /> {s("back")}
         </button>
 
         {/* Header */}
@@ -150,7 +165,7 @@ const ArchivoPage = () => {
               {filterLabel}
             </span>
             <span className={`text-[13px] uppercase tracking-widest ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-              {filteredAnimals.length} registro{filteredAnimals.length !== 1 ? "s" : ""}
+              {recordCount} {recordWord}
             </span>
           </div>
 
@@ -160,7 +175,6 @@ const ArchivoPage = () => {
             {activeLabel}
           </h1>
 
-          {/* Descripción */}
           {description && (
             <div className={`max-w-5xl rounded-2xl border px-6 py-5 mb-6
               ${isLight ? "bg-white border-stone-200" : "bg-white/5 border-white/10"}`}>
@@ -186,7 +200,7 @@ const ArchivoPage = () => {
         ) : (
           <div className={`text-center py-24 text-sm uppercase tracking-widest
             ${isLight ? "text-stone-400" : "text-stone-600"}`}>
-            No hay registros para este filtro
+            {s("noRecords")}
           </div>
         )}
       </div>

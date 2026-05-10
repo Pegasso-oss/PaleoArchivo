@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { useUser } from "./context/useUser";
 import {
   LandingPage, DinoDetailPage, FavoritesPage, ProfilePage,
-  ArchivoPage, TopFavoritosPage,
+  ArchivoPage, TopFavoritosPage, PaleoMapPage, ComparadorPage,
   PaleozoicoPage, CambricoPage, OrdovicicoPage, SiluricoPage,
   DevonicoPage, CarboniferoPage, PermicoPage,
   MesozoicoPage, TriasicoPage, JurasicoPage, CretacicoPage,
@@ -61,6 +61,8 @@ function App() {
           <Route path="/animal/:id"    element={<DinoDetailPage />} />
           <Route path="/archivo"       element={<ArchivoPage />} />
           <Route path="/top-favoritos" element={<TopFavoritosPage />} />
+          <Route path="/mapa"          element={<PaleoMapPage />} />
+          <Route path="/comparador"    element={<ComparadorPage />} />
 
           {/* PALEOZOICO */}
           <Route path="/era/paleozoico"             element={<PaleozoicoPage />} />

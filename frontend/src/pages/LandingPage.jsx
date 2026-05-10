@@ -188,22 +188,46 @@ const DatoCurioso = ({ isLight, lang }) => {
 
 // ArchivoShortcut
 const ArchivoShortcut = ({ activeDiet, activeType, activeSize, isLight, lang, typeLabels }) => {
-  if (!activeDiet && !activeType && !activeSize) return null;
   const isDiet = !!activeDiet;
   const isTipo = !!activeType;
+  const isSize = !!activeSize;
+  const noFilter = !isDiet && !isTipo && !isSize;
+
   const dietCfg = activeDiet ? getDietConfig(activeDiet) : null;
   const typeCfg = activeType ? (TYPE_THEMES[activeType] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
   const sizeCfgFull = activeSize ? SIZE_CATEGORIES.find(s => s.id === activeSize) : null;
-  const color = isDiet ? dietCfg.color : isTipo ? typeCfg : sizeCfgFull?.theme;
-  const emoji = isDiet ? dietCfg.emoji : isTipo ? "🦕" : (sizeCfgFull?.emoji || "📏");
-  const label = isDiet ? getDietLabel(activeDiet, lang) : isTipo ? (typeLabels[activeType] || activeType) : (sizeCfgFull?.label[lang] || sizeCfgFull?.label.es || activeSize);
-  const href = isDiet ? `/archivo?diet=${encodeURIComponent(activeDiet)}` : isTipo ? `/archivo?tipo=${encodeURIComponent(activeType)}` : `/archivo?size=${encodeURIComponent(activeSize)}`;
-  const filterType = isDiet ? "Dieta" : isTipo ? "Tipo" : ({ es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[lang] || "Tamaño");
-  const count = allAnimals.filter(a => {
+
+  const color = noFilter
+    ? { text: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/30" }
+    : isDiet ? dietCfg.color : isTipo ? typeCfg : sizeCfgFull?.theme;
+
+  const emoji = noFilter ? "🗂️" : isDiet ? dietCfg.emoji : isTipo ? "🦕" : (sizeCfgFull?.emoji || "📏");
+
+  const filterType = noFilter
+    ? { es: "Archivo completo", en: "Full archive", fr: "Archive complète", it: "Archivio completo" }[lang] || "Archivo completo"
+    : isDiet ? "Dieta" : isTipo ? "Tipo" : ({ es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[lang] || "Tamaño");
+
+  const label = noFilter
+    ? { es: "Todas las especies", en: "All species", fr: "Toutes les espèces", it: "Tutte le specie" }[lang] || "Todas las especies"
+    : isDiet ? getDietLabel(activeDiet, lang)
+    : isTipo ? (typeLabels[activeType] || activeType)
+    : (sizeCfgFull?.label[lang] || sizeCfgFull?.label.es || activeSize);
+
+  const href = noFilter ? "/archivo"
+    : isDiet ? `/archivo?diet=${encodeURIComponent(activeDiet)}`
+    : isTipo ? `/archivo?tipo=${encodeURIComponent(activeType)}`
+    : `/archivo?size=${encodeURIComponent(activeSize)}`;
+
+  const count = noFilter ? allAnimals.length : allAnimals.filter(a => {
     if (isDiet) return a.dieta === activeDiet;
     if (isTipo) return a.tipo === activeType;
     return getSizeCategory(a.longitud) === activeSize;
   }).length;
+
+  const browseLabel = noFilter
+    ? { es: "Ver el archivo", en: "Browse archive", fr: "Voir l'archive", it: "Vedi l'archivio" }[lang] || "Ver el archivo"
+    : { es: "Ver archivo de", en: "Browse", fr: "Voir", it: "Vedi" }[lang] || "Ver archivo de";
+
   return (
     <Link to={href} className={"w-full rounded-xl border px-4 py-3 flex flex-col gap-1.5 transition-all hover:scale-[1.01] group justify-center " + (isLight ? "bg-stone-50 border-stone-200 hover:border-amber-400/40" : "bg-[#0f0e0d] border-[#2a2520] hover:border-amber-600/30")}>
       <div className="flex items-center gap-2">
@@ -211,7 +235,7 @@ const ArchivoShortcut = ({ activeDiet, activeType, activeSize, isLight, lang, ty
         <p className={"text-[10px] uppercase tracking-[0.1em] font-bold " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{filterType} · {count} registros</p>
       </div>
       <div className="flex items-center justify-between gap-1">
-        <p className={"text-xs font-black uppercase tracking-wide leading-tight " + (color?.text || "")}>{({ es: "Ver archivo de", en: "Browse", fr: "Voir", it: "Vedi" }[lang] || "Ver archivo de")} {label}</p>
+        <p className={"text-xs font-black uppercase tracking-wide leading-tight " + (color?.text || "")}>{browseLabel} {!noFilter && label}</p>
         <ArrowRight size={14} className={"shrink-0 transition-transform group-hover:translate-x-0.5 " + (color?.text || "")} />
       </div>
     </Link>
@@ -500,10 +524,10 @@ const LandingPage = () => {
               </p>
               <div className="flex flex-col gap-1.5">
                 {[
-                  { v: allAnimals.length, l: { es: "Especies catalogadas", en: "Catalogued species", fr: "Espèces cataloguées", it: "Specie catalogate" } },
-                  { v: "16", l: { es: "Periodos geológicos", en: "Geological periods", fr: "Périodes géologiques", it: "Periodi geologici" } },
-                  { v: Object.keys(DIET_CONFIG).length, l: { es: "Tipos de dieta", en: "Diet types", fr: "Types de régime", it: "Tipi di dieta" } },
-                  { v: "4Ga", l: { es: "Años de historia", en: "Years of history", fr: "Ans d'histoire", it: "Anni di storia" } },
+                  { v: allAnimals.length, l: { es: "especies catalogadas", en: "catalogued species", fr: "espèces cataloguées", it: "specie catalogate" } },
+                  { v: "16", l: { es: "periodos geológicos", en: "geological periods", fr: "périodes géologiques", it: "periodi geologici" } },
+                  { v: Object.keys(DIET_CONFIG).length, l: { es: "tipos de dieta", en: "diet types", fr: "types de régime", it: "tipi di dieta" } },
+                  { v: "4Ga", l: { es: "años de historia", en: "years of history", fr: "ans d'histoire", it: "anni di storia" } },
                 ].map(({ v, l }) => (
                   <div key={String(v)} className="flex items-baseline justify-between gap-2">
                     <span className={"text-[10px] leading-snug " + (isLight ? "text-stone-500" : "text-[#6b5e4e]")}>{l[lang] || l.es}</span>
@@ -518,6 +542,23 @@ const LandingPage = () => {
 
             {/* ── Cronología rediseñada ── */}
             <SidebarCronologia isLight={isLight} lang={lang} />
+
+            {/* ── Enlace al mapa ── */}
+            <Link to="/mapa"
+              className={"rounded-xl border px-4 py-3 flex items-center justify-between gap-3 transition-all hover:scale-[1.01] group " + (isLight ? "border-stone-200 bg-white/50 hover:border-amber-400/40" : "border-[#2a2520] bg-[#0c0b0a]/50 hover:border-amber-600/30")}>
+              <div className="flex items-center gap-2.5">
+                <span className="text-lg">🌍</span>
+                <div>
+                  <p className={"text-[10px] font-black uppercase tracking-wider " + (isLight ? "text-stone-600" : "text-[#c8b89a]")}>
+                    {{ es: "Paleogeografía", en: "Paleogeography", fr: "Paléogéographie", it: "Paleogeografia" }[lang] || "Paleogeografía"}
+                  </p>
+                  <p className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+                    {{ es: "Mapa de la Tierra prehistórica", en: "Prehistoric Earth map", fr: "Carte de la Terre préhistorique", it: "Mappa della Terra preistorica" }[lang] || "Mapa de la Tierra prehistórica"}
+                  </p>
+                </div>
+              </div>
+              <ArrowRight size={13} className={"shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600"} />
+            </Link>
 
             {/* Dots */}
             <div className="flex gap-2 items-center">
@@ -534,23 +575,50 @@ const LandingPage = () => {
         </aside>
 
         {/* Barra móvil/tablet */}
-        <div className={"lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t px-4 py-3 flex items-center justify-between gap-4 " + (isLight ? "bg-[#f0ebe3]/95 border-stone-200 backdrop-blur-sm" : "bg-[#0f0e0c]/95 border-[#2a2520] backdrop-blur-sm")}>
-          <div className="flex items-center gap-4">
-            {[
-              { v: allAnimals.length, l: { es: "spp.", en: "spp.", fr: "esp.", it: "spp." } },
-              { v: "16",              l: { es: "per.", en: "per.", fr: "pér.", it: "per." } },
-            ].map(({ v, l }) => (
-              <div key={String(v)} className="flex items-baseline gap-1">
-                <span className="text-amber-600 font-black text-sm font-mono">{v}</span>
-                <span className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{l[lang] || l.es}</span>
-              </div>
-            ))}
+        <div className={"lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t " + (isLight ? "bg-[#f0ebe3]/95 border-stone-200 backdrop-blur-sm" : "bg-[#0f0e0c]/95 border-[#2a2520] backdrop-blur-sm")}>
+          {/* Fila principal */}
+          <div className="flex items-center justify-between gap-2 px-4 py-2.5">
+            {/* Stats */}
+            <div className="flex items-center gap-3">
+              {[
+                { v: allAnimals.length, l: { es: "spp.", en: "spp.", fr: "esp.", it: "spp." } },
+                { v: "16",              l: { es: "per.", en: "per.", fr: "pér.", it: "per." } },
+              ].map(({ v, l }) => (
+                <div key={String(v)} className="flex items-baseline gap-1">
+                  <span className="text-amber-600 font-black text-sm font-mono">{v}</span>
+                  <span className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{l[lang] || l.es}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className={"w-px h-4 shrink-0 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
+
+            {/* Botón Top Favoritos */}
+            <Link to="/top-favoritos"
+              className={"flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-colors " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
+              🏆 Top
+            </Link>
+
+            <div className={"w-px h-4 shrink-0 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
+
+            {/* Botón Animal Random */}
+            <button
+              onClick={() => {
+                const random = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+                window.location.href = "/animal/" + encodeURIComponent(random.nombre.toLowerCase());
+              }}
+              className={"flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-colors " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
+              🎲 {{ es: "Azar", en: "Random", fr: "Aléa", it: "Caso" }[lang] || "Azar"}
+            </button>
+
+            <div className={"w-px h-4 shrink-0 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
+
+            {/* Botón Archivo */}
+            <Link to="/archivo" className={"flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-colors group " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
+              {{ es: "Archivo", en: "Archive", fr: "Archive", it: "Archivio" }[lang] || "Archivo"}
+              <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
-          <div className={"w-px h-5 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
-          <Link to="/archivo" className={"flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-colors group " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
-            {{ es: "Archivo", en: "Archive", fr: "Archive", it: "Archivio" }[lang] || "Archivo"}
-            <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
-          </Link>
         </div>
 
         {/* Contenido principal */}
@@ -612,11 +680,10 @@ const LandingPage = () => {
                 </div>
               )}
             </div>
-            {hasFilter && (
-              <div className="shrink-0 w-52 hidden sm:block">
-                <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} activeSize={activeSize} isLight={isLight} lang={lang} typeLabels={typeLabels} />
-              </div>
-            )}
+            {/* Archivo shortcut — siempre visible en desktop */}
+            <div className="shrink-0 w-52 hidden sm:block">
+              <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} activeSize={activeSize} isLight={isLight} lang={lang} typeLabels={typeLabels} />
+            </div>
           </div>
 
           {/* Filtros */}

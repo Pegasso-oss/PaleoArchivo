@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
 import {
   LogIn, User, LogOut, LockOpen, AlertTriangle,
-  Sun, Moon, ChevronDown, Star, Clock,
+  Sun, Moon, ChevronDown, Star, Clock, Scale,
 } from "lucide-react";
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
@@ -135,18 +135,26 @@ const Header = () => {
 
           <div className="flex items-center gap-2">
 
+            {/* ── Botón Comparador ── */}
+            <button
+              onClick={() => navigate("/comparador")}
+              aria-label="Comparador"
+              className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
+                ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}
+            >
+              <Scale size={18} className={`${iconColor} md:w-6 md:h-6`} />
+              <span className={`hidden md:inline font-mono text-[10px] uppercase tracking-widest font-bold ${iconColor}`}>Comparar</span>
+            </button>
+
             {/* ── Botón Cronología ── */}
             <button
               onClick={openTimeline}
               aria-label={timelineLabel}
-              className={`flex items-center gap-1.5 border-2 px-2.5 py-2 md:px-4 md:py-3 rounded-xl md:rounded-lg transition-all font-black tracking-widest uppercase
-                ${isLight
-                  ? "bg-stone-100 border-stone-200 text-stone-500 hover:border-amber-500 hover:text-amber-600"
-                  : "bg-black/40 border-white/10 text-stone-400 hover:border-amber-600/60 hover:text-amber-500"
-                }`}
+              className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
+                ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}
             >
-              <Clock size={14} className="md:w-5 md:h-5" />
-              <span className="hidden md:inline text-[9px] md:text-xs">{timelineLabel}</span>
+              <Clock size={18} className={`${iconColor} md:w-6 md:h-6`} />
+              <span className={`hidden md:inline font-mono text-[10px] uppercase tracking-widest font-bold ${iconColor}`}>{timelineLabel}</span>
             </button>
 
             {/* Botón tema */}

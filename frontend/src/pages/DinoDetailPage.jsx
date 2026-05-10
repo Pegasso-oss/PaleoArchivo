@@ -11,10 +11,11 @@ import Toast from "../components/Toast";
 import {
   Ruler, Utensils, Skull, ArrowsUpFromLine,
   Star, Pickaxe, FlaskConical, Layers, Clock,
-  Dna, MapPin, Swords, BookOpen, ChevronDown, ExternalLink,
+  Dna, MapPin, Swords, BookOpen, ChevronDown, ExternalLink, Scale,
 } from "lucide-react";
 import { getDietConfig, getDietLabel } from "../data/dietConfig";
 import useTranslatedDescription from "../hooks/useTranslatedDescription";
+import AnimalMap from "../components/AnimalMap";
 
 const getRivalText = (dino, rival, language) => {
   const texts = {
@@ -542,14 +543,14 @@ const DinoDetailPage = () => {
                 ))}
               </div>
             )}
-            <div className={`rounded-lg border-2 border-dashed flex flex-col items-center justify-center py-10 gap-3
-              ${isLight ? "border-stone-200 bg-stone-50" : "border-white/[0.07] bg-white/[0.02]"}`}>
-              <MapPin size={22} className={isLight ? "text-stone-300" : "text-stone-700"} />
-              <div className="text-center">
-                <p className={`font-mono text-[14px] uppercase tracking-[0.25em] font-black ${isLight ? "text-stone-400" : "text-stone-600"}`}>{dd.discoveryMap}</p>
-                <p className={`font-mono text-[12px] uppercase tracking-widest mt-1 ${isLight ? "text-stone-300" : "text-stone-700"}`}>{dd.comingSoon}</p>
-              </div>
-            </div>
+            <AnimalMap animal={dino} hex={hex} />
+            <button
+              onClick={() => navigate(`/comparador?a=${encodeURIComponent(dino.nombre.toLowerCase())}`)}
+              style={{ borderColor: `${hex}40`, color: hex }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border font-mono text-[10px] uppercase tracking-widest hover:opacity-80 transition-all"
+            >
+              <Scale size={13} /> Comparar con otra especie
+            </button>
           </div>
         </div>
 

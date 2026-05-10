@@ -124,7 +124,7 @@ export const dinosaurios = [
     metodo: "Compresión",
     material: "Lutita de Burgess",
     extincion: "505 m.a.",
-    imagen: "https://scontent-mad2-1.xx.fbcdn.net/v/t39.30808-6/505859077_1023600126549207_4965076388167109940_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=108&ccb=1-7&_nc_sid=13d280&_nc_ohc=F4Ef7OZqTgEQ7kNvwGsA_l7&_nc_oc=AdoRDq4Xik4Yl78qLrR1MTZM1DvTS_4lOoEE-eZrsquWDsuF70tIKU5W2dNzQKY8T1w&_nc_zt=23&_nc_ht=scontent-mad2-1.xx&_nc_gid=xkvy5r3wvpp8MXNcXLUSNw&_nc_ss=7b289&oh=00_Af1yYYoG30iBRlbaeSpDiZvSCz0MKcYF_ldmc23mjKUdTA&oe=69F99D6A",
+    imagen: "https://imgur.com/1dJHxw6.jpg",
     descripcion: "El fósil más abundante de la famosa Lutita de Burgess, con miles de especímenes recuperados. Su cuerpo delicado con cuatro largos cuernos curvados hacia atrás le valió el apodo de animal encaje. Es un artrópodo basal que no pertenece a ningún grupo moderno conocido, testigo de la explosiva diversidad del Cámbrico.",
   },
 ];

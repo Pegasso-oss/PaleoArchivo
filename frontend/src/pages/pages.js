@@ -7,6 +7,7 @@ export { default as ArchivoPage }       from './ArchivoPage';
 export { default as TopFavoritosPage }  from './TopFavoritosPage';
 export { default as PaleoMapPage }      from './PaleoMapPage';
 export { default as ComparadorPage }    from './ComparadorPage';
+export { default as SugerirPage }       from './SugerirPage';
 
 // ── PALEOZOICO ──────────────────────────────────────────────────────────────
 export { default as PaleozoicoPage }  from './PaleozoicoPage';

@@ -1,3 +1,0 @@
-// Admin de mongo
-
-admin_dino -- dino_superadmin2874

@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config({ path: './backend/.env' });
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const authRoutes = require('./routes/auth');
 const translateRoutes = require('./routes/translate');
+const suggestionsRoutes = require('./routes/suggestions');
 
 const app = express();
 
@@ -27,6 +29,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/translate', translateRoutes);
+app.use('/api/auth/suggestions', suggestionsRoutes);
 
 app.get('/', (req, res) => {
   res.send('El servidor de la Reserva Dino está ONLINE 🦖');

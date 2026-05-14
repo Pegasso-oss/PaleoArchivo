@@ -560,6 +560,23 @@ const LandingPage = () => {
               <ArrowRight size={13} className={"shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600"} />
             </Link>
 
+            {/* ── Enlace a sugerir especie ── */}
+            <Link to="/sugerir"
+              className={"rounded-xl border px-4 py-3 flex items-center justify-between gap-3 transition-all hover:scale-[1.01] group " + (isLight ? "border-stone-200 bg-white/50 hover:border-amber-400/40" : "border-[#2a2520] bg-[#0c0b0a]/50 hover:border-amber-600/30")}>
+              <div className="flex items-center gap-2.5">
+                <span className="text-lg">💡</span>
+                <div>
+                  <p className={"text-[10px] font-black uppercase tracking-wider " + (isLight ? "text-stone-600" : "text-[#c8b89a]")}>
+                    {{ es: "Sugerir especie", en: "Suggest species", fr: "Suggérer une espèce", it: "Suggerisci specie" }[lang] || "Sugerir especie"}
+                  </p>
+                  <p className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+                    {{ es: "¿Echas algo en falta?", en: "Missing something?", fr: "Il manque quelque chose?", it: "Manca qualcosa?" }[lang] || "¿Echas algo en falta?"}
+                  </p>
+                </div>
+              </div>
+              <ArrowRight size={13} className={"shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600"} />
+            </Link>
+
             {/* Dots */}
             <div className="flex gap-2 items-center">
               <div className="w-6 h-[3px] bg-amber-600 rounded-full" />
@@ -574,55 +591,9 @@ const LandingPage = () => {
           </div>
         </aside>
 
-        {/* Barra móvil/tablet */}
-        <div className={"lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t " + (isLight ? "bg-[#f0ebe3]/95 border-stone-200 backdrop-blur-sm" : "bg-[#0f0e0c]/95 border-[#2a2520] backdrop-blur-sm")}>
-          {/* Fila principal */}
-          <div className="flex items-center justify-between gap-2 px-4 py-2.5">
-            {/* Stats */}
-            <div className="flex items-center gap-3">
-              {[
-                { v: allAnimals.length, l: { es: "spp.", en: "spp.", fr: "esp.", it: "spp." } },
-                { v: "16",              l: { es: "per.", en: "per.", fr: "pér.", it: "per." } },
-              ].map(({ v, l }) => (
-                <div key={String(v)} className="flex items-baseline gap-1">
-                  <span className="text-amber-600 font-black text-sm font-mono">{v}</span>
-                  <span className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{l[lang] || l.es}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className={"w-px h-4 shrink-0 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
-
-            {/* Botón Top Favoritos */}
-            <Link to="/top-favoritos"
-              className={"flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-colors " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
-              🏆 Top
-            </Link>
-
-            <div className={"w-px h-4 shrink-0 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
-
-            {/* Botón Animal Random */}
-            <button
-              onClick={() => {
-                const random = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-                window.location.href = "/animal/" + encodeURIComponent(random.nombre.toLowerCase());
-              }}
-              className={"flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-colors " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
-              🎲 {{ es: "Azar", en: "Random", fr: "Aléa", it: "Caso" }[lang] || "Azar"}
-            </button>
-
-            <div className={"w-px h-4 shrink-0 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
-
-            {/* Botón Archivo */}
-            <Link to="/archivo" className={"flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-colors group " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
-              {{ es: "Archivo", en: "Archive", fr: "Archive", it: "Archivio" }[lang] || "Archivo"}
-              <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
-        </div>
 
         {/* Contenido principal */}
-        <div className={"flex-1 overflow-y-auto overflow-x-hidden px-6 lg:px-6 pt-8 pb-20 min-w-0 " + (isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]")}>
+        <div className={"flex-1 overflow-y-auto overflow-x-hidden px-6 lg:px-6 pt-8 pb-8 min-w-0 " + (isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]")}>
 
           {/* Cabecera */}
           <div className="mb-8">

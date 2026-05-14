@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
 import {
   LogIn, User, LogOut, LockOpen, AlertTriangle,
-  Sun, Moon, ChevronDown, Star, Clock, Scale,
+  Sun, Moon, ChevronDown, Star, Clock, Scale, Menu, X, Map, Trophy, Lightbulb,
 } from "lucide-react";
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
@@ -48,6 +48,7 @@ const Header = () => {
   const [avatar, setAvatar] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const menuRef = useRef(null);
 
   const t = translations[language].header;
@@ -72,6 +73,7 @@ const Header = () => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target))
         setIsMenuOpen(false);
+        setIsDrawerOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -115,23 +117,34 @@ const Header = () => {
       <header className="bg-[#1a1614] border-b border-[#d97706] sticky top-0 z-[50]">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-2">
 
-          {/* Logo */}
-          <Link to="/" className="group flex items-center gap-6 shrink-0">
-            <img src={paleoLogo} alt="Logo"
-              className="h-10 md:h-20 w-auto transition-transform group-hover:scale-110" />
-            <div className="hidden md:flex flex-col">
-              <h1 className={`text-3xl font-black tracking-tighter uppercase italic ${isLight ? "text-stone-900" : "text-white"}`}>
-                Paleo<span className="text-amber-600">Archivo</span>
-              </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <div className="h-0.5 w-8 bg-amber-500/40" />
-                <span className={`text-sm font-light tracking-[0.2em] uppercase italic ${isLight ? "text-stone-600" : "text-white"}`}>
-                  {getSubtitle()}
-                </span>
-                <div className="h-0.5 w-8 bg-amber-500/40" />
+          {/* Logo — siempre a la izquierda */}
+          <div className="flex items-center gap-2">
+            <Link to="/" className="group flex items-center gap-3 shrink-0">
+              <img src={paleoLogo} alt="Logo"
+                className="h-10 md:h-20 w-auto transition-transform group-hover:scale-110" />
+              <div className="hidden md:flex flex-col">
+                <h1 className={`text-3xl font-black tracking-tighter uppercase italic ${isLight ? "text-stone-900" : "text-white"}`}>
+                  Paleo<span className="text-amber-600">Archivo</span>
+                </h1>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="h-0.5 w-8 bg-amber-500/40" />
+                  <span className={`text-sm font-light tracking-[0.2em] uppercase italic ${isLight ? "text-stone-600" : "text-white"}`}>
+                    {getSubtitle()}
+                  </span>
+                  <div className="h-0.5 w-8 bg-amber-500/40" />
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+
+            {/* ── Botón hamburguesa — justo a la derecha del logo, solo móvil ── */}
+            <button
+              onClick={() => setIsDrawerOpen(v => !v)}
+              className={`lg:hidden flex items-center justify-center w-9 h-9 rounded-xl border-2 transition-all shrink-0 ml-1
+                ${isLight ? "bg-white border-stone-200 text-stone-500" : "bg-black/40 border-white/10 text-stone-400"}`}
+            >
+              <Menu size={18} />
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
 
@@ -139,7 +152,7 @@ const Header = () => {
             <button
               onClick={() => navigate("/comparador")}
               aria-label="Comparador"
-              className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
+              className={`hidden md:flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
                 ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}
             >
               <Scale size={18} className={`${iconColor} md:w-6 md:h-6`} />
@@ -159,7 +172,7 @@ const Header = () => {
 
             {/* Botón tema */}
             <button onClick={toggleTheme}
-              className={`flex items-center justify-center border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
+              className={`hidden md:flex items-center justify-center border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
                 ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}>
               {isLight
                 ? <Moon size={18} className={`${iconColor} md:w-6 md:h-6`} />
@@ -268,6 +281,83 @@ const Header = () => {
           </div>
         </div>
       )}
+
+      {/* ── Overlay ── */}
+      {isDrawerOpen && (
+        <div className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
+          onClick={() => setIsDrawerOpen(false)} />
+      )}
+
+      {/* ── Drawer deslizante ── */}
+      <div className={`lg:hidden fixed top-0 left-0 h-full w-72 z-[70] flex flex-col transition-transform duration-300 ease-in-out
+        ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isLight ? "bg-[#f0ebe3] border-r border-stone-200" : "bg-[#0f0e0c] border-r border-[#2a2520]"}`}>
+
+        <div className={`flex items-center justify-between px-4 py-4 border-b ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
+          <Link to="/" onClick={() => setIsDrawerOpen(false)} className="flex items-center gap-2.5">
+            <img src={paleoLogo} alt="PaleoArchivo" className="w-10 h-10 object-contain" />
+            <span className={`font-mono text-[13px] font-black uppercase tracking-widest ${isLight ? "text-stone-700" : "text-[#f5e6c8]"}`}>
+              Paleo<span className="text-amber-600">Archivo</span>
+            </span>
+          </Link>
+          <button onClick={() => setIsDrawerOpen(false)}
+            className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors ${isLight ? "text-stone-400 hover:text-stone-700" : "text-[#4a3f32] hover:text-[#f5e6c8]"}`}>
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-1">
+          {[
+            { to: "/archivo",       emoji: "🗂️", label: "Archivo completo" },
+            { to: "/mapa",          emoji: "🌍", label: "Paleogeografía"   },
+            { to: "/top-favoritos", emoji: "🏆", label: "Top Favoritos"    },
+            { to: "/comparador",    emoji: "⚖️",  label: "Comparador"      },
+            { to: "/sugerir",       emoji: "💡", label: "Sugerir especie"  },
+          ].map(({ to, emoji, label }) => (
+            <Link key={to} to={to} onClick={() => setIsDrawerOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-mono text-[11px] uppercase tracking-wide font-bold
+                ${isLight ? "text-stone-600 hover:bg-amber-50 hover:text-amber-700" : "text-[#c8b89a] hover:bg-amber-600/10 hover:text-amber-500"}`}>
+              <span className="text-base w-5 text-center">{emoji}</span>{label}
+            </Link>
+          ))}
+          <div className={`my-2 h-px ${isLight ? "bg-stone-200" : "bg-[#2a2520]"}`} />
+          <button onClick={() => {
+              const random = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+              navigate(`/animal/${encodeURIComponent(random.nombre.toLowerCase())}`);
+              setIsDrawerOpen(false);
+            }}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl w-full text-left transition-all font-mono text-[11px] uppercase tracking-wide font-bold
+              ${isLight ? "text-stone-600 hover:bg-amber-50 hover:text-amber-700" : "text-[#c8b89a] hover:bg-amber-600/10 hover:text-amber-500"}`}>
+            <span className="text-base w-5 text-center">🎲</span>Animal sorpresa
+          </button>
+          <button onClick={() => { openTimeline(); setIsDrawerOpen(false); }}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl w-full text-left transition-all font-mono text-[11px] uppercase tracking-wide font-bold
+              ${isLight ? "text-stone-600 hover:bg-amber-50 hover:text-amber-700" : "text-[#c8b89a] hover:bg-amber-600/10 hover:text-amber-500"}`}>
+            <Clock size={15} className="shrink-0" />Cronología
+          </button>
+          <div className={`my-2 h-px ${isLight ? "bg-stone-200" : "bg-[#2a2520]"}`} />
+          {[
+            { to: "/era/paleozoico", label: "Paleozoico", color: "#6aafc5" },
+            { to: "/era/mesozoico",  label: "Mesozoico",  color: "#6abf6a" },
+            { to: "/era/cenozoico",  label: "Cenozoico",  color: "#cf9a5a" },
+          ].map(({ to, label, color }) => (
+            <Link key={to} to={to} onClick={() => setIsDrawerOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all font-mono text-[10px] uppercase tracking-widest ${isLight ? "hover:bg-stone-100" : "hover:bg-white/5"}`}>
+              <span style={{ background: color }} className="w-2 h-2 rounded-full shrink-0" />
+              <span style={{ color }}>{label}</span>
+            </Link>
+          ))}
+        </div>
+
+        <div className={`px-3 py-4 border-t ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
+          <button onClick={toggleTheme}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl w-full transition-all font-mono text-[11px] uppercase tracking-wide font-bold
+              ${isLight ? "text-stone-600 hover:bg-amber-50" : "text-[#c8b89a] hover:bg-amber-600/10"}`}>
+            {isLight ? <Moon size={15} /> : <Sun size={15} />}
+            {isLight ? "Modo oscuro" : "Modo claro"}
+          </button>
+        </div>
+      </div>
     </>
   );
 };

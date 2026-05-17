@@ -150,6 +150,10 @@ export const ANIMAL_COORDS = {
   "MOA GIGANTE":       { lon: 172,  lat: -43 }, // Nueva Zelanda
   "PÁJARO ELEFANTE":   { lon: 47,   lat: -20 }, // Madagascar
   "LOBO DE FALKLAND":  { lon: -59,  lat: -51 }, // Islas Malvinas
+  "MEGACHELICERAX":        { lon: 103,  lat: 25  }, // Chengjiang, Yunnan, China
+  "DICYNODON":             { lon: 25,   lat: -31 }, // Sudáfrica (Cuenca de Karoo)
+  "CHLAMYDOSELACHUS":      { lon: -10,  lat: 50  }, // Europa occidental (fósiles)
+  "PHORUSRHACOS":          { lon: -65,  lat: -35 }, // Patagonia, Argentina
 };
 
 /**

@@ -6,6 +6,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const authRoutes = require('./routes/auth');
 const translateRoutes = require('./routes/translate');
 const suggestionsRoutes = require('./routes/suggestions');
+const notesRoutes = require('./routes/notes');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/translate', translateRoutes);
 app.use('/api/auth/suggestions', suggestionsRoutes);
+app.use('/api/auth/notes', notesRoutes);
 
 app.get('/', (req, res) => {
   res.send('El servidor de la Reserva Dino está ONLINE 🦖');

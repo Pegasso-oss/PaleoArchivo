@@ -34,6 +34,15 @@ const userSchema = new mongoose.Schema({
       nombre: { type: String, required: true }
     }
   ],
+  notes: [
+    {
+      _id: false,
+      animalId: { type: String, required: true },
+      animalNombre: { type: String, default: "" },
+      text: { type: String, default: "", maxlength: 1000 },
+      updatedAt: { type: Date, default: Date.now }
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now

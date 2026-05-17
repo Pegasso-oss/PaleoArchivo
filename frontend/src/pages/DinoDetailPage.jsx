@@ -16,6 +16,7 @@ import {
 import { getDietConfig, getDietLabel } from "../data/dietConfig";
 import useTranslatedDescription from "../hooks/useTranslatedDescription";
 import AnimalMap from "../components/AnimalMap";
+import AnimalNotes from "../components/AnimalNotes";
 
 const getRivalText = (dino, rival, language) => {
   const texts = {
@@ -525,6 +526,7 @@ const DinoDetailPage = () => {
                 )}
               </motion.div>
             )}
+            <AnimalNotes animalId={String(dino.id)} animalNombre={dino.nombre} hex={hex} />
           </div>
 
           {/* COLUMNA DERECHA */}

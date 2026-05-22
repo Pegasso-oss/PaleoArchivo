@@ -8,7 +8,6 @@ const EraCard = ({ name, age, image, children, id }) => {
   const { theme, language } = useUser();
   const isLight = theme === 'light';
 
-  const { translated: nameTraducido } = useTranslatedSubName(name, language);
   const { translated: childrenTraducido } = useTranslatedSubName(
     typeof children === 'string' ? children : null,
     language
@@ -46,7 +45,7 @@ const EraCard = ({ name, age, image, children, id }) => {
             className="text-4xl font-black font-mono tracking-tighter leading-none group-hover:text-amber-600 transition-colors uppercase italic"
             style={{ color: textPrimary }}
           >
-            {nameTraducido}
+            {name}
           </h3>
           <p
             className="font-black text-amber-600 text-[15px] font-mono tracking-tighter uppercase italic leading-none break-words transition-colors"

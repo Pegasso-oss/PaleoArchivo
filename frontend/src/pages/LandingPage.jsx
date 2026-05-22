@@ -188,46 +188,22 @@ const DatoCurioso = ({ isLight, lang }) => {
 
 // ArchivoShortcut
 const ArchivoShortcut = ({ activeDiet, activeType, activeSize, isLight, lang, typeLabels }) => {
+  if (!activeDiet && !activeType && !activeSize) return null;
   const isDiet = !!activeDiet;
   const isTipo = !!activeType;
-  const isSize = !!activeSize;
-  const noFilter = !isDiet && !isTipo && !isSize;
-
   const dietCfg = activeDiet ? getDietConfig(activeDiet) : null;
   const typeCfg = activeType ? (TYPE_THEMES[activeType] || { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/40" }) : null;
   const sizeCfgFull = activeSize ? SIZE_CATEGORIES.find(s => s.id === activeSize) : null;
-
-  const color = noFilter
-    ? { text: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/30" }
-    : isDiet ? dietCfg.color : isTipo ? typeCfg : sizeCfgFull?.theme;
-
-  const emoji = noFilter ? "🗂️" : isDiet ? dietCfg.emoji : isTipo ? "🦕" : (sizeCfgFull?.emoji || "📏");
-
-  const filterType = noFilter
-    ? { es: "Archivo completo", en: "Full archive", fr: "Archive complète", it: "Archivio completo" }[lang] || "Archivo completo"
-    : isDiet ? "Dieta" : isTipo ? "Tipo" : ({ es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[lang] || "Tamaño");
-
-  const label = noFilter
-    ? { es: "Todas las especies", en: "All species", fr: "Toutes les espèces", it: "Tutte le specie" }[lang] || "Todas las especies"
-    : isDiet ? getDietLabel(activeDiet, lang)
-    : isTipo ? (typeLabels[activeType] || activeType)
-    : (sizeCfgFull?.label[lang] || sizeCfgFull?.label.es || activeSize);
-
-  const href = noFilter ? "/archivo"
-    : isDiet ? `/archivo?diet=${encodeURIComponent(activeDiet)}`
-    : isTipo ? `/archivo?tipo=${encodeURIComponent(activeType)}`
-    : `/archivo?size=${encodeURIComponent(activeSize)}`;
-
-  const count = noFilter ? allAnimals.length : allAnimals.filter(a => {
+  const color = isDiet ? dietCfg.color : isTipo ? typeCfg : sizeCfgFull?.theme;
+  const emoji = isDiet ? dietCfg.emoji : isTipo ? "🦕" : (sizeCfgFull?.emoji || "📏");
+  const label = isDiet ? getDietLabel(activeDiet, lang) : isTipo ? (typeLabels[activeType] || activeType) : (sizeCfgFull?.label[lang] || sizeCfgFull?.label.es || activeSize);
+  const href = isDiet ? `/archivo?diet=${encodeURIComponent(activeDiet)}` : isTipo ? `/archivo?tipo=${encodeURIComponent(activeType)}` : `/archivo?size=${encodeURIComponent(activeSize)}`;
+  const filterType = isDiet ? "Dieta" : isTipo ? "Tipo" : ({ es: "Tamaño", en: "Size", fr: "Taille", it: "Dimensione" }[lang] || "Tamaño");
+  const count = allAnimals.filter(a => {
     if (isDiet) return a.dieta === activeDiet;
     if (isTipo) return a.tipo === activeType;
     return getSizeCategory(a.longitud) === activeSize;
   }).length;
-
-  const browseLabel = noFilter
-    ? { es: "Ver el archivo", en: "Browse archive", fr: "Voir l'archive", it: "Vedi l'archivio" }[lang] || "Ver el archivo"
-    : { es: "Ver archivo de", en: "Browse", fr: "Voir", it: "Vedi" }[lang] || "Ver archivo de";
-
   return (
     <Link to={href} className={"w-full rounded-xl border px-4 py-3 flex flex-col gap-1.5 transition-all hover:scale-[1.01] group justify-center " + (isLight ? "bg-stone-50 border-stone-200 hover:border-amber-400/40" : "bg-[#0f0e0d] border-[#2a2520] hover:border-amber-600/30")}>
       <div className="flex items-center gap-2">
@@ -235,7 +211,7 @@ const ArchivoShortcut = ({ activeDiet, activeType, activeSize, isLight, lang, ty
         <p className={"text-[10px] uppercase tracking-[0.1em] font-bold " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{filterType} · {count} registros</p>
       </div>
       <div className="flex items-center justify-between gap-1">
-        <p className={"text-xs font-black uppercase tracking-wide leading-tight " + (color?.text || "")}>{browseLabel} {!noFilter && label}</p>
+        <p className={"text-xs font-black uppercase tracking-wide leading-tight " + (color?.text || "")}>{({ es: "Ver archivo de", en: "Browse", fr: "Voir", it: "Vedi" }[lang] || "Ver archivo de")} {label}</p>
         <ArrowRight size={14} className={"shrink-0 transition-transform group-hover:translate-x-0.5 " + (color?.text || "")} />
       </div>
     </Link>
@@ -360,7 +336,7 @@ const SidebarTopFavoritos = ({ isLight, lang }) => {
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
         <p className={"text-[12px] uppercase tracking-[0.2em] " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{labels.title[lang] || labels.title.es}</p>
         {topList.length > 0 && (
-          <Link to="/top-favoritos" className="text-[9px] uppercase tracking-widest font-bold text-amber-600 hover:text-amber-500 transition-colors">
+          <Link to="/archivo" className="text-[9px] uppercase tracking-widest font-bold text-amber-600 hover:text-amber-500 transition-colors">
             {labels.viewAll[lang] || labels.viewAll.es} →
           </Link>
         )}
@@ -458,7 +434,7 @@ const LandingPage = () => {
   const eras = [
     { id: "paleozoico", name: "PALEOZOICO", age: "541 - 252 m.a.", image: "https://media.istockphoto.com/id/1144091536/es/foto/criaturas-del-período-cámbrico-escena-submarina-con-anomalocaris-opabinia-hallucigenia-pirania.jpg?s=612x612&w=0&k=20&c=XD683S0yCOb2WhXsT3iRx5XGVS7jCNjS3EN4SK0e7uA=", desc: lnd.eras?.paleozoico?.desc },
     { id: "mesozoico",  name: "MESOZOICO",  age: "252 - 66 m.a.",  image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: lnd.eras?.mesozoico?.desc },
-    { id: "cenozoico",  name: "CENOZOICO",  age: "66 m.a. - " + t("landing.today", {}), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
+    { id: "cenozoico",  name: "CENOZOICO",  age: "66 m.a. - " + (lnd.today || "Hoy"), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
   ];
 
   const availableTypes = [...new Set(allAnimals.map((a) => a.tipo).filter(Boolean))].sort();
@@ -543,40 +519,6 @@ const LandingPage = () => {
             {/* ── Cronología rediseñada ── */}
             <SidebarCronologia isLight={isLight} lang={lang} />
 
-            {/* ── Enlace al mapa ── */}
-            <Link to="/mapa"
-              className={"rounded-xl border px-4 py-3 flex items-center justify-between gap-3 transition-all hover:scale-[1.01] group " + (isLight ? "border-stone-200 bg-white/50 hover:border-amber-400/40" : "border-[#2a2520] bg-[#0c0b0a]/50 hover:border-amber-600/30")}>
-              <div className="flex items-center gap-2.5">
-                <span className="text-lg">🌍</span>
-                <div>
-                  <p className={"text-[10px] font-black uppercase tracking-wider " + (isLight ? "text-stone-600" : "text-[#c8b89a]")}>
-                    {{ es: "Paleogeografía", en: "Paleogeography", fr: "Paléogéographie", it: "Paleogeografia" }[lang] || "Paleogeografía"}
-                  </p>
-                  <p className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
-                    {{ es: "Mapa de la Tierra prehistórica", en: "Prehistoric Earth map", fr: "Carte de la Terre préhistorique", it: "Mappa della Terra preistorica" }[lang] || "Mapa de la Tierra prehistórica"}
-                  </p>
-                </div>
-              </div>
-              <ArrowRight size={13} className={"shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600"} />
-            </Link>
-
-            {/* ── Enlace a sugerir especie ── */}
-            <Link to="/sugerir"
-              className={"rounded-xl border px-4 py-3 flex items-center justify-between gap-3 transition-all hover:scale-[1.01] group " + (isLight ? "border-stone-200 bg-white/50 hover:border-amber-400/40" : "border-[#2a2520] bg-[#0c0b0a]/50 hover:border-amber-600/30")}>
-              <div className="flex items-center gap-2.5">
-                <span className="text-lg">💡</span>
-                <div>
-                  <p className={"text-[10px] font-black uppercase tracking-wider " + (isLight ? "text-stone-600" : "text-[#c8b89a]")}>
-                    {{ es: "Sugerir especie", en: "Suggest species", fr: "Suggérer une espèce", it: "Suggerisci specie" }[lang] || "Sugerir especie"}
-                  </p>
-                  <p className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
-                    {{ es: "¿Echas algo en falta?", en: "Missing something?", fr: "Il manque quelque chose?", it: "Manca qualcosa?" }[lang] || "¿Echas algo en falta?"}
-                  </p>
-                </div>
-              </div>
-              <ArrowRight size={13} className={"shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600"} />
-            </Link>
-
             {/* Dots */}
             <div className="flex gap-2 items-center">
               <div className="w-6 h-[3px] bg-amber-600 rounded-full" />
@@ -591,9 +533,28 @@ const LandingPage = () => {
           </div>
         </aside>
 
+        {/* Barra móvil/tablet */}
+        <div className={"lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t px-4 py-3 flex items-center justify-between gap-4 " + (isLight ? "bg-[#f0ebe3]/95 border-stone-200 backdrop-blur-sm" : "bg-[#0f0e0c]/95 border-[#2a2520] backdrop-blur-sm")}>
+          <div className="flex items-center gap-4">
+            {[
+              { v: allAnimals.length, l: { es: "spp.", en: "spp.", fr: "esp.", it: "spp." } },
+              { v: "16",              l: { es: "per.", en: "per.", fr: "pér.", it: "per." } },
+            ].map(({ v, l }) => (
+              <div key={String(v)} className="flex items-baseline gap-1">
+                <span className="text-amber-600 font-black text-sm font-mono">{v}</span>
+                <span className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{l[lang] || l.es}</span>
+              </div>
+            ))}
+          </div>
+          <div className={"w-px h-5 " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
+          <Link to="/archivo" className={"flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-colors group " + (isLight ? "text-stone-500 hover:text-amber-600" : "text-[#6b5e4e] hover:text-amber-500")}>
+            {{ es: "Archivo", en: "Archive", fr: "Archive", it: "Archivio" }[lang] || "Archivo"}
+            <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
 
         {/* Contenido principal */}
-        <div className={"flex-1 overflow-y-auto overflow-x-hidden px-6 lg:px-6 pt-8 pb-8 min-w-0 " + (isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]")}>
+        <div className={"flex-1 overflow-y-auto overflow-x-hidden px-6 lg:px-6 pt-8 pb-20 min-w-0 " + (isLight ? "bg-[#f7f3ee]" : "bg-[#0c0b0a]")}>
 
           {/* Cabecera */}
           <div className="mb-8">
@@ -651,10 +612,11 @@ const LandingPage = () => {
                 </div>
               )}
             </div>
-            {/* Archivo shortcut — siempre visible en desktop */}
-            <div className="shrink-0 w-52 hidden sm:block">
-              <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} activeSize={activeSize} isLight={isLight} lang={lang} typeLabels={typeLabels} />
-            </div>
+            {hasFilter && (
+              <div className="shrink-0 w-52 hidden sm:block">
+                <ArchivoShortcut activeDiet={activeDiet} activeType={activeType} activeSize={activeSize} isLight={isLight} lang={lang} typeLabels={typeLabels} />
+              </div>
+            )}
           </div>
 
           {/* Filtros */}

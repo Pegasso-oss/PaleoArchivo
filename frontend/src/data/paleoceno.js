@@ -13,7 +13,7 @@ export const dinosaurios = [
     metodo: "Reemplazo",
     material: "Calcita",
     extincion: "58 m.a.",
-    imagen: "https://img.freepik.com/premium-photo/titanoboa-snake-jungle_871710-294.jpg",
+    imagen: "https://imgur.com/SPUBEgb.jpg",
     descripcion: "La serpiente más grande que jamás ha existido. Dominaba los ríos de la actual Colombia tras la caída de los dinosaurios.",
     rival: [{ id: 24, rol: "presa" }],
   },

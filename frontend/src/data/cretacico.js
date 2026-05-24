@@ -66,7 +66,7 @@ export const dinosaurios = [
     metodo: "Permineralización",
     material: "Arenisca fluvial",
     extincion: "94 m.a.",
-    imagen: "https://imgur.com/Hwgeo22.png",
+    imagen: "https://imgur.com/vAlb4wx.png",
     descripcion: "El animal terrestre más grande que jamás ha existido, con estimaciones de peso que oscilan entre 70 y 110 toneladas. Solo conocemos vértebras y fragmentos de costillas, pero su escala es incontestable. Convivió con el Giganotosaurus, uno de los mayores depredadores terrestres, que pudo haber cazado juveniles en grupo.",
   },
   {

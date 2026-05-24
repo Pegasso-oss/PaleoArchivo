@@ -73,7 +73,7 @@ export const dinosaurios = [
     era: "Cámbrico",
     conservacion: "60",
     extincion: "485 m.a.",
-    imagen: "https://www.infobae.com/resizer/v2/DOXET7HSU5HDTE45UFNLBRZR4A.png?auth=e61b1aa41aebd52d5dcb5b49f99d7c8197d34dc1c5c31e834efc7d57f0d05242&smart=true&width=350&height=191&quality=85",
+    imagen: "https://imgur.com/GQPWx2b.png",
     descripcion: "Fue un animal marino primitivo, conocido por ser uno de los primeros con médula espinal, a pesar de no tener vértebras.",
   },
   {
@@ -90,7 +90,7 @@ export const dinosaurios = [
     metodo: "Compresión",
     material: "Lutita de Burgess",
     extincion: "505 m.a.",
-    imagen: "https://neofronteras.com/wp-content/photos/Peripatidae.jpg",
+    imagen: "https://imgur.com/lDkgYms.jpg",
     descripcion: "Uno de los animales más extraños del Cámbrico y de toda la historia de la vida. Durante décadas los paleontólogos lo reconstruyeron al revés y con la cabeza donde estaba la cola. Tenía espinas dorsales rígidas y tentáculos ventrales con garras. Su linaje evolutivo conecta con los tardígrados y onicóforos modernos.",
   },
   {

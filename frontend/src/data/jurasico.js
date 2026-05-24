@@ -76,7 +76,7 @@ export const dinosaurios = [
     era: "Jurásico",
     conservacion: "70",
     extincion: "183 m.a.",
-    imagen: "https://dinosaurland.es/wp-content/uploads/elementor/thumbs/dinosaurio-dilophosaurio-dinosaurland-r1n5kl3d0hoxzyfh48jq2li114xjxmj0g5g6jkao74.jpg",
+    imagen: "https://imgur.com/8iW3kNY.jpg",
     descripcion: "Dilophosaurus era un cazador grande y ligero, con robustas extremidades posteriores, cola de gran longitud y peculiar mandíbula superior.",
   },
   {
@@ -170,7 +170,7 @@ export const dinosaurios = [
     metodo: "Permineralización",
     material: "Arcilla Oxford",
     extincion: "155 m.a.",
-    imagen: "https://imgur.com/dXOpDeX.png",
+    imagen: "https://imgur.com/oieoXCW.png",
     descripcion: "Posiblemente el pez óseo más grande que jamás ha existido, con estimaciones que lo sitúan entre 9 y 16 metros. A pesar de su tamaño colosal era un filtrador de plancton, convergente con las ballenas jorobadas actuales. Sus restos aparecen frecuentemente con marcas de mordidas de Pliosaurus, su principal depredador.",
     rival: [{ id: 18, rol: "presa" }],
   },

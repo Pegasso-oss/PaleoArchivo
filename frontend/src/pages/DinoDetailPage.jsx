@@ -343,7 +343,7 @@ const DinoDetailPage = () => {
     const userId = localStorage.getItem("userId");
     if (!userId) { setToast({ show: true, msg: dd.authRequired, type: "error" }); return; }
     try {
-      const response = await apiClient.post("/favorites/add", { userId, dinoId: dino.id, nombre: dino.nombre });
+      const response = await apiClient.post("/favorites/add", { userId, dinoId: dino.id, nombre: dino.nombre, dieta: dino.dieta || "" });
       if (setFavorites) setFavorites((response.data.favorites || response.data).map(fav => String(fav.id)));
       setToast({ show: true, msg: isFav ? dd.removedFav : dd.addedFav, type: "success" });
     } catch {

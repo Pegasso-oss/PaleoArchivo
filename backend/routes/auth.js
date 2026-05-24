@@ -167,7 +167,7 @@ router.delete('/user/:id', authMiddleware, async (req, res) => {
 
 // --- TOGGLE FAVORITOS ---
 router.post('/favorites/add', authMiddleware, async (req, res) => {
-  const { userId, dinoId, nombre } = req.body;
+  const { userId, dinoId, nombre, dieta } = req.body;
 
   if (req.user.id !== userId) {
     return res.status(403).json({ msg: 'No tienes permiso para modificar estos favoritos' });
@@ -177,17 +177,24 @@ router.post('/favorites/add', authMiddleware, async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ msg: 'Usuario no encontrado' });
 
+    if (!user.history)      user.history      = [];
+    if (!user.favorites)    user.favorites    = [];
+    if (!user.notes)        user.notes        = [];
+    if (!user.achievements) user.achievements = [];
+
     const dinoIdStr = String(dinoId);
     const existe = user.favorites.some(fav => fav.id === dinoIdStr);
 
     if (existe) {
       user.favorites = user.favorites.filter(fav => fav.id !== dinoIdStr);
     } else {
-      user.favorites.push({ id: dinoIdStr, nombre });
+      user.favorites.push({ id: dinoIdStr, nombre, dieta: dieta || '' });
     }
 
     await user.save();
-    const newAchievements = await checkAchievements(user);
+    const favDietas = {};
+    user.favorites.forEach(f => { if (f.dieta) favDietas[f.dieta] = (favDietas[f.dieta] || 0) + 1; });
+    const newAchievements = await checkAchievements(user, { favDietas });
     res.json({ favorites: user.favorites, newAchievements });
   } catch (err) {
     console.error(err);
@@ -223,7 +230,10 @@ router.post('/history/add', authMiddleware, async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ msg: 'Usuario no encontrado' });
 
-    // Evitar duplicados consecutivos del mismo animal
+    if (!user.history)   user.history   = [];
+    if (!user.favorites) user.favorites = [];
+    if (!user.notes)     user.notes     = [];
+    if (!user.achievements) user.achievements = [];
     const last = user.history[user.history.length - 1];
     if (!last || last.animalId !== String(animalId)) {
       user.history.push({ animalId: String(animalId), animalNombre: animalNombre || "", animalEra: animalEra || "", visitedAt: new Date() });
@@ -232,7 +242,9 @@ router.post('/history/add', authMiddleware, async (req, res) => {
       await user.save();
     }
 
-    const newAchievements = await checkAchievements(user);
+    const favDietas = {};
+    user.favorites.forEach(f => { if (f.dieta) favDietas[f.dieta] = (favDietas[f.dieta] || 0) + 1; });
+    const newAchievements = await checkAchievements(user, { favDietas });
     res.json({ history: user.history, newAchievements });
   } catch (err) {
     console.error(err);

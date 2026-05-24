@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema({
     {
       _id: false,
       id: { type: String, required: true },
-      nombre: { type: String, required: true }
+      nombre: { type: String, required: true },
+      dieta: { type: String, default: "" }
     }
   ],
   history: [

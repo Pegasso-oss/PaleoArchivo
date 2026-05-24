@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config({ path: './backend/.env' });
 const authRoutes = require('./routes/auth');
 const translateRoutes = require('./routes/translate');
+const notesRoutes = require('./routes/notes');
 const { router: achievementRoutes } = require('./routes/achievements');
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/translate', translateRoutes);
+app.use('/api/auth/notes', notesRoutes);
 app.use('/api/achievements', achievementRoutes);
 
 app.get('/', (req, res) => {

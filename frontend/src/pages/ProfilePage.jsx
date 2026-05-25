@@ -361,7 +361,7 @@ function MedallasGrid({ user, favAnimals, isLight, language }) {
           ${unlocked ? "opacity-100" : "opacity-30 grayscale"}`}>
           {unlocked ? (
             <img src={`/achievements/${ach.id}.png`} alt={ach.name.es}
-              className="w-14 h-14 object-contain drop-shadow-lg" />
+              className="w-14 h-14 object-contain " />
           ) : (
             <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl
               ${isLight ? "bg-stone-200" : "bg-white/5"}`}>

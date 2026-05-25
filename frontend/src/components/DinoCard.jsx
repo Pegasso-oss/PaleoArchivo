@@ -10,6 +10,7 @@ import { allAnimals } from "../data/allData";
 import Toast from "./Toast";
 import apiClient from "../api/apiClient";
 import useTranslatedDescription from "../hooks/useTranslatedDescription";
+import { useAchievementToast } from "../hooks/useAchievementToast";
 import useTranslatedSubName from "../hooks/useTranslatedSubName";
 
 const RIVAL_BORDER = {
@@ -23,6 +24,7 @@ const DinoCard = ({ dino }) => {
   const isFav = isFavorite(dino.id);
   const { theme, language } = useUser();
   const { tSection } = useTranslation();
+  const showAchievement = useAchievementToast(language);
   const dc = tSection("dinoCard");
   const isLight = theme === "light";
   const [toast, setToast] = useState({ show: false, msg: "", type: "success" });
@@ -47,8 +49,9 @@ const DinoCard = ({ dino }) => {
     const userId = localStorage.getItem("userId");
     if (!userId) { setToast({ show: true, msg: dc.authRequired, type: "error" }); return; }
     try {
-      const response = await apiClient.post("/favorites/add", { userId, dinoId: dino.id, nombre: dino.nombre });
-      if (setFavorites) setFavorites(response.data.map(fav => String(fav.id)));
+      const response = await apiClient.post("/favorites/add", { userId, dinoId: dino.id, nombre: dino.nombre, dieta: dino.dieta || "" });
+      if (setFavorites) setFavorites((response.data.favorites || response.data).map(fav => String(fav.id)));
+      if (response.data.newAchievements?.length) showAchievement(response.data.newAchievements);
       setToast({ show: true, msg: isFav ? `${dino.nombre} ${dc.removedFav}` : `${dino.nombre} ${dc.addedFav}`, type: "success" });
     } catch {
       setToast({ show: true, msg: dc.systemError, type: "error" });

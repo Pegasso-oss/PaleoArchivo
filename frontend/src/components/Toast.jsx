@@ -40,7 +40,6 @@ const Toast = ({ message, type, isVisible, onClose }) => {
               display: "flex",
               alignItems: "center",
               gap: "12px",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.8)",
               pointerEvents: "auto",
               minWidth: "280px"
             }}

@@ -336,7 +336,7 @@ const SidebarTopFavoritos = ({ isLight, lang }) => {
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
         <p className={"text-[12px] uppercase tracking-[0.2em] " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>{labels.title[lang] || labels.title.es}</p>
         {topList.length > 0 && (
-          <Link to="/archivo" className="text-[9px] uppercase tracking-widest font-bold text-amber-600 hover:text-amber-500 transition-colors">
+          <Link to="/top-favoritos" className="text-[9px] uppercase tracking-widest font-bold text-amber-600 hover:text-amber-500 transition-colors">
             {labels.viewAll[lang] || labels.viewAll.es} →
           </Link>
         )}
@@ -518,6 +518,40 @@ const LandingPage = () => {
 
             {/* ── Cronología rediseñada ── */}
             <SidebarCronologia isLight={isLight} lang={lang} />
+
+            {/* ── Enlace al mapa ── */}
+            <Link to="/mapa"
+              className={"rounded-xl border px-4 py-3 flex items-center justify-between gap-3 transition-all hover:scale-[1.01] group " + (isLight ? "border-stone-200 bg-white/50 hover:border-amber-400/40" : "border-[#2a2520] bg-[#0c0b0a]/50 hover:border-amber-600/30")}>
+              <div className="flex items-center gap-2.5">
+                <span className="text-lg">🌍</span>
+                <div>
+                  <p className={"text-[10px] font-black uppercase tracking-wider " + (isLight ? "text-stone-600" : "text-[#c8b89a]")}>
+                    {{ es: "Paleogeografía", en: "Paleogeography", fr: "Paléogéographie", it: "Paleogeografia" }[lang] || "Paleogeografía"}
+                  </p>
+                  <p className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+                    {{ es: "Mapa de la Tierra prehistórica", en: "Prehistoric Earth map", fr: "Carte de la Terre préhistorique", it: "Mappa della Terra preistorica" }[lang] || "Mapa de la Tierra prehistórica"}
+                  </p>
+                </div>
+              </div>
+              <ArrowRight size={13} className="shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600" />
+            </Link>
+
+            {/* ── Enlace a sugerir especie ── */}
+            <Link to="/sugerir"
+              className={"rounded-xl border px-4 py-3 flex items-center justify-between gap-3 transition-all hover:scale-[1.01] group " + (isLight ? "border-stone-200 bg-white/50 hover:border-amber-400/40" : "border-[#2a2520] bg-[#0c0b0a]/50 hover:border-amber-600/30")}>
+              <div className="flex items-center gap-2.5">
+                <span className="text-lg">💡</span>
+                <div>
+                  <p className={"text-[10px] font-black uppercase tracking-wider " + (isLight ? "text-stone-600" : "text-[#c8b89a]")}>
+                    {{ es: "Sugerir especie", en: "Suggest species", fr: "Suggérer une espèce", it: "Suggerisci specie" }[lang] || "Sugerir especie"}
+                  </p>
+                  <p className={"text-[9px] uppercase tracking-wide " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+                    {{ es: "¿Echas algo en falta?", en: "Missing something?", fr: "Il manque quelque chose?", it: "Manca qualcosa?" }[lang] || "¿Echas algo en falta?"}
+                  </p>
+                </div>
+              </div>
+              <ArrowRight size={13} className="shrink-0 transition-transform group-hover:translate-x-0.5 text-amber-600" />
+            </Link>
 
             {/* Dots */}
             <div className="flex gap-2 items-center">

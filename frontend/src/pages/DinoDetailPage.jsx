@@ -16,6 +16,7 @@ import {
 import { getDietConfig, getDietLabel } from "../data/dietConfig";
 import useTranslatedDescription from "../hooks/useTranslatedDescription";
 import useTranslatedSubName from "../hooks/useTranslatedSubName";
+import { useAchievementToast } from "../hooks/useAchievementToast";
 import AnimalMap from "../components/AnimalMap";
 import AnimalNotes from "../components/AnimalNotes";
 
@@ -291,6 +292,7 @@ const DinoDetailPage = () => {
   const { isFavorite, setFavorites } = useFavorites();
   const { theme: colorTheme, language } = useUser();
   const { tSection } = useTranslation();
+  const showAchievement = useAchievementToast(language);
   const dd = tSection("dinoDetail");
   const typeLabels = tSection("typeLabels");
   const isLight = colorTheme === "light";
@@ -308,7 +310,7 @@ const DinoDetailPage = () => {
       animalId: String(dino.id),
       animalNombre: dino.nombre,
       animalEra: dino.era || "",
-    }).catch(() => {});
+    }).then(res => { if (res.data.newAchievements?.length) showAchievement(res.data.newAchievements); }).catch(() => {});
   }, [dino?.id]);
 
   const { translated: descripcionTraducida, loading: loadingDesc } = useTranslatedDescription(dino?.descripcion ?? null, language);
@@ -345,6 +347,7 @@ const DinoDetailPage = () => {
     try {
       const response = await apiClient.post("/favorites/add", { userId, dinoId: dino.id, nombre: dino.nombre, dieta: dino.dieta || "" });
       if (setFavorites) setFavorites((response.data.favorites || response.data).map(fav => String(fav.id)));
+      if (response.data.newAchievements?.length) showAchievement(response.data.newAchievements);
       setToast({ show: true, msg: isFav ? dd.removedFav : dd.addedFav, type: "success" });
     } catch {
       setToast({ show: true, msg: dd.connectionError, type: "error" });

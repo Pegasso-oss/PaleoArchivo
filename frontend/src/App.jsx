@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useUser } from "./context/useUser";
 import {
+  AdminPage,
   LandingPage, DinoDetailPage, FavoritesPage, ProfilePage,
   ArchivoPage, TopFavoritosPage, PaleoMapPage, ComparadorPage, SugerirPage,
   PaleozoicoPage, CambricoPage, OrdovicicoPage, SiluricoPage,
@@ -27,7 +28,7 @@ function App() {
 
   const [toast, setToast] = useState({ isVisible: false, message: "", type: "success" });
 
-  const hideHeader = location.pathname === "/login" || location.pathname === "/register";
+  const hideHeader = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/admin";
 
   useEffect(() => {
     document.body.style.backgroundColor = isLight ? "#f8f6f2" : "#1d1914";
@@ -64,6 +65,7 @@ function App() {
           <Route path="/mapa"          element={<PaleoMapPage />} />
           <Route path="/comparador"    element={<ComparadorPage />} />
           <Route path="/sugerir"       element={<SugerirPage />} />
+          <Route path="/admin"         element={<AdminPage />} />
 
           {/* PALEOZOICO */}
           <Route path="/era/paleozoico"             element={<PaleozoicoPage />} />

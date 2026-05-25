@@ -53,6 +53,7 @@ const userSchema = new mongoose.Schema({
       updatedAt: { type: Date, default: Date.now }
     }
   ],
+  isAdmin: { type: Boolean, default: false },
   suggestions: { type: Number, default: 0 },
   achievements: [
     {

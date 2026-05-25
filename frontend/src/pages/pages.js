@@ -1,4 +1,5 @@
 // Páginas generales
+export { default as AdminPage }      from './AdminPage';
 export { default as LandingPage }     from './LandingPage';
 export { default as DinoDetailPage }  from './DinoDetailPage';
 export { default as FavoritesPage }   from './FavoritesPage';

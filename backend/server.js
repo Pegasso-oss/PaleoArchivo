@@ -7,6 +7,7 @@ const translateRoutes = require('./routes/translate');
 const notesRoutes = require('./routes/notes');
 const suggestionsRoutes = require('./routes/suggestions');
 const { router: achievementRoutes } = require('./routes/achievements');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api/auth/translate', translateRoutes);
 app.use('/api/auth/notes', notesRoutes);
 app.use('/api/auth/suggestions', suggestionsRoutes);
 app.use('/api/achievements', achievementRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.send('El servidor de la Reserva Dino está ONLINE 🦖');

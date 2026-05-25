@@ -45,6 +45,11 @@ const ACHIEVEMENTS = [
 
 // ── Función principal ──────────────────────────────────────────────────────
 async function checkAchievements(user, extraData = {}) {
+  if (!user.history)      user.history      = [];
+  if (!user.favorites)    user.favorites    = [];
+  if (!user.notes)        user.notes        = [];
+  if (!user.achievements) user.achievements = [];
+
   const unlocked = new Set(user.achievements.map(a => a.id));
   const newOnes  = [];
 

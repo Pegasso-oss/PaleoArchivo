@@ -5,6 +5,7 @@ require('dotenv').config({ path: './backend/.env' });
 const authRoutes = require('./routes/auth');
 const translateRoutes = require('./routes/translate');
 const notesRoutes = require('./routes/notes');
+const suggestionsRoutes = require('./routes/suggestions');
 const { router: achievementRoutes } = require('./routes/achievements');
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/translate', translateRoutes);
 app.use('/api/auth/notes', notesRoutes);
+app.use('/api/auth/suggestions', suggestionsRoutes);
 app.use('/api/achievements', achievementRoutes);
 
 app.get('/', (req, res) => {

@@ -5,7 +5,6 @@ const { Resend } = require('resend');
 const authMiddleware = require('../middleware/auth');
 const User = require('../models/User');
 
-const resend   = new Resend(process.env.RESEND_API_KEY);
 const TO_EMAIL = process.env.SUGGESTION_EMAIL || 'paleoarchivo@gmail.com';
 
 const PERIODOS_VALIDOS = [
@@ -15,14 +14,13 @@ const PERIODOS_VALIDOS = [
 ];
 
 router.post('/', authMiddleware, async (req, res) => {
-  const { nombre, periodo, fuente } = req.body;
+  const { nombre, periodo, fuente, foto } = req.body;
 
   if (!nombre || !nombre.trim())
     return res.status(400).json({ msg: 'El nombre es obligatorio.' });
   if (!periodo || !PERIODOS_VALIDOS.includes(periodo))
     return res.status(400).json({ msg: 'Periodo geológico no válido.' });
 
-  // Buscar username real en la BD
   let usuario = 'Desconocido';
   try {
     const user = await User.findById(req.user.id).select('username email');
@@ -30,6 +28,7 @@ router.post('/', authMiddleware, async (req, res) => {
   } catch (_) {}
 
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: TO_EMAIL,
@@ -57,11 +56,25 @@ router.post('/', authMiddleware, async (req, res) => {
               <td style="padding: 8px 0; color: #f5e6c8;">${usuario}</td>
             </tr>
           </table>
+          ${foto ? `<div style="margin-top:16px;"><p style="color:#6b5e4e;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 8px;">Foto adjunta</p><img src="${foto}" style="max-width:400px;border-radius:8px;" /></div>` : ''}
         </div>
       `,
     });
 
-    res.json({ msg: 'Sugerencia enviada correctamente. ¡Gracias!' });
+    let newAchievements = [];
+    // Incrementar contador y verificar logro
+    try {
+      const { checkAchievements } = require('./achievements');
+      const userDoc = await User.findById(req.user.id);
+      if (userDoc) {
+        if (!userDoc.suggestions) userDoc.suggestions = 0;
+        userDoc.suggestions += 1;
+        await userDoc.save();
+        newAchievements = await checkAchievements(userDoc, { suggestions: userDoc.suggestions });
+      }
+    } catch (_) {}
+
+    res.json({ msg: 'Sugerencia enviada correctamente. ¡Gracias!', newAchievements });
   } catch (err) {
     console.error('Error Resend:', err);
     res.status(500).json({ msg: 'Error al enviar la sugerencia. Inténtalo de nuevo.' });

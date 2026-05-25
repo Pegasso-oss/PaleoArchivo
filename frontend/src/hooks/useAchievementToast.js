@@ -51,7 +51,6 @@ export function useAchievementToast(language = "es") {
           background: #1a1614;
           border: 1px solid rgba(251,191,36,0.4);
           border-radius: 14px;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.5);
           font-family: monospace;
           z-index: 9999;
           opacity: 0;

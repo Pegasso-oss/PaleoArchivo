@@ -4,6 +4,7 @@ const router  = express.Router();
 const { Resend } = require('resend');
 const authMiddleware = require('../middleware/auth');
 const User = require('../models/User');
+const { checkAchievements } = require('./achievements');
 
 const TO_EMAIL = process.env.SUGGESTION_EMAIL || 'paleoarchivo@gmail.com';
 
@@ -64,7 +65,6 @@ router.post('/', authMiddleware, async (req, res) => {
     let newAchievements = [];
     // Incrementar contador y verificar logro
     try {
-      const { checkAchievements } = require('./achievements');
       const userDoc = await User.findById(req.user.id);
       if (userDoc) {
         if (!userDoc.suggestions) userDoc.suggestions = 0;

@@ -9,7 +9,7 @@ import {
   ChevronRight, Award
 } from "lucide-react";
 
-const ADMIN_URL = import.meta.env.VITE_API_URL?.replace("/api/auth", "/api/admin") || "http://localhost:5000/api/admin";
+const ADMIN_URL = import.meta.env.DEV ? "http://localhost:5000/api/admin" : "https://paleoarchivo.onrender.com/api/admin";
 
 const ACHIEVEMENT_IDS = [
   "first_visit","first_fav","first_note","time_traveler","carnivore_fan",
@@ -197,7 +197,7 @@ function UserDrawer({ user, isLight, onClose }) {
   if (!user) return null;
   return (
     <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
-      <div className={`w-full max-w-md h-full overflow-y-auto border-l p-6 flex flex-col gap-5
+      <div className={`w-full max-w-md h-full overflow-y-auto border-l shadow-2xl p-6 flex flex-col gap-5
         ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between">

@@ -6,7 +6,7 @@ import axios from "axios";
 import {
   BarChart2, Users, Trophy, Lightbulb,
   Search, Trash2, Plus, X, RefreshCw, LogOut,
-  ChevronRight, Star, Calendar, Hash
+  ChevronRight, Award
 } from "lucide-react";
 
 const ADMIN_URL = import.meta.env.VITE_API_URL?.replace("/api/auth", "/api/admin") || "http://localhost:5000/api/admin";
@@ -28,17 +28,18 @@ const TABS = [
 const adminHeaders = () => ({ "x-auth-token": localStorage.getItem("adminToken") });
 
 // ── Stats ──────────────────────────────────────────────────────────────────
-function StatsTab() {
+function StatsTab({ isLight }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const muted = isLight ? "text-stone-400" : "text-[#6b5e4e]";
 
   useEffect(() => {
     axios.get(`${ADMIN_URL}/stats`, { headers: adminHeaders() })
       .then(r => setData(r.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="font-mono text-[11px] uppercase tracking-widest text-[#6b5e4e]">Cargando...</p>;
-  if (!data)   return <p className="font-mono text-[11px] text-red-400">Error al cargar estadísticas</p>;
+  if (loading) return <p className={`font-mono text-[11px] uppercase tracking-widest ${muted}`}>Cargando...</p>;
+  if (!data)   return <p className="font-mono text-[11px] text-red-400">Error al cargar</p>;
 
   const cards = [
     { label: "Usuarios",    value: data.users,       color: "#f59e0b" },
@@ -50,26 +51,27 @@ function StatsTab() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {cards.map(({ label, value, color }) => (
-          <div key={label} className="relative p-5 rounded-xl border border-[#2a2520] bg-[#0f0e0c] overflow-hidden">
+          <div key={label} className={`relative p-5 rounded-2xl border overflow-hidden
+            ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
             <div className="absolute inset-x-0 top-0 h-[2px]" style={{ backgroundColor: color }} />
-            <p className="font-mono text-[10px] uppercase tracking-widest mt-1 mb-2 text-[#4a3f32]">{label}</p>
-            <p className="font-mono text-3xl font-black" style={{ color }}>{value}</p>
+            <p className={`font-mono text-[10px] uppercase tracking-widest mt-1 mb-3 ${muted}`}>{label}</p>
+            <p className="font-mono text-4xl font-black" style={{ color }}>{value}</p>
           </div>
         ))}
       </div>
 
       {data.topAnimals?.length > 0 && (
-        <div className="rounded-xl border border-[#2a2520] bg-[#0f0e0c] overflow-hidden">
-          <div className="px-5 py-3 border-b border-[#1a1816] bg-[#0c0b0a]">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-[#4a3f32]">Top animales más visitados</p>
+        <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+          <div className={`px-6 py-4 border-b ${isLight ? "border-stone-100" : "border-[#1a1816]"}`}>
+            <p className={`font-mono text-[11px] uppercase tracking-widest font-bold ${muted}`}>Top animales más visitados</p>
           </div>
           {data.topAnimals.map((a, i) => (
-            <div key={a._id} className={`flex items-center gap-4 px-5 py-3.5 ${i < data.topAnimals.length - 1 ? "border-b border-[#1a1816]" : ""}`}>
-              <span className={`font-mono text-[13px] font-black w-5 ${i === 0 ? "text-amber-500" : "text-[#4a3f32]"}`}>{i + 1}</span>
-              <span className="font-mono text-[13px] font-bold flex-1 uppercase text-[#f5e6c8]">{a.nombre}</span>
-              <span className="font-mono text-[11px] text-[#4a3f32]">{a.count} visitas</span>
+            <div key={a._id} className={`flex items-center gap-5 px-6 py-4 ${i < data.topAnimals.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
+              <span className={`font-mono text-[13px] font-black w-6 text-center ${i === 0 ? "text-amber-500" : muted}`}>{i + 1}</span>
+              <span className={`font-mono text-[13px] font-bold flex-1 uppercase ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{a.nombre}</span>
+              <span className={`font-mono text-[12px] px-3 py-1 rounded-lg ${isLight ? "bg-stone-100 text-stone-500" : "bg-white/5 text-[#6b5e4e]"}`}>{a.count} visitas</span>
             </div>
           ))}
         </div>
@@ -79,10 +81,11 @@ function StatsTab() {
 }
 
 // ── Users ──────────────────────────────────────────────────────────────────
-function UsersTab({ onSelectUser }) {
+function UsersTab({ isLight, onSelectUser }) {
   const [users, setUsers]     = useState([]);
   const [q, setQ]             = useState("");
   const [loading, setLoading] = useState(false);
+  const muted = isLight ? "text-stone-400" : "text-[#6b5e4e]";
 
   const search = useCallback(async () => {
     setLoading(true);
@@ -95,9 +98,9 @@ function UsersTab({ onSelectUser }) {
 
   useEffect(() => { search(); }, []);
 
-  const deleteUser = async (id, e) => {
+  const deleteUser = async (e, id) => {
     e.stopPropagation();
-    if (!confirm("¿Borrar este usuario? Esta acción es irreversible.")) return;
+    if (!confirm("¿Borrar este usuario? Esta acción no se puede deshacer.")) return;
     try {
       await axios.delete(`${ADMIN_URL}/users/${id}`, { headers: adminHeaders() });
       setUsers(u => u.filter(x => x._id !== id));
@@ -107,117 +110,148 @@ function UsersTab({ onSelectUser }) {
   return (
     <div className="flex flex-col gap-4">
       {/* Buscador */}
-      <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-[#2a2520] bg-[#0c0b0a]">
-        <Search size={14} className="text-[#4a3f32] shrink-0" />
+      <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+        <Search size={14} className={muted} />
         <input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === "Enter" && search()}
           placeholder="Buscar por nombre o email..."
-          className="flex-1 bg-transparent font-mono text-[12px] outline-none text-[#f5e6c8] placeholder:text-[#2a2520]" />
-        <button onClick={search} className="text-amber-600 hover:text-amber-500 transition-colors">
-          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          className={`flex-1 bg-transparent font-mono text-[12px] outline-none ${isLight ? "text-stone-800 placeholder:text-stone-300" : "text-[#f5e6c8] placeholder:text-[#3a3028]"}`} />
+        <button onClick={search} className={`font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all
+          ${isLight ? "bg-stone-100 text-stone-500 hover:bg-stone-200" : "bg-white/5 text-[#6b5e4e] hover:bg-white/10"}`}>
+          {loading ? <RefreshCw size={12} className="animate-spin" /> : "Buscar"}
         </button>
       </div>
 
       {/* Tabla */}
-      <div className="rounded-xl border border-[#2a2520] bg-[#0f0e0c] overflow-hidden">
-        {/* Header */}
-        <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_40px] gap-4 px-5 py-2.5 border-b border-[#1a1816] bg-[#0c0b0a]">
-          {["Usuario", "Email", "ID", "Favs", "Registro", ""].map(h => (
-            <p key={h} className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#3a3028]">{h}</p>
-          ))}
+      <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+        {/* Header tabla */}
+        <div className={`grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-4 px-6 py-3 border-b text-[10px] font-mono uppercase tracking-widest
+          ${isLight ? "border-stone-100 bg-stone-50 text-stone-400" : "border-[#1a1816] bg-[#0c0b0a] text-[#4a3f32]"}`}>
+          <span>Usuario</span>
+          <span>ID</span>
+          <span>Favs</span>
+          <span>Miembro desde</span>
+          <span>Logros</span>
+          <span></span>
         </div>
 
-        {/* Filas */}
-        {users.length === 0 && !loading && (
-          <p className="px-5 py-4 font-mono text-[11px] uppercase text-[#4a3f32]">Sin resultados</p>
-        )}
         {users.map((u, i) => (
           <div key={u._id}
             onClick={() => onSelectUser(u)}
-            className={`grid grid-cols-[2fr_2fr_1fr_1fr_1fr_40px] gap-4 px-5 py-3.5 items-center cursor-pointer transition-all hover:bg-amber-600/5
-              ${i < users.length - 1 ? "border-b border-[#1a1816]" : ""}`}>
+            className={`grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-4 items-center px-6 py-4 cursor-pointer transition-all
+              ${i < users.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}
+              ${isLight ? "hover:bg-amber-50" : "hover:bg-amber-600/5"}`}>
+
             {/* Usuario */}
-            <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex items-center gap-3 min-w-0">
               <img src={u.avatar || "https://i.ytimg.com/vi/7j8krOd0-KA/maxresdefault.jpg"} alt=""
-                className="w-7 h-7 rounded-full object-cover border border-[#2a2520] shrink-0" />
-              <span className="font-mono text-[12px] font-bold uppercase truncate text-[#f5e6c8]">{u.username}</span>
+                className={`w-8 h-8 rounded-full object-cover border shrink-0 ${isLight ? "border-stone-200" : "border-[#2a2520]"}`} />
+              <div className="min-w-0">
+                <p className={`font-mono text-[12px] font-black uppercase truncate ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
+                <p className={`font-mono text-[10px] truncate ${muted}`}>{u.email}</p>
+              </div>
             </div>
-            {/* Email */}
-            <span className="font-mono text-[11px] truncate text-[#6b5e4e]">{u.email}</span>
+
             {/* ID */}
-            <span className="font-mono text-[10px] text-[#3a3028] truncate">{u._id.slice(-6)}</span>
+            <p className={`font-mono text-[10px] truncate ${muted}`}>{u._id}</p>
+
             {/* Favs */}
-            <div className="flex items-center gap-1.5">
-              <Star size={10} className="text-amber-600 shrink-0" />
-              <span className="font-mono text-[12px] font-bold text-amber-600">{u.favorites?.length || 0}</span>
-            </div>
+            <p className={`font-mono text-[12px] font-bold text-amber-500`}>{u.favorites?.length || 0}</p>
+
             {/* Fecha */}
-            <span className="font-mono text-[10px] text-[#4a3f32]">
+            <p className={`font-mono text-[11px] ${muted}`}>
               {new Date(u.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "2-digit" })}
-            </span>
-            {/* Borrar */}
-            <button onClick={e => deleteUser(u._id, e)}
-              className="text-red-400/30 hover:text-red-400 transition-colors flex items-center justify-center">
-              <Trash2 size={12} />
-            </button>
+            </p>
+
+            {/* Logros */}
+            <div className="flex items-center gap-1">
+              <Award size={12} className="text-amber-500 shrink-0" />
+              <p className={`font-mono text-[11px] font-bold ${isLight ? "text-stone-600" : "text-[#f5e6c8]"}`}>
+                {u.achievements?.length || 0}
+              </p>
+            </div>
+
+            {/* Acciones */}
+            <div className="flex items-center gap-2">
+              <button onClick={e => deleteUser(e, u._id)}
+                className="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all">
+                <Trash2 size={13} />
+              </button>
+              <ChevronRight size={13} className={muted} />
+            </div>
           </div>
         ))}
+
+        {users.length === 0 && !loading && (
+          <p className={`px-6 py-8 font-mono text-[11px] uppercase tracking-widest text-center ${muted}`}>Sin resultados</p>
+        )}
       </div>
     </div>
   );
 }
 
-// ── User Detail Drawer ─────────────────────────────────────────────────────
-function UserDrawer({ user, onClose }) {
+// ── User detail drawer ─────────────────────────────────────────────────────
+function UserDrawer({ user, isLight, onClose }) {
+  const muted  = isLight ? "text-stone-400"   : "text-[#6b5e4e]";
+  const border = isLight ? "border-stone-200" : "border-[#2a2520]";
+
   if (!user) return null;
   return (
-    <div className="fixed inset-0 z-50 flex">
-      <div className="flex-1 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="w-full max-w-sm bg-[#0f0e0c] border-l border-[#2a2520] flex flex-col overflow-y-auto">
-        <div className="px-6 py-5 border-b border-[#1a1816] flex items-center justify-between">
-          <p className="font-mono text-[11px] uppercase tracking-widest text-amber-500 font-black">{user.username}</p>
-          <button onClick={onClose} className="text-[#4a3f32] hover:text-[#f5e6c8] transition-colors"><X size={16} /></button>
+    <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
+      <div className={`w-full max-w-md h-full overflow-y-auto border-l p-6 flex flex-col gap-5
+        ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}
+        onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <p className={`font-mono text-[10px] uppercase tracking-widest ${muted}`}>Detalle de usuario</p>
+          <button onClick={onClose} className={`p-1.5 rounded-lg transition-all ${isLight ? "hover:bg-stone-100" : "hover:bg-white/5"}`}>
+            <X size={14} className={muted} />
+          </button>
         </div>
-        <div className="p-6 flex flex-col gap-5">
+
+        <div className="flex items-center gap-4">
           <img src={user.avatar || "https://i.ytimg.com/vi/7j8krOd0-KA/maxresdefault.jpg"} alt=""
-            className="w-20 h-20 rounded-full object-cover border-2 border-amber-600/30" />
-          <div className="flex flex-col gap-3">
-            {[
-              { icon: <Hash size={12} />,      label: "ID completo",    value: user._id },
-              { icon: <Star size={12} />,      label: "Favoritos",      value: user.favorites?.length || 0 },
-              { icon: <Calendar size={12} />,  label: "Registro",       value: new Date(user.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" }) },
-            ].map(({ icon, label, value }) => (
-              <div key={label} className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-[#4a3f32]">
-                  {icon}
-                  <p className="font-mono text-[9px] uppercase tracking-widest">{label}</p>
-                </div>
-                <p className="font-mono text-[12px] text-[#f5e6c8] break-all">{value}</p>
-              </div>
-            ))}
-            {user.bio && (
-              <div className="flex flex-col gap-1">
-                <p className="font-mono text-[9px] uppercase tracking-widest text-[#4a3f32]">Biografía</p>
-                <p className="font-mono text-[12px] text-[#f5e6c8]">{user.bio}</p>
-              </div>
-            )}
-          </div>
-          <div className={`p-3 rounded-xl border ${user.isAdmin ? "border-amber-600/30 bg-amber-600/10" : "border-[#2a2520]"}`}>
-            <p className={`font-mono text-[10px] uppercase tracking-widest ${user.isAdmin ? "text-amber-500" : "text-[#4a3f32]"}`}>
-              {user.isAdmin ? "✓ Administrador" : "Usuario estándar"}
-            </p>
+            className={`w-16 h-16 rounded-full object-cover border-2 border-amber-600/30`} />
+          <div>
+            <p className={`font-mono text-lg font-black uppercase italic ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{user.username}</p>
+            <p className={`font-mono text-[11px] ${muted}`}>{user.email}</p>
           </div>
         </div>
+
+        <div className={`rounded-xl border divide-y ${border} ${isLight ? "divide-stone-100" : "divide-[#1a1816]"}`}>
+          {[
+            { label: "ID MongoDB",     value: user._id },
+            { label: "Favoritos",      value: user.favorites?.length || 0 },
+            { label: "Visitadas",      value: user.history?.length || 0 },
+            { label: "Notas",          value: user.notes?.length || 0 },
+            { label: "Logros",         value: `${user.achievements?.length || 0} / 16` },
+            { label: "Sugerencias",    value: user.suggestions || 0 },
+            { label: "Miembro desde",  value: new Date(user.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" }) },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex items-center justify-between px-4 py-3 gap-4">
+              <span className={`font-mono text-[10px] uppercase tracking-widest ${muted}`}>{label}</span>
+              <span className={`font-mono text-[12px] font-bold text-right break-all ${isLight ? "text-stone-700" : "text-[#f5e6c8]"}`}>{value}</span>
+            </div>
+          ))}
+        </div>
+
+        {user.bio && (
+          <div className={`rounded-xl border p-4 ${border}`}>
+            <p className={`font-mono text-[10px] uppercase tracking-widest mb-2 ${muted}`}>Biografía</p>
+            <p className={`font-mono text-[12px] leading-relaxed ${isLight ? "text-stone-600" : "text-[#a89880]"}`}>{user.bio}</p>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 // ── Achievements ───────────────────────────────────────────────────────────
-function AchievementsTab() {
+function AchievementsTab({ isLight }) {
   const [userId, setUserId]     = useState("");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading]   = useState(false);
   const [msg, setMsg]           = useState("");
+  const muted  = isLight ? "text-stone-400"   : "text-[#6b5e4e]";
+  const border = isLight ? "border-stone-200" : "border-[#2a2520]";
 
   const load = async () => {
     if (!userId.trim()) return;
@@ -250,9 +284,10 @@ function AchievementsTab() {
       <div className="flex gap-3">
         <input value={userId} onChange={e => setUserId(e.target.value)} onKeyDown={e => e.key === "Enter" && load()}
           placeholder="ID de MongoDB del usuario..."
-          className="flex-1 px-4 py-2.5 rounded-xl border border-[#2a2520] bg-[#0c0b0a] font-mono text-[12px] outline-none text-[#f5e6c8] placeholder:text-[#2a2520]" />
+          className={`flex-1 px-4 py-3 rounded-xl border font-mono text-[12px] outline-none transition-all
+            ${isLight ? "bg-white border-stone-200 text-stone-800 placeholder:text-stone-300" : "bg-[#0f0e0c] border-[#2a2520] text-[#f5e6c8] placeholder:text-[#3a3028]"}`} />
         <button onClick={load}
-          className="px-4 py-2.5 rounded-xl bg-amber-600 text-white font-mono text-[11px] uppercase tracking-widest hover:bg-amber-500 transition-all">
+          className="px-5 py-3 rounded-xl bg-red-500 text-white font-mono text-[11px] uppercase tracking-widest hover:bg-red-400 transition-all">
           {loading ? <RefreshCw size={13} className="animate-spin" /> : "Buscar"}
         </button>
       </div>
@@ -260,26 +295,31 @@ function AchievementsTab() {
       {msg && <p className="font-mono text-[11px] text-red-400">{msg}</p>}
 
       {userData && (
-        <div className="rounded-xl border border-[#2a2520] bg-[#0f0e0c] overflow-hidden">
-          <div className="px-5 py-3 border-b border-[#1a1816] bg-[#0c0b0a]">
-            <p className="font-mono text-[11px] font-black uppercase text-amber-500">{userData.username}</p>
-            <p className="font-mono text-[10px] text-[#4a3f32]">{unlockedIds.size} / {ACHIEVEMENT_IDS.length} logros</p>
+        <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+          <div className={`px-6 py-4 border-b flex items-center justify-between ${isLight ? "border-stone-100 bg-stone-50" : "border-[#1a1816] bg-[#0c0b0a]"}`}>
+            <p className="font-mono text-[12px] font-black uppercase text-amber-500">{userData.username}</p>
+            <p className={`font-mono text-[10px] ${muted}`}>{unlockedIds.size} / {ACHIEVEMENT_IDS.length} logros</p>
           </div>
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
             {ACHIEVEMENT_IDS.map(id => {
               const has = unlockedIds.has(id);
               return (
-                <div key={id} className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border transition-all
-                  ${has ? "border-amber-600/30 bg-amber-600/10" : "border-[#2a2520]"}`}>
-                  <div className="flex items-center gap-2 min-w-0">
-                    <img src={`/achievements/${id}.png`} alt="" className="w-7 h-7 object-contain shrink-0"
-                      onError={e => e.currentTarget.style.display="none"} />
-                    <span className={`font-mono text-[11px] uppercase tracking-wide truncate ${has ? "text-amber-500" : "text-[#4a3f32]"}`}>{id}</span>
+                <div key={id} className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl border transition-all
+                  ${has
+                    ? isLight ? "border-amber-200 bg-amber-50" : "border-amber-600/30 bg-amber-600/10"
+                    : isLight ? "border-stone-100 opacity-60" : "border-[#2a2520] opacity-50"}`}>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <img src={`/achievements/${id}.png`} alt="" className="w-8 h-8 object-contain shrink-0"
+                      onError={e => e.currentTarget.style.display = "none"} />
+                    <span className={`font-mono text-[11px] uppercase tracking-wide truncate font-bold
+                      ${has ? "text-amber-500" : muted}`}>{id}</span>
                   </div>
                   <button onClick={() => has ? remove(id) : add(id)}
-                    className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all
-                      ${has ? "bg-red-500/20 text-red-400 hover:bg-red-500/40" : "bg-amber-600/20 text-amber-500 hover:bg-amber-600/40"}`}>
-                    {has ? <X size={11} /> : <Plus size={11} />}
+                    className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all
+                      ${has
+                        ? "bg-red-500/20 text-red-400 hover:bg-red-500/40"
+                        : "bg-amber-600/20 text-amber-500 hover:bg-amber-600/40"}`}>
+                    {has ? <X size={12} /> : <Plus size={12} />}
                   </button>
                 </div>
               );
@@ -292,28 +332,37 @@ function AchievementsTab() {
 }
 
 // ── Suggestions ────────────────────────────────────────────────────────────
-function SuggestionsTab() {
+function SuggestionsTab({ isLight }) {
   const [users, setUsers]     = useState([]);
   const [loading, setLoading] = useState(true);
+  const muted  = isLight ? "text-stone-400"   : "text-[#6b5e4e]";
 
   useEffect(() => {
     axios.get(`${ADMIN_URL}/suggestions`, { headers: adminHeaders() })
       .then(r => setUsers(r.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="font-mono text-[11px] uppercase text-[#4a3f32]">Cargando...</p>;
+  if (loading) return <p className={`font-mono text-[11px] uppercase ${muted}`}>Cargando...</p>;
 
   return (
-    <div className="rounded-xl border border-[#2a2520] bg-[#0f0e0c] overflow-hidden">
+    <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+      <div className={`grid grid-cols-[2fr_1fr_1fr] gap-4 px-6 py-3 border-b text-[10px] font-mono uppercase tracking-widest
+        ${isLight ? "border-stone-100 bg-stone-50 text-stone-400" : "border-[#1a1816] bg-[#0c0b0a] text-[#4a3f32]"}`}>
+        <span>Usuario</span>
+        <span>Sugerencias</span>
+        <span>Miembro desde</span>
+      </div>
       {users.length === 0 ? (
-        <p className="px-5 py-4 font-mono text-[11px] uppercase text-[#4a3f32]">Sin sugerencias aún</p>
+        <p className={`px-6 py-8 font-mono text-[11px] uppercase tracking-widest text-center ${muted}`}>Sin sugerencias aún</p>
       ) : users.map((u, i) => (
-        <div key={u._id} className={`flex items-center gap-4 px-5 py-3.5 ${i < users.length - 1 ? "border-b border-[#1a1816]" : ""}`}>
-          <div className="flex-1 min-w-0">
-            <p className="font-mono text-[13px] font-black uppercase text-[#f5e6c8]">{u.username}</p>
-            <p className="font-mono text-[10px] text-[#4a3f32]">{u.email}</p>
+        <div key={u._id} className={`grid grid-cols-[2fr_1fr_1fr] gap-4 items-center px-6 py-4
+          ${i < users.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
+          <div>
+            <p className={`font-mono text-[13px] font-black uppercase ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
+            <p className={`font-mono text-[10px] ${muted}`}>{u.email}</p>
           </div>
-          <span className="font-mono text-[12px] font-black text-amber-500">{u.suggestions} sug.</span>
+          <span className="font-mono text-[13px] font-black text-amber-500">{u.suggestions}</span>
+          <span className={`font-mono text-[11px] ${muted}`}>{new Date(u.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "2-digit" })}</span>
         </div>
       ))}
     </div>
@@ -322,30 +371,33 @@ function SuggestionsTab() {
 
 // ── Página principal ───────────────────────────────────────────────────────
 export default function AdminPage() {
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const { theme } = useUser();
-  const isLight   = theme === "light";
+  const isLight = theme === "light";
 
-  const [tab, setTab]               = useState("stats");
+  const [tab, setTab]           = useState("stats");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [checking, setChecking]     = useState(true);
-  const [allowed, setAllowed]       = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [allowed, setAllowed]   = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPass,  setLoginPass]  = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const bg = isLight ? "bg-[#f5f2ed]" : "bg-[#0a0908]";
+  const bg     = isLight ? "bg-[#f5f2ed]" : "bg-[#0a0908]";
+  const bgCard = isLight ? "bg-white"      : "bg-[#0f0e0c]";
+  const border = isLight ? "border-stone-200" : "border-[#2a2520]";
+  const muted  = isLight ? "text-stone-400"   : "text-[#6b5e4e]";
 
   useEffect(() => {
     const t = localStorage.getItem("adminToken");
     if (!t) { setChecking(false); return; }
     axios.get(`${ADMIN_URL}/stats`, { headers: { "x-auth-token": t } })
       .then(() => setAllowed(true))
-      .catch(() => { localStorage.removeItem("adminToken"); })
+      .catch(() => { localStorage.removeItem("adminToken"); setAllowed(false); })
       .finally(() => setChecking(false));
   }, []);
 
-  const handleLogin = async () => {
+  const handleAdminLogin = async () => {
     setLoginError("");
     try {
       const res = await axios.post(`${ADMIN_URL}/login`, { email: loginEmail, password: loginPass });
@@ -354,7 +406,7 @@ export default function AdminPage() {
     } catch { setLoginError("Credenciales incorrectas"); }
   };
 
-  const handleLogout = () => { localStorage.removeItem("adminToken"); setAllowed(false); };
+  const logout = () => { localStorage.removeItem("adminToken"); setAllowed(false); };
 
   if (checking) return (
     <div className={`min-h-screen flex items-center justify-center ${bg}`}>
@@ -362,97 +414,108 @@ export default function AdminPage() {
     </div>
   );
 
+  // ── Login ──
   if (!allowed) return (
-    <div className="min-h-screen flex items-center justify-center font-mono bg-[#0a0908] px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-[#2a2520] bg-[#0f0e0c] p-8 flex flex-col gap-6">
+    <div className={`min-h-screen flex items-center justify-center px-4 ${bg}`}>
+      <div className={`w-full max-w-sm rounded-2xl border p-8 flex flex-col gap-6 ${bgCard} ${border}`}>
         <div>
-          <div className="w-6 h-[3px] bg-red-500 mb-4" />
-          <h1 className="text-2xl font-black uppercase italic tracking-tight text-[#f5e6c8]">
+          <div className="w-8 h-[3px] bg-red-500 mb-4" />
+          <h1 className={`font-mono text-2xl font-black uppercase italic tracking-tight ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
             Panel <span className="text-red-500">Admin</span>
           </h1>
-          <p className="font-mono text-[10px] uppercase tracking-widest mt-1 text-[#4a3f32]">Acceso restringido</p>
+          <p className={`font-mono text-[10px] uppercase tracking-widest mt-1 ${muted}`}>Acceso restringido</p>
         </div>
         <div className="flex flex-col gap-3">
-          <input value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="Email" type="email"
-            className="w-full px-4 py-3 rounded-xl border border-[#2a2520] bg-[#0c0b0a] font-mono text-[13px] outline-none text-[#f5e6c8] placeholder:text-[#2a2520] focus:border-red-500/50 transition-colors" />
-          <input value={loginPass} onChange={e => setLoginPass(e.target.value)} placeholder="Contraseña" type="password"
-            onKeyDown={e => e.key === "Enter" && handleLogin()}
-            className="w-full px-4 py-3 rounded-xl border border-[#2a2520] bg-[#0c0b0a] font-mono text-[13px] outline-none text-[#f5e6c8] placeholder:text-[#2a2520] focus:border-red-500/50 transition-colors" />
+          <input value={loginEmail} onChange={e => setLoginEmail(e.target.value)}
+            placeholder="Email" type="email" autoComplete="email"
+            className={`w-full px-4 py-3 rounded-xl border font-mono text-[13px] outline-none transition-all
+              focus:border-red-500/50 ${isLight ? "bg-stone-50 border-stone-200 text-stone-900" : "bg-[#0c0b0a] border-[#2a2520] text-[#f5e6c8]"}`} />
+          <input value={loginPass} onChange={e => setLoginPass(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleAdminLogin()}
+            placeholder="Contraseña" type="password" autoComplete="current-password"
+            className={`w-full px-4 py-3 rounded-xl border font-mono text-[13px] outline-none transition-all
+              focus:border-red-500/50 ${isLight ? "bg-stone-50 border-stone-200 text-stone-900" : "bg-[#0c0b0a] border-[#2a2520] text-[#f5e6c8]"}`} />
           {loginError && <p className="font-mono text-[11px] text-red-400">{loginError}</p>}
-          <button onClick={handleLogin}
-            className="w-full py-3 rounded-xl bg-red-500 text-white font-mono text-[11px] uppercase tracking-widest font-bold hover:bg-red-400 transition-all">
+          <button onClick={handleAdminLogin}
+            className="w-full py-3 rounded-xl bg-red-500 hover:bg-red-400 text-white font-mono text-[11px] uppercase tracking-widest font-black transition-all">
             Entrar
           </button>
         </div>
-        <button onClick={() => navigate("/")} className="font-mono text-[10px] uppercase tracking-widest text-center text-[#4a3f32] hover:text-amber-500 transition-colors">
+        <button onClick={() => navigate("/")} className={`font-mono text-[10px] uppercase tracking-widest text-center transition-colors hover:text-amber-500 ${muted}`}>
           ← Volver al inicio
         </button>
       </div>
     </div>
   );
 
+  // ── Panel ──
   return (
-    <div className="min-h-screen flex font-mono bg-[#0a0908]">
+    <div className={`min-h-screen flex ${bg}`}>
 
-      {/* ── Sidebar ── */}
-      <aside className="w-56 shrink-0 flex flex-col border-r border-[#1a1816] bg-[#0c0b0a]">
-        <div className="px-5 py-6 border-b border-[#1a1816]">
-          <div className="w-5 h-[2px] bg-red-500 mb-3" />
-          <p className="font-mono text-[13px] font-black uppercase italic text-[#f5e6c8]">
-            Paleo<span className="text-red-500">Admin</span>
+      {/* Sidebar */}
+      <aside className={`hidden md:flex w-56 shrink-0 flex-col border-r ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+        <div className="p-6">
+          <div className="w-6 h-[3px] bg-red-500 mb-4" />
+          <p className={`font-mono text-[10px] uppercase tracking-widest ${muted}`}>PaleoArchivo</p>
+          <p className={`font-mono text-lg font-black uppercase italic mt-0.5 ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
+            Panel <span className="text-red-500">Admin</span>
           </p>
-          <p className="font-mono text-[9px] uppercase tracking-widest text-[#3a3028] mt-0.5">Panel de control</p>
         </div>
 
-        <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+        <nav className="flex-1 px-3 flex flex-col gap-1">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => { setTab(id); setSelectedUser(null); }}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-[11px] uppercase tracking-widest transition-all text-left
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest transition-all text-left
                 ${tab === id
-                  ? "bg-red-500/15 text-red-400 border border-red-500/20"
-                  : "text-[#4a3f32] hover:text-[#f5e6c8] hover:bg-white/[0.03]"}`}>
-              <Icon size={13} />
-              {label}
+                  ? "bg-red-500 text-white"
+                  : isLight ? "text-stone-500 hover:bg-stone-100 hover:text-stone-700" : "text-[#6b5e4e] hover:bg-white/5 hover:text-[#f5e6c8]"}`}>
+              <Icon size={14} /> {label}
             </button>
           ))}
         </nav>
 
-        <div className="px-3 py-4 border-t border-[#1a1816]">
-          <button onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full font-mono text-[11px] uppercase tracking-widest text-red-400/50 hover:text-red-400 hover:bg-red-500/10 transition-all">
+        <div className="p-4 border-t" style={{ borderColor: isLight ? "#e7e5e4" : "#2a2520" }}>
+          <button onClick={logout}
+            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest transition-all
+              text-red-400 hover:bg-red-500/10`}>
             <LogOut size={13} /> Cerrar sesión
           </button>
         </div>
       </aside>
 
-      {/* ── Contenido ── */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="px-8 py-4 border-b border-[#1a1816] bg-[#0c0b0a] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#3a3028]">Admin</span>
-            <ChevronRight size={11} className="text-[#2a2520]" />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#6b5e4e]">
-              {TABS.find(t => t.id === tab)?.label}
-            </span>
-          </div>
-          <button onClick={() => navigate("/")}
-            className="font-mono text-[10px] uppercase tracking-widest text-[#3a3028] hover:text-amber-500 transition-colors">
-            Ver sitio →
-          </button>
-        </header>
+      {/* Contenido */}
+      <main className="flex-1 overflow-y-auto">
+        {/* Header móvil */}
+        <div className={`md:hidden flex items-center justify-between px-4 py-3 border-b ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+          <p className={`font-mono text-[12px] font-black uppercase italic ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>
+            Panel <span className="text-red-500">Admin</span>
+          </p>
+          <button onClick={logout} className="text-red-400"><LogOut size={15} /></button>
+        </div>
 
-        {/* Body */}
-        <main className="flex-1 overflow-y-auto px-8 py-6">
-          {tab === "stats"        && <StatsTab />}
-          {tab === "users"        && <UsersTab onSelectUser={setSelectedUser} />}
-          {tab === "achievements" && <AchievementsTab />}
-          {tab === "suggestions"  && <SuggestionsTab />}
-        </main>
-      </div>
+        {/* Tabs móvil */}
+        <div className={`md:hidden flex gap-1 p-2 border-b overflow-x-auto ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
+          {TABS.map(({ id, label, icon: Icon }) => (
+            <button key={id} onClick={() => { setTab(id); setSelectedUser(null); }}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-widest whitespace-nowrap transition-all
+                ${tab === id ? "bg-red-500 text-white" : isLight ? "text-stone-500" : "text-[#6b5e4e]"}`}>
+              <Icon size={12} /> {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="p-6 md:p-8">
+          {tab === "stats"        && <StatsTab isLight={isLight} />}
+          {tab === "users"        && <UsersTab isLight={isLight} onSelectUser={setSelectedUser} />}
+          {tab === "achievements" && <AchievementsTab isLight={isLight} />}
+          {tab === "suggestions"  && <SuggestionsTab isLight={isLight} />}
+        </div>
+      </main>
 
       {/* Drawer usuario */}
-      <UserDrawer user={selectedUser} onClose={() => setSelectedUser(null)} />
+      {selectedUser && tab === "users" && (
+        <UserDrawer user={selectedUser} isLight={isLight} onClose={() => setSelectedUser(null)} />
+      )}
     </div>
   );
 }

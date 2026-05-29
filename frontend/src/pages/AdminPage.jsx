@@ -368,7 +368,7 @@ function SuggestionsTab({ isLight }) {
               <p className={`font-mono text-[14px] font-black uppercase ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
               <p className={`font-mono text-[12px] ${muted}`}>{u.email}</p>
             </div>
-            <span className="font-mono text-[14px] font-black text-amber-500">{u.suggestions?.length || 0}</span>
+            <span className="font-mono text-[14px] font-black text-amber-500">{Array.isArray(u.suggestions) ? u.suggestions.length : (u.suggestions || 0)}</span>
             <span className={`font-mono text-[13px] ${muted}`}>{new Date(u.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "2-digit" })}</span>
             <ChevronRight size={14} className={`transition-transform duration-200 ${selected?._id === u._id ? "rotate-90" : ""} ${muted}`} />
           </div>
@@ -388,9 +388,13 @@ function SuggestionsTab({ isLight }) {
             </button>
           </div>
 
-          {(selected.suggestions || []).length === 0 ? (
+          {!Array.isArray(selected.suggestions) ? (
+            <p className={`px-6 py-6 font-mono text-[13px] ${muted}`}>
+              Este usuario tiene <span className="text-amber-500 font-bold">{selected.suggestions}</span> sugerencia(s) enviadas antes del nuevo sistema. El contenido no está disponible.
+            </p>
+          ) : selected.suggestions.length === 0 ? (
             <p className={`px-6 py-6 font-mono text-[13px] uppercase ${muted}`}>Sin sugerencias guardadas</p>
-          ) : (selected.suggestions || []).map((s, i) => (
+          ) : selected.suggestions.map((s, i) => (
             <div key={i} className={`px-6 py-5 flex flex-col gap-3 ${i < selected.suggestions.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-1 flex-1 min-w-0">

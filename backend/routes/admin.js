@@ -134,7 +134,7 @@ router.delete('/users/:id/achievements/:achievementId', adminAuth, async (req, r
 // ── Sugerencias ───────────────────────────────────────────────────────────
 router.get('/suggestions', adminAuth, async (req, res) => {
   try {
-    const users = await User.find({ suggestions: { $type: 'array', $ne: [] } })
+    const users = await User.find({ 'suggestions.0': { $exists: true } })
       .select('username email suggestions createdAt');
     res.json(users);
   } catch (err) {

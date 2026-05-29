@@ -56,7 +56,7 @@ function StatsTab({ isLight }) {
           <div key={label} className={`relative p-5 rounded-2xl border overflow-hidden
             ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
             <div className="absolute inset-x-0 top-0 h-[2px]" style={{ backgroundColor: color }} />
-            <p className={`font-mono text-[10px] uppercase tracking-widest mt-1 mb-3 ${muted}`}>{label}</p>
+            <p className={`font-mono text-[12px] uppercase tracking-widest mt-1 mb-3 ${muted}`}>{label}</p>
             <p className="font-mono text-4xl font-black" style={{ color }}>{value}</p>
           </div>
         ))}
@@ -65,7 +65,7 @@ function StatsTab({ isLight }) {
       {data.topAnimals?.length > 0 && (
         <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
           <div className={`px-6 py-4 border-b ${isLight ? "border-stone-100" : "border-[#1a1816]"}`}>
-            <p className={`font-mono text-[11px] uppercase tracking-widest font-bold ${muted}`}>Top animales más visitados</p>
+            <p className={`font-mono text-[13px] uppercase tracking-widest font-bold ${muted}`}>Top animales más visitados</p>
           </div>
           {data.topAnimals.map((a, i) => (
             <div key={a._id} className={`flex items-center gap-5 px-6 py-4 ${i < data.topAnimals.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
@@ -114,7 +114,7 @@ function UsersTab({ isLight, onSelectUser }) {
         <Search size={14} className={muted} />
         <input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === "Enter" && search()}
           placeholder="Buscar por nombre o email..."
-          className={`flex-1 bg-transparent font-mono text-[12px] outline-none ${isLight ? "text-stone-800 placeholder:text-stone-300" : "text-[#f5e6c8] placeholder:text-[#3a3028]"}`} />
+          className={`flex-1 bg-transparent font-mono text-[14px] outline-none ${isLight ? "text-stone-800 placeholder:text-stone-300" : "text-[#f5e6c8] placeholder:text-[#3a3028]"}`} />
         <button onClick={search} className={`font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all
           ${isLight ? "bg-stone-100 text-stone-500 hover:bg-stone-200" : "bg-white/5 text-[#6b5e4e] hover:bg-white/10"}`}>
           {loading ? <RefreshCw size={12} className="animate-spin" /> : "Buscar"}
@@ -124,7 +124,7 @@ function UsersTab({ isLight, onSelectUser }) {
       {/* Tabla */}
       <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
         {/* Header tabla */}
-        <div className={`grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-4 px-6 py-3 border-b text-[10px] font-mono uppercase tracking-widest
+        <div className={`grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-4 px-6 py-3 border-b text-[12px] font-mono uppercase tracking-widest
           ${isLight ? "border-stone-100 bg-stone-50 text-stone-400" : "border-[#1a1816] bg-[#0c0b0a] text-[#4a3f32]"}`}>
           <span>Usuario</span>
           <span>ID</span>
@@ -146,19 +146,19 @@ function UsersTab({ isLight, onSelectUser }) {
               <img src={u.avatar || "https://i.ytimg.com/vi/7j8krOd0-KA/maxresdefault.jpg"} alt=""
                 className={`w-8 h-8 rounded-full object-cover border shrink-0 ${isLight ? "border-stone-200" : "border-[#2a2520]"}`} />
               <div className="min-w-0">
-                <p className={`font-mono text-[12px] font-black uppercase truncate ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
-                <p className={`font-mono text-[10px] truncate ${muted}`}>{u.email}</p>
+                <p className={`font-mono text-[14px] font-black uppercase truncate ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
+                <p className={`font-mono text-[12px] truncate ${muted}`}>{u.email}</p>
               </div>
             </div>
 
             {/* ID */}
-            <p className={`font-mono text-[10px] truncate ${muted}`}>{u._id}</p>
+            <p className={`font-mono text-[12px] truncate ${muted}`}>{u._id}</p>
 
             {/* Favs */}
-            <p className={`font-mono text-[12px] font-bold text-amber-500`}>{u.favorites?.length || 0}</p>
+            <p className={`font-mono text-[14px] font-bold text-amber-500`}>{u.favorites?.length || 0}</p>
 
             {/* Fecha */}
-            <p className={`font-mono text-[11px] ${muted}`}>
+            <p className={`font-mono text-[13px] ${muted}`}>
               {new Date(u.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "2-digit" })}
             </p>
 
@@ -201,7 +201,7 @@ function UserDrawer({ user, isLight, onClose }) {
         ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between">
-          <p className={`font-mono text-[10px] uppercase tracking-widest ${muted}`}>Detalle de usuario</p>
+          <p className={`font-mono text-[12px] uppercase tracking-widest ${muted}`}>Detalle de usuario</p>
           <button onClick={onClose} className={`p-1.5 rounded-lg transition-all ${isLight ? "hover:bg-stone-100" : "hover:bg-white/5"}`}>
             <X size={14} className={muted} />
           </button>
@@ -212,7 +212,7 @@ function UserDrawer({ user, isLight, onClose }) {
             className={`w-16 h-16 rounded-full object-cover border-2 border-amber-600/30`} />
           <div>
             <p className={`font-mono text-lg font-black uppercase italic ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{user.username}</p>
-            <p className={`font-mono text-[11px] ${muted}`}>{user.email}</p>
+            <p className={`font-mono text-[13px] ${muted}`}>{user.email}</p>
           </div>
         </div>
 
@@ -227,8 +227,8 @@ function UserDrawer({ user, isLight, onClose }) {
             { label: "Miembro desde",  value: new Date(user.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" }) },
           ].map(({ label, value }) => (
             <div key={label} className="flex items-center justify-between px-4 py-3 gap-4">
-              <span className={`font-mono text-[10px] uppercase tracking-widest ${muted}`}>{label}</span>
-              <span className={`font-mono text-[12px] font-bold text-right break-all ${isLight ? "text-stone-700" : "text-[#f5e6c8]"}`}>{value}</span>
+              <span className={`font-mono text-[12px] uppercase tracking-widest ${muted}`}>{label}</span>
+              <span className={`font-mono text-[13px] font-bold text-right break-all ${isLight ? "text-stone-700" : "text-[#f5e6c8]"}`}>{value}</span>
             </div>
           ))}
         </div>
@@ -284,7 +284,7 @@ function AchievementsTab({ isLight }) {
       <div className="flex gap-3">
         <input value={userId} onChange={e => setUserId(e.target.value)} onKeyDown={e => e.key === "Enter" && load()}
           placeholder="ID de MongoDB del usuario..."
-          className={`flex-1 px-4 py-3 rounded-xl border font-mono text-[12px] outline-none transition-all
+          className={`flex-1 px-4 py-3 rounded-xl border font-mono text-[14px] outline-none transition-all
             ${isLight ? "bg-white border-stone-200 text-stone-800 placeholder:text-stone-300" : "bg-[#0f0e0c] border-[#2a2520] text-[#f5e6c8] placeholder:text-[#3a3028]"}`} />
         <button onClick={load}
           className="px-5 py-3 rounded-xl bg-red-500 text-white font-mono text-[11px] uppercase tracking-widest hover:bg-red-400 transition-all">
@@ -311,7 +311,7 @@ function AchievementsTab({ isLight }) {
                   <div className="flex items-center gap-2.5 min-w-0">
                     <img src={`/achievements/${id}.png`} alt="" className="w-8 h-8 object-contain shrink-0"
                       onError={e => e.currentTarget.style.display = "none"} />
-                    <span className={`font-mono text-[11px] uppercase tracking-wide truncate font-bold
+                    <span className={`font-mono text-[13px] uppercase tracking-wide truncate font-bold
                       ${has ? "text-amber-500" : muted}`}>{id}</span>
                   </div>
                   <button onClick={() => has ? remove(id) : add(id)}
@@ -333,41 +333,89 @@ function AchievementsTab({ isLight }) {
 
 // ── Suggestions ────────────────────────────────────────────────────────────
 function SuggestionsTab({ isLight }) {
-  const [users, setUsers]     = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [users, setUsers]       = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [selected, setSelected] = useState(null);
   const muted  = isLight ? "text-stone-400"   : "text-[#6b5e4e]";
+  const border = isLight ? "border-stone-200" : "border-[#2a2520]";
 
   useEffect(() => {
     axios.get(`${ADMIN_URL}/suggestions`, { headers: adminHeaders() })
       .then(r => setUsers(r.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className={`font-mono text-[11px] uppercase ${muted}`}>Cargando...</p>;
+  if (loading) return <p className={`font-mono text-[13px] uppercase ${muted}`}>Cargando...</p>;
 
   return (
-    <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
-      <div className={`grid grid-cols-[2fr_1fr_1fr] gap-4 px-6 py-3 border-b text-[10px] font-mono uppercase tracking-widest
-        ${isLight ? "border-stone-100 bg-stone-50 text-stone-400" : "border-[#1a1816] bg-[#0c0b0a] text-[#4a3f32]"}`}>
-        <span>Usuario</span>
-        <span>Sugerencias</span>
-        <span>Miembro desde</span>
-      </div>
-      {users.length === 0 ? (
-        <p className={`px-6 py-8 font-mono text-[11px] uppercase tracking-widest text-center ${muted}`}>Sin sugerencias aún</p>
-      ) : users.map((u, i) => (
-        <div key={u._id} className={`grid grid-cols-[2fr_1fr_1fr] gap-4 items-center px-6 py-4
-          ${i < users.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
-          <div>
-            <p className={`font-mono text-[13px] font-black uppercase ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
-            <p className={`font-mono text-[10px] ${muted}`}>{u.email}</p>
-          </div>
-          <span className="font-mono text-[13px] font-black text-amber-500">{u.suggestions}</span>
-          <span className={`font-mono text-[11px] ${muted}`}>{new Date(u.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "2-digit" })}</span>
+    <div className="flex flex-col gap-4">
+      <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+        <div className={`grid grid-cols-[2fr_1fr_1fr_auto] gap-4 px-6 py-3 border-b text-[12px] font-mono uppercase tracking-widest
+          ${isLight ? "border-stone-100 bg-stone-50 text-stone-400" : "border-[#1a1816] bg-[#0c0b0a] text-[#4a3f32]"}`}>
+          <span>Usuario</span>
+          <span>Sugerencias</span>
+          <span>Miembro desde</span>
+          <span></span>
         </div>
-      ))}
+        {users.length === 0 ? (
+          <p className={`px-6 py-8 font-mono text-[13px] uppercase tracking-widest text-center ${muted}`}>Sin sugerencias aún</p>
+        ) : users.map((u, i) => (
+          <div key={u._id}
+            onClick={() => setSelected(selected?._id === u._id ? null : u)}
+            className={`grid grid-cols-[2fr_1fr_1fr_auto] gap-4 items-center px-6 py-4 cursor-pointer transition-all
+              ${i < users.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}
+              ${selected?._id === u._id ? isLight ? "bg-amber-50" : "bg-amber-600/5" : isLight ? "hover:bg-stone-50" : "hover:bg-white/[0.02]"}`}>
+            <div>
+              <p className={`font-mono text-[14px] font-black uppercase ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{u.username}</p>
+              <p className={`font-mono text-[12px] ${muted}`}>{u.email}</p>
+            </div>
+            <span className="font-mono text-[14px] font-black text-amber-500">{u.suggestions?.length || 0}</span>
+            <span className={`font-mono text-[13px] ${muted}`}>{new Date(u.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "2-digit" })}</span>
+            <ChevronRight size={14} className={`transition-transform duration-200 ${selected?._id === u._id ? "rotate-90" : ""} ${muted}`} />
+          </div>
+        ))}
+      </div>
+
+      {/* Detalle con lista de sugerencias */}
+      {selected && (
+        <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+          <div className={`px-6 py-4 border-b flex items-center justify-between ${isLight ? "border-stone-100 bg-stone-50" : "border-[#1a1816] bg-[#0c0b0a]"}`}>
+            <div>
+              <p className={`font-mono text-[15px] font-black uppercase italic ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{selected.username}</p>
+              <p className={`font-mono text-[12px] ${muted}`}>{selected.email} · {selected._id}</p>
+            </div>
+            <button onClick={() => setSelected(null)} className={`p-2 rounded-lg ${isLight ? "hover:bg-stone-100" : "hover:bg-white/5"}`}>
+              <X size={14} className={muted} />
+            </button>
+          </div>
+
+          {(selected.suggestions || []).length === 0 ? (
+            <p className={`px-6 py-6 font-mono text-[13px] uppercase ${muted}`}>Sin sugerencias guardadas</p>
+          ) : (selected.suggestions || []).map((s, i) => (
+            <div key={i} className={`px-6 py-5 flex flex-col gap-3 ${i < selected.suggestions.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <p className={`font-mono text-[15px] font-black uppercase ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{s.nombre}</p>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className={`font-mono text-[11px] uppercase tracking-widest px-2 py-0.5 rounded-md font-bold
+                      ${isLight ? "bg-amber-100 text-amber-700" : "bg-amber-600/20 text-amber-400"}`}>{s.periodo}</span>
+                    {s.fuente && <span className={`font-mono text-[12px] ${muted}`}>{s.fuente}</span>}
+                    <span className={`font-mono text-[11px] ${muted}`}>{new Date(s.fecha).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })}</span>
+                  </div>
+                </div>
+                {s.foto && (
+                  <img src={s.foto} alt="foto" className="w-20 h-20 rounded-xl object-cover shrink-0 border"
+                    style={{ borderColor: isLight ? "#e7e5e4" : "#2a2520" }} />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+
+
 
 // ── Página principal ───────────────────────────────────────────────────────
 export default function AdminPage() {
@@ -465,7 +513,7 @@ export default function AdminPage() {
         <nav className="flex-1 px-3 flex flex-col gap-1">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => { setTab(id); setSelectedUser(null); }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest transition-all text-left
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-mono text-[13px] uppercase tracking-widest transition-all text-left
                 ${tab === id
                   ? "bg-red-500 text-white"
                   : isLight ? "text-stone-500 hover:bg-stone-100 hover:text-stone-700" : "text-[#6b5e4e] hover:bg-white/5 hover:text-[#f5e6c8]"}`}>
@@ -476,7 +524,7 @@ export default function AdminPage() {
 
         <div className="p-4 border-t" style={{ borderColor: isLight ? "#e7e5e4" : "#2a2520" }}>
           <button onClick={logout}
-            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest transition-all
+            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl font-mono text-[13px] uppercase tracking-widest transition-all
               text-red-400 hover:bg-red-500/10`}>
             <LogOut size={13} /> Cerrar sesión
           </button>

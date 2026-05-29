@@ -19,7 +19,7 @@ const ACHIEVEMENTS = [
   { id: "first_visit",     check: (u) => u.history.length >= 1 },
   { id: "first_fav",       check: (u) => u.favorites.length >= 1 },
   { id: "first_note",      check: (u) => u.notes.length >= 1 },
-  { id: "contributor",     check: (u) => (u.suggestions || 0) >= 1 },
+  { id: "contributor",     check: (u) => (Array.isArray(u.suggestions) ? u.suggestions.length : (u.suggestions || 0)) >= 1 },
   { id: "time_traveler",   check: (u) => {
     const eras = new Set(u.history.map(h => ERA_MAP[h.animalEra]).filter(Boolean));
     return eras.size >= 3;
@@ -55,6 +55,10 @@ async function checkAchievements(user, extraData = {}) {
 
   const enriched = {
     ...user.toObject(),
+    history:     user.history     || [],
+    favorites:   user.favorites   || [],
+    notes:       user.notes       || [],
+    achievements:user.achievements|| [],
     favDietas:   extraData.favDietas   || {},
     suggestions: extraData.suggestions || 0,
   };

@@ -63,14 +63,14 @@ router.post('/', authMiddleware, async (req, res) => {
     });
 
     let newAchievements = [];
-    // Incrementar contador y verificar logro
+    // Guardar sugerencia y verificar logro
     try {
       const userDoc = await User.findById(req.user.id);
       if (userDoc) {
-        if (!userDoc.suggestions) userDoc.suggestions = 0;
-        userDoc.suggestions += 1;
+        if (!Array.isArray(userDoc.suggestions)) userDoc.suggestions = [];
+        userDoc.suggestions.push({ nombre: nombre.trim(), periodo, fuente: fuente?.trim() || "", foto: foto || "" });
         await userDoc.save();
-        newAchievements = await checkAchievements(userDoc, { suggestions: userDoc.suggestions });
+        newAchievements = await checkAchievements(userDoc, { suggestions: userDoc.suggestions.length });
       }
     } catch (_) {}
 

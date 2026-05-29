@@ -54,7 +54,13 @@ const userSchema = new mongoose.Schema({
     }
   ],
   isAdmin: { type: Boolean, default: false },
-  suggestions: { type: Number, default: 0 },
+  suggestions: [{
+    nombre:  { type: String, required: true },
+    periodo: { type: String, required: true },
+    fuente:  { type: String, default: "" },
+    foto:    { type: String, default: "" },
+    fecha:   { type: Date,   default: Date.now },
+  }],
   achievements: [
     {
       _id: false,

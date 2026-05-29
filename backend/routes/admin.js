@@ -26,7 +26,10 @@ router.get('/stats', adminAuth, async (req, res) => {
     const totalFavs  = await User.aggregate([{ $group: { _id: null, total: { $sum: { $size: "$favorites" } } } }]);
     const totalHist  = await User.aggregate([{ $group: { _id: null, total: { $sum: { $size: { $ifNull: ["$history", []] } } } } }]);
     const totalNotes = await User.aggregate([{ $group: { _id: null, total: { $sum: { $size: { $ifNull: ["$notes", []] } } } } }]);
-    const totalSugg  = await User.aggregate([{ $group: { _id: null, total: { $sum: { $ifNull: ["$suggestions", 0] } } } }]);
+    const totalSugg  = await User.aggregate([
+      { $addFields: { suggestionsArr: { $cond: { if: { $isArray: "$suggestions" }, then: "$suggestions", else: [] } } } },
+      { $group: { _id: null, total: { $sum: { $size: "$suggestionsArr" } } } }
+    ]);
 
     // Animal más visitado
     const topAnimal = await User.aggregate([
@@ -131,8 +134,8 @@ router.delete('/users/:id/achievements/:achievementId', adminAuth, async (req, r
 // ── Sugerencias ───────────────────────────────────────────────────────────
 router.get('/suggestions', adminAuth, async (req, res) => {
   try {
-    // Las sugerencias están guardadas como contador — aquí devolvemos los usuarios con suggestions > 0
-    const users = await User.find({ suggestions: { $gt: 0 } }).select('username email suggestions createdAt');
+    const users = await User.find({ suggestions: { $type: 'array', $ne: [] } })
+      .select('username email suggestions createdAt');
     res.json(users);
   } catch (err) {
     res.status(500).json({ msg: 'Error de servidor' });

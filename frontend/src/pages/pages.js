@@ -10,6 +10,9 @@ export { default as PaleoMapPage }  from './PaleoMapPage';
 export { default as SugerirPage }  from './SugerirPage';
 export { default as TopFavoritosPage }  from './TopFavoritosPage';
 
+// ── PRECAMBRICO ──────────────────────────────────────────────────────────────
+export { default as EdiacaricoPage } from './EdiacaricoPage';
+
 // ── PALEOZOICO ──────────────────────────────────────────────────────────────
 export { default as PaleozoicoPage }  from './PaleozoicoPage';
 export { default as CambricoPage }    from './CambricoPage';

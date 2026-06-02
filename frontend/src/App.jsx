@@ -11,7 +11,7 @@ import {
   CenozoicoPage,
   PaleogenoPage, PaleocenoPage, EocenoPage, OligocenoPage,
   NeogenoPage,   MiocenoPage,  PliocenoPage,
-  CuaternarioPage, PleistocenoPage, HolocenoPage,
+  CuaternarioPage, PleistocenoPage, HolocenoPage, EdiacaricoPage
 } from "./pages/pages.js";
 
 import Header        from "./components/Header.jsx";
@@ -66,6 +66,9 @@ function App() {
           <Route path="/comparador"    element={<ComparadorPage />} />
           <Route path="/sugerir"       element={<SugerirPage />} />
           <Route path="/admin"         element={<AdminPage />} />
+          
+          {/* Precambrico */}
+          <Route path="/era/ediacarico"             element={<EdiacaricoPage />} />
 
           {/* PALEOZOICO */}
           <Route path="/era/paleozoico"             element={<PaleozoicoPage />} />

@@ -68,11 +68,11 @@ const getRandomFact = (list, exclude = -1) => {
 // ── Cronología del sidebar ─────────────────────────────────────────────────
 const TIMELINE_ERAS = [
   {
-  era: { es: "Ediacárico", en: "Ediacaran", fr: "Édiacarien", it: "Ediacarano" },
+  era: { es: "Precámbrico", en: "Precambrian", fr: "Précambrien", it: "Precambriano" },
   periodos: [
     { name: { es: "Ediacárico", en: "Ediacaran", fr: "Édiacarien", it: "Ediacarano" }, ma: "635", color: "bg-fuchsia-600" },
   ],
-},
+  },
   {
     era: { es: "Paleozoico", en: "Paleozoic", fr: "Paléozoïque", it: "Paleozoico" },
     periodos: [
@@ -705,7 +705,7 @@ const LandingPage = () => {
           {/* Divisor con label */}
           <div className="flex items-center gap-3 mb-6">
             <div className={"flex-1 h-px " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />
-            <span className={"text-[10px] tracking-[0.2em] uppercase " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
+            <span className={"text-[13px] tracking-[0.2em] uppercase " + (isLight ? "text-stone-400" : "text-[#4a3f32]")}>
               {{ es: "Selecciona una era", en: "Select an era", fr: "Sélectionnez une ère", it: "Seleziona un'era" }[lang] || "Selecciona una era"}
             </span>
             <div className={"flex-1 h-px " + (isLight ? "bg-stone-200" : "bg-[#2a2520]")} />

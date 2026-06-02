@@ -20,6 +20,7 @@ const LANGUAGES = [
 ];
 
 const ROUTE_SUBTITLES = {
+  "/era/ediacarico": "Ediacarico",
   "/era/paleozoico": "Paleozoico",
   "/era/paleozoico/cambrico": "Cámbrico",
   "/era/paleozoico/ordovicico": "Ordovícico",

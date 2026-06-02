@@ -7,7 +7,7 @@
 
 export const ERAS = [
   {
-  era: "Ediacárico",
+  era: "Precámbrico",
   eraColor: "#2a0a2a",
   eraTextColor: "#d946ef",
   periodos: [

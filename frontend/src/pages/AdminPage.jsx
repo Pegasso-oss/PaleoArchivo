@@ -6,7 +6,7 @@ import axios from "axios";
 import {
   BarChart2, Users, Trophy, Lightbulb,
   Search, Trash2, Plus, X, RefreshCw, LogOut,
-  ChevronRight, Award
+  ChevronRight, ChevronDown, Award
 } from "lucide-react";
 
 const ADMIN_URL = import.meta.env.DEV ? "http://localhost:5000/api/admin" : "https://paleoarchivo.onrender.com/api/admin";
@@ -332,6 +332,53 @@ function AchievementsTab({ isLight }) {
 }
 
 // ── Suggestions ────────────────────────────────────────────────────────────
+
+// ── Dropdown de estado ─────────────────────────────────────────────────────
+function EstadoDropdown({ estado, estados, onSelect, onDelete }) {
+  const [open, setOpen] = useState(false);
+  const est = estados.find(e => e.id === estado) || estados[0];
+
+  const SOLID_BG = {
+    abierto:     "#16a34a",
+    en_progreso: "#d97706",
+    descartado:  "#57534e",
+    cerrado:     "#dc2626",
+  };
+
+  return (
+    <div className="flex items-center gap-2 shrink-0">
+      {estado === "cerrado" && (
+        <button onClick={e => { e.stopPropagation(); onDelete(); }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] uppercase tracking-widest font-black
+            bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all">
+          <Trash2 size={11} /> Borrar
+        </button>
+      )}
+      <div className="relative" onClick={e => e.stopPropagation()}>
+        <button
+          onClick={() => setOpen(o => !o)}
+          className="flex items-center gap-2 px-4 py-1.5 rounded-lg font-mono text-[11px] uppercase tracking-widest font-black text-white transition-all"
+          style={{ backgroundColor: SOLID_BG[estado] || SOLID_BG.abierto }}>
+          {est.label} <ChevronDown size={11} />
+        </button>
+        {open && (
+          <div className="absolute right-0 top-full mt-1 z-50 rounded-xl overflow-hidden shadow-2xl border border-[#2a2520] min-w-[130px]"
+            style={{ backgroundColor: "#0f0e0c" }}>
+            {estados.map(e => (
+              <button key={e.id}
+                onClick={() => { onSelect(e.id); setOpen(false); }}
+                className="w-full flex items-center gap-2.5 px-4 py-2.5 font-mono text-[11px] uppercase tracking-widest font-black text-left transition-all hover:bg-white/5">
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: SOLID_BG[e.id] }} />
+                <span className={e.color}>{e.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function SuggestionsTab({ isLight }) {
   const [users, setUsers]       = useState([]);
   const [loading, setLoading]   = useState(true);
@@ -339,10 +386,35 @@ function SuggestionsTab({ isLight }) {
   const muted  = isLight ? "text-stone-400"   : "text-[#6b5e4e]";
   const border = isLight ? "border-stone-200" : "border-[#2a2520]";
 
+  const ESTADOS = [
+    { id: "abierto",      label: "Abierto",      color: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/30"  },
+    { id: "en_progreso",  label: "En progreso",  color: "text-amber-400",  bg: "bg-amber-400/10",  border: "border-amber-400/30"  },
+    { id: "descartado",   label: "Descartado",   color: "text-stone-400",  bg: "bg-stone-400/10",  border: "border-stone-400/30"  },
+    { id: "cerrado",      label: "Cerrado",      color: "text-red-400",    bg: "bg-red-400/10",    border: "border-red-400/30"    },
+  ];
+
+  const getEstado = (id) => ESTADOS.find(e => e.id === id) || ESTADOS[0];
+
   useEffect(() => {
     axios.get(`${ADMIN_URL}/suggestions`, { headers: adminHeaders() })
       .then(r => setUsers(r.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
+
+  const updateEstado = async (userId, suggId, estado) => {
+    try {
+      const r = await axios.put(`${ADMIN_URL}/users/${userId}/suggestions/${suggId}`, { estado }, { headers: adminHeaders() });
+      setUsers(us => us.map(u => u._id === userId ? { ...u, suggestions: r.data } : u));
+      setSelected(s => s?._id === userId ? { ...s, suggestions: r.data } : s);
+    } catch {}
+  };
+
+  const deleteSugg = async (userId, suggId) => {
+    try {
+      const r = await axios.delete(`${ADMIN_URL}/users/${userId}/suggestions/${suggId}`, { headers: adminHeaders() });
+      setUsers(us => us.map(u => u._id === userId ? { ...u, suggestions: r.data } : u));
+      setSelected(s => s?._id === userId ? { ...s, suggestions: r.data } : s);
+    } catch {}
+  };
 
   if (loading) return <p className={`font-mono text-[13px] uppercase ${muted}`}>Cargando...</p>;
 
@@ -375,10 +447,9 @@ function SuggestionsTab({ isLight }) {
         ))}
       </div>
 
-      {/* Detalle con lista de sugerencias */}
       {selected && (
-        <div className={`rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
-          <div className={`px-6 py-4 border-b flex items-center justify-between ${isLight ? "border-stone-100 bg-stone-50" : "border-[#1a1816] bg-[#0c0b0a]"}`}>
+        <div className={`rounded-2xl border ${isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]"}`}>
+          <div className={`px-6 py-4 border-b flex items-center justify-between rounded-t-2xl ${isLight ? "border-stone-100 bg-stone-50" : "border-[#1a1816] bg-[#0c0b0a]"}`}>
             <div>
               <p className={`font-mono text-[15px] font-black uppercase italic ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{selected.username}</p>
               <p className={`font-mono text-[12px] ${muted}`}>{selected.email} · {selected._id}</p>
@@ -388,36 +459,52 @@ function SuggestionsTab({ isLight }) {
             </button>
           </div>
 
-          {selected._suggestionsLegacy > 0 && selected.suggestions.length === 0 ? (
+          {selected._suggestionsLegacy > 0 && (!selected.suggestions || selected.suggestions.length === 0) ? (
             <p className={`px-6 py-6 font-mono text-[13px] ${muted}`}>
-              Este usuario tiene <span className="text-amber-500 font-bold">{selected._suggestionsLegacy}</span> sugerencia(s) registradas antes del nuevo sistema — el contenido no está disponible.
+              Este usuario tiene <span className="text-amber-500 font-bold">{selected._suggestionsLegacy}</span> sugerencia(s) del sistema anterior — contenido no disponible.
             </p>
-          ) : selected.suggestions.length === 0 ? (
+          ) : !selected.suggestions || selected.suggestions.length === 0 ? (
             <p className={`px-6 py-6 font-mono text-[13px] uppercase ${muted}`}>Sin sugerencias guardadas</p>
-          ) : selected.suggestions.map((s, i) => (
-            <div key={i} className={`px-6 py-5 flex flex-col gap-3 ${i < selected.suggestions.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex flex-col gap-1 flex-1 min-w-0">
-                  <p className={`font-mono text-[15px] font-black uppercase ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{s.nombre}</p>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className={`font-mono text-[11px] uppercase tracking-widest px-2 py-0.5 rounded-md font-bold
-                      ${isLight ? "bg-amber-100 text-amber-700" : "bg-amber-600/20 text-amber-400"}`}>{s.periodo}</span>
-                    {s.fuente && <span className={`font-mono text-[12px] ${muted}`}>{s.fuente}</span>}
-                    <span className={`font-mono text-[11px] ${muted}`}>{new Date(s.fecha).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })}</span>
+          ) : selected.suggestions.map((s, i) => {
+            const est = getEstado(s.estado || "abierto");
+            return (
+              <div key={s._id || i} className={`px-6 py-5 flex flex-col gap-3 ${i < selected.suggestions.length - 1 ? isLight ? "border-b border-stone-100" : "border-b border-[#1a1816]" : ""}`}>
+                {/* Cabecera sugerencia */}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+                    <p className={`font-mono text-[15px] font-black uppercase ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>{s.nombre}</p>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span className={`font-mono text-[11px] uppercase tracking-widest px-2 py-0.5 rounded-md font-bold
+                        ${isLight ? "bg-amber-100 text-amber-700" : "bg-amber-600/20 text-amber-400"}`}>{s.periodo}</span>
+                      {s.fuente && <span className={`font-mono text-[12px] ${muted}`}>{s.fuente}</span>}
+                      <span className={`font-mono text-[11px] ${muted}`}>{new Date(s.fecha).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })}</span>
+                    </div>
                   </div>
+
+                  {/* Controles estado */}
+                  <EstadoDropdown
+                    estado={s.estado || "abierto"}
+                    estados={ESTADOS}
+                    onSelect={val => updateEstado(selected._id, s._id, val)}
+                    onDelete={() => deleteSugg(selected._id, s._id)}
+                  />
                 </div>
+
+                {/* Foto */}
                 {s.foto && (
-                  <img src={s.foto} alt="foto" className="w-20 h-20 rounded-xl object-cover shrink-0 border"
+                  <img src={s.foto} alt="foto referencia"
+                    className="w-full max-w-xs rounded-xl object-cover border mt-1"
                     style={{ borderColor: isLight ? "#e7e5e4" : "#2a2520" }} />
                 )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
   );
 }
+
 
 
 

@@ -25,17 +25,6 @@ export const translations = {
       subtitleDefault: "Todo sobre el pasado, en tu mano",
       favorites: "Mis Favoritos",
       profile: "Mi Perfil",
-      myProfile: "Mi perfil",
-      compare: "Comparar",
-      cronologia: "Cronología",
-      randomAnimal: "Animal sorpresa",
-      darkMode: "Modo oscuro",
-      lightMode: "Modo claro",
-      fullArchive: "Archivo completo",
-      paleogeography: "Paleogeografía",
-      topFavorites: "Top Favoritos",
-      comparator: "Comparador",
-      suggestSpecies: "Sugerir especie",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
@@ -89,12 +78,14 @@ export const translations = {
       filterDiets: "Dietas",
       filterTypes: "Tipos",
       clearFilters: "Limpiar",
-      today: "Hoy",
       logoutTitle: "Sesión Cerrada",
       logoutSub: "Acceso restringido",
 
       // Eras
       eras: {
+        ediacarico: {
+          desc: "Los primeros seres pluricelulares complejos. Dickinsonia, Charnia y los albores de la vida animal hace 635 millones de años.",
+        },
         paleozoico: {
           desc: "El origen de la vida compleja. Trilobites, bosques de helechos gigantes y los primeros anfibios.",
         },
@@ -234,11 +225,6 @@ export const translations = {
       addedFav: "Añadido a favoritos",
       removedFav: "Eliminado de favoritos",
       connectionError: "Error de conexión",
-      biologicalRivalry: "Rivalidad biológica",
-      loginToAccess: "Iniciar sesión",
-      compareWith: "Comparar con otra especie",
-      noTitle: "Sin título",
-      literatureEnglishOnly: "😅 Solo disponible en inglés, lo sentimos.",
     },
 
     // ── FAVORITES ─────────────────────────────────────────────────────────
@@ -262,19 +248,6 @@ export const translations = {
         language: "Idioma",
         changePassword: "Cambiar contraseña",
         dangerZone: "Zona de peligro",
-        stats: "Estadísticas",
-        statsSubtitle: "Tu actividad en el archivo",
-        history: "Historial de visitados",
-        historySubtitle: "Últimas fichas visitadas",
-        eraFavorite: "Era favorita",
-        visited: "Visitadas",
-        notes: "Notas",
-        favorites_label: "Favoritos",
-        favsByEra: "Favoritos por era",
-        visitedByEra: "Visitadas por era",
-        emptyStats: "Explora el archivo para ver tus estadísticas.",
-        emptyHistory: "Aún no has visitado ninguna ficha.",
-        showMore: "más",
       },
       field: {
         username: "Nombre de usuario",
@@ -314,8 +287,6 @@ export const translations = {
         passwordError: "Error al cambiar",
         nameMismatch: "El nombre no coincide",
         deleteError: "Error al borrar",
-        uploadNotImage: "El archivo debe ser una imagen.",
-        uploadTooLarge: "La imagen no puede superar los 3 MB.",
       },
     },
 
@@ -328,9 +299,6 @@ export const translations = {
       submit: "Entrar al archivo",
       noAccount: "¿No tiene una cuenta?",
       signUp: "Registrarse",
-      backToHome: "← Volver al inicio",
-      serverError: "Error: El servidor no envió el ID de usuario.",
-      connectionError: "Error de conexión",
     },
 
     // ── REGISTER ──────────────────────────────────────────────────────────
@@ -346,16 +314,6 @@ export const translations = {
       submit: "Registrarse",
       hasAccount: "¿Ya tiene una cuenta?",
       signIn: "Iniciar Sesión",
-      backToHome: "← Volver al inicio",
-      passwordMismatch: "ERROR: Las contraseñas no coinciden.",
-      successMsg: "ACCESO CONCEDIDO: Investigador registrado.",
-      errorMsg: "Error en el registro.",
-      panelTitle: "250M años de historia",
-      panelSub: "Accede a tu archivo de investigación.",
-      registerPanelTitle: "Únete al archivo fósil",
-      registerPanelSub: "Crea tu cuenta y comienza tu expedición.",
-      loginSubtitle: "Introduce tus credenciales para continuar",
-      registerSubtitle: "Completa los campos para registrarte",
     },
 
     // ── TOAST ─────────────────────────────────────────────────────────────
@@ -382,6 +340,7 @@ export const translations = {
       Squamata: "Escamoso",
       Mammalia: "Mamífero",
       Crocodylomorpha: "Crocodilomorfo",
+      Ediacaran: "Ediacarano",
     },
 
     // ── ARCHIVO ───────────────────────────────────────────────────────────
@@ -422,40 +381,6 @@ export const translations = {
         gigante:  "Los gigantes prehistóricos (más de 12 metros) son los animales más grandes que han poblado la Tierra. Desde los saurópodos titanosáuridos hasta el Megalodon y el Livyatan, estos colosos dominaron sus ecosistemas durante millones de años y siguen siendo objeto de fascinación científica y popular.",
       },
     },
-    archivoPage: { back: "Volver", records: "registro", recordsP: "registros", noRecords: "No hay registros para este filtro", aboutDiet: "Sobre esta dieta", aboutType: "Sobre este grupo", aboutSize: "Sobre este tamaño", allSpecies: "Todas las especies", fullArchive: "Archivo completo", diet: "Dieta", type: "Tipo", size: "Tamaño", sizeSmall: "Pequeño", sizeMedium: "Mediano", sizeLarge: "Grande", sizeGiant: "Gigante" },
-    favoritesPage: { specimens: "especímenes", filter: "Filtrar", all: "Todos", eras: "Eras", noResults: "Sin resultados", searchPlh: "BUSCAR EN MIS REGISTROS..." },
-    landing_extra: { paleogeographyDesc: "Todos los animales del archivo sobre el mapa global. Usa las tarjetas de era para filtrar qué especies se muestran. Haz clic en un punto para ver la ficha del animal.", filterSize: "Tamaño", selectEra: "Selecciona una era", funFact: "Dato curioso", filterCount: "registros", timeScale: "Escala temporal", random: "Aleatorio", discover: "Descubrir", again: "Otra vez", topFavTitle: "Top favoritos", topFavEmpty: "Sin datos aún", topFavViewAll: "Ver todos", topFavUsers: "usuarios", fullArchive: "Archivo completo", browseArchive: "Ver el archivo", browseOf: "Ver archivo de", paleogeography: "Paleogeografía", paleogeographySub: "Mapa de la Tierra prehistórica", suggestSpecies: "Sugerir especie", suggestSpeciesSub: "¿Echas algo en falta?" },
-    animalMap: { discoveryZone: "Zona de hallazgo", viewFullMap: "Ver mapa completo", noLocation: "Ubicación no disponible", noCoords: "Coordenadas de hallazgo no registradas", filterByEra: "Filtrar por era", of: "de", speciesVisible: "especies visibles", speciesSingular: "especie", speciesPlural: "especies", loadingMap: "Cargando mapa...", findingsOnMap: "hallazgos en el mapa", viewRecord: "Ver ficha" },
-    timeline: { title: "Cronología geológica", subtitle: "16 periodos · 538 Ma – presente", close: "Cerrar", selectPeriod: "Selecciona un periodo", climate: "Clima", extinction: "Extinción", repSpecies: "Especies representativas", records: "registros", diet: "Dieta", size: "Tamaño" },
-    notes: { title: "Nota privada", loginPrompt: "Inicia sesión para añadir notas privadas", saved: "Guardada ✓", deleted: "Borrada", error: "Error", unsaved: "Sin guardar", placeholder: "Escribe tus notas sobre este animal...", savedOn: "guardada", save: "Guardar", delete: "Borrar" },
-    comparador: { back: "Volver", breadcrumb: "PaleoArchivo · Comparador de tamaño", title: "¿Cuánto más", titleAccent: "grande", speciesA: "Especie A", speciesB: "Especie B", searchPlh: "Buscar especie...", scaleCaption: "Comparación a escala real · humano = 1.75 m de referencia", noHeight: "Sin datos de altura", was: "era", biggerThan: "más grande que", diffOf: "— diferencia de", emptyTitle: "Selecciona dos especies", emptySub: "para comparar su tamaño", viewRecord: "Ver ficha" },
-    suggest: { back: "Volver", breadcrumb: "PaleoArchivo · Sugerir especie", title: "Sugerir una", titleAccent: "especie", subtitle: "¿Echas en falta una especie en el archivo? Envíanos tu sugerencia con una fuente científica.", locked: "Acceso restringido", lockedDesc: "Necesitas una cuenta para sugerir especies al archivo.", login: "Iniciar sesión", register: "Crear cuenta", sendingAs: "Enviando como", nameLabel: "Nombre de la especie", namePlh: "Ej: Therizinosaurus cheloniformis", periodLabel: "Periodo geológico", sourceLabel: "Fuente científica", optional: "opcional", sourcePlh: "Ej: Wikipedia, paper DOI, libro de referencia...", sourceHint: "Paper, libro, Wikipedia con referencias, o enlace a fuente primaria", sending: "Enviando...", submit: "Enviar sugerencia", validation: "El nombre y el periodo son obligatorios.", sendError: "Error al enviar. Inténtalo de nuevo.", disclaimer: "Las sugerencias son revisadas manualmente. No todas pueden añadirse, pero todas se valoran." },
-    settings: { title: "Ajustes de Perfil", interface: "Interfaz", dark: "Oscura", light: "Clara", language: "Idioma" },
-
-    timelineData: [
-      { era: "Paleozoico", periodos: [
-        { id: "cambrico", nombre: "Cámbrico", descripcion: "Explosión de vida marina multicultural. En apenas 20 millones de años aparecen casi todos los filos animales conocidos. Los mares cálidos y someros se llenan de vida por primera vez.", clima: "Cálido, sin hielo polar", extinciones: "Gran extinción del Cámbrico tardío (~94% especies marinas)" },
-        { id: "ordovicico", nombre: "Ordovícico", descripcion: "Los mares cubren Gondwana. Explosión de invertebrados marinos: briozoos, equinodermos y corales. Aparecen los primeros vertebrados sin mandíbula.", clima: "Frío al final, glaciación en Gondwana", extinciones: "2ª extinción masiva: ~85% de especies" },
-        { id: "silurico", nombre: "Silúrico", descripcion: "Recuperación tras la extinción. Las primeras plantas vasculares colonizan la tierra firme. Los peces con mandíbulas diversifican los océanos.", clima: "Cálido y estable", extinciones: "Extinción del Silúrico tardío (menor escala)" },
-        { id: "devonico", nombre: "Devónico", descripcion: "La edad de los peces. Los océanos están dominados por placodermos gigantes. En tierra, los primeros bosques aparecen y los tetrápodos dan sus primeros pasos.", clima: "Cálido, dióxido de carbono alto", extinciones: "Extinción del Devónico tardío: ~75% de especies" },
-        { id: "carbonifero", nombre: "Carbonífero", descripcion: "Bosques tropicales de licopodios gigantes cubren Euramerica. El oxígeno atmosférico alcanza el 35%, permitiendo insectos y arácnidos de tamaño descomunal.", clima: "Cálido y húmedo al inicio, glaciación al final", extinciones: "Extinción del Carbonífero tardío (colapso forestal)" },
-        { id: "permico", nombre: "Pérmico", descripcion: "Los sinápsidos dominan la tierra. Pangea está completamente formada. Termina con la peor extinción de la historia: el Gran Morir elimina el 96% de las especies.", clima: "Seco y extremo. Desertificación de Pangea.", extinciones: "Gran Extinción Permo-Triásica: 96% de especies" },
-      ]},
-      { era: "Mesozoico", periodos: [
-        { id: "triasico", nombre: "Triásico", descripcion: "Recuperación lenta tras el Gran Morir. Los arcosaurios se diversifican: pterosaurios, cocodrilos y los primeros dinosaurios. Los mamíferos aparecen de forma discreta.", clima: "Cálido y seco. Sin glaciares.", extinciones: "Extinción del Triásico-Jurásico: ~80% de especies" },
-        { id: "jurasico", nombre: "Jurásico", descripcion: "Los dinosaurios dominan todos los continentes. Los saurópodos alcanzan tamaños sin precedentes. Archaeopteryx establece el vínculo entre dinosaurios y aves.", clima: "Cálido y húmedo. Mares cálidos y someros.", extinciones: "Extinción del Jurásico tardío (moderada)" },
-        { id: "cretacico", nombre: "Cretácico", descripcion: "Pico de la diversidad dinosauriana. Las plantas con flores transforman los ecosistemas terrestres. Finaliza con el impacto de Chicxulub y la extinción K-Pg.", clima: "Muy cálido. Sin hielo polar. Nivel del mar alto.", extinciones: "Extinción K-Pg: 76% de especies. Fin de los dinosaurios no avianos." },
-      ]},
-      { era: "Cenozoico", periodos: [
-        { id: "paleoceno", nombre: "Paleoceno", descripcion: "Los mamíferos ocupan los nichos ecológicos dejados por los dinosaurios. Pequeños y generalistas al principio, se diversifican rápidamente en formas nuevas.", clima: "Cálido y en aumento. Bosques tropicales extensos.", extinciones: "Máximo Térmico del Paleoceno-Eoceno (IETM)" },
-        { id: "eoceno", nombre: "Eoceno", descripcion: "Los cetáceos regresan al mar. Aparecen los primeros caballos, rinocerontes y tapires. El clima alcanza su punto más cálido del Cenozoico.", clima: "Máximo térmico. Selvas tropicales hasta el Ártico.", extinciones: "Gran Corte Eoceno-Oligoceno: enfriamiento global" },
-        { id: "oligoceno", nombre: "Oligoceno", descripcion: "La Antártida se congela y los pastizales se expanden globalmente. Los mamíferos se especializan. Aparece el mayor mamífero terrestre conocido: Paraceratherium.", clima: "Enfriamiento progresivo. Formación de hielo en la Antártida.", extinciones: "Extinción del Oligoceno tardío (moderada)" },
-        { id: "mioceno", nombre: "Mioceno", descripcion: "Los pastizales dominan los continentes. Megalodon reina en los océanos. Grandes primates africanos evolucionan hacia linajes que incluyen al ser humano.", clima: "Variable. Enfriamiento gradual con pulsos cálidos.", extinciones: "Extinción del Mioceno tardío (moderada)" },
-        { id: "plioceno", nombre: "Plioceno", descripcion: "El enfriamiento global forma el corredor de hielo ártico. Los homínidos bípedos prosperan en las sabanas africanas. El Gran Intercambio Americano conecta las Américas.", clima: "Frío. Inicio de los ciclos glaciales.", extinciones: "Extinción del Plioceno (moderada)" },
-        { id: "pleistoceno", nombre: "Pleistoceno", descripcion: "Las glaciaciones modelan los continentes. La megafauna domina cada ecosistema. Homo sapiens emerge en África y se expande por todo el planeta.", clima: "Ciclos glaciales-interglaciares. Hasta 3 km de hielo en Norteamérica.", extinciones: "Extinción de la megafauna del Pleistoceno tardío" },
-        { id: "holoceno", nombre: "Holoceno", descripcion: "El interglacial actual. La civilización humana transforma el planeta. La tasa de extinción supera 1000 veces la media geológica.", clima: "Templado y estable. Calentamiento acelerado desde 1850.", extinciones: "6ª extinción masiva en curso (antropogénica)" },
-      ]},
-    ],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -475,17 +400,6 @@ export const translations = {
       subtitleDefault: "Everything about the past, in your hand",
       favorites: "My Favorites",
       profile: "My Profile",
-      myProfile: "My profile",
-      compare: "Compare",
-      cronologia: "Timeline",
-      randomAnimal: "Random animal",
-      darkMode: "Dark mode",
-      lightMode: "Light mode",
-      fullArchive: "Full archive",
-      paleogeography: "Paleogeography",
-      topFavorites: "Top Favorites",
-      comparator: "Comparator",
-      suggestSpecies: "Suggest species",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
@@ -538,11 +452,13 @@ export const translations = {
       filterDiets: "Diets",
       filterTypes: "Types",
       clearFilters: "Clear",
-      today: "Today",
       logoutTitle: "Session Closed",
       logoutSub: "Access restricted",
 
       eras: {
+        ediacarico: {
+          desc: "The first complex multicellular beings. Dickinsonia, Charnia and the dawn of animal life 635 million years ago.",
+        },
         paleozoico: {
           desc: "The origin of complex life. Trilobites, giant fern forests and the first amphibians.",
         },
@@ -662,11 +578,6 @@ export const translations = {
       addedFav: "Added to favorites",
       removedFav: "Removed from favorites",
       connectionError: "Connection error",
-      biologicalRivalry: "Biological rivalry",
-      loginToAccess: "Log in",
-      compareWith: "Compare with another species",
-      noTitle: "No title",
-      literatureEnglishOnly: "",
     },
 
     favorites: {
@@ -688,19 +599,6 @@ export const translations = {
         language: "Language",
         changePassword: "Change password",
         dangerZone: "Danger zone",
-        stats: "Statistics",
-        statsSubtitle: "Your activity in the archive",
-        history: "Visited history",
-        historySubtitle: "Last visited records",
-        eraFavorite: "Favourite era",
-        visited: "Visited",
-        notes: "Notes",
-        favorites_label: "Favourites",
-        favsByEra: "Favourites by era",
-        visitedByEra: "Visited by era",
-        emptyStats: "Explore the archive to see your statistics.",
-        emptyHistory: "You haven't visited any record yet.",
-        showMore: "more",
       },
       field: {
         username: "Username",
@@ -739,8 +637,6 @@ export const translations = {
         passwordError: "Error changing password",
         nameMismatch: "Name does not match",
         deleteError: "Error deleting account",
-        uploadNotImage: "File must be an image.",
-        uploadTooLarge: "Image cannot exceed 3 MB.",
       },
     },
 
@@ -752,9 +648,6 @@ export const translations = {
       submit: "Enter the archive",
       noAccount: "Don't have an account?",
       signUp: "Sign Up",
-      backToHome: "← Back to home",
-      serverError: "Error: Server did not send user ID.",
-      connectionError: "Connection error",
     },
 
     register: {
@@ -769,16 +662,6 @@ export const translations = {
       submit: "Register",
       hasAccount: "Already have an account?",
       signIn: "Log In",
-      backToHome: "← Back to home",
-      passwordMismatch: "ERROR: Passwords do not match.",
-      successMsg: "ACCESS GRANTED: Researcher registered.",
-      errorMsg: "Registration error.",
-      panelTitle: "250M years of history",
-      panelSub: "Access your research archive.",
-      registerPanelTitle: "Join the fossil archive",
-      registerPanelSub: "Create your account and start your expedition.",
-      loginSubtitle: "Enter your credentials to continue",
-      registerSubtitle: "Fill in the fields to register",
     },
 
     toast: {
@@ -803,6 +686,7 @@ export const translations = {
       Squamata: "Squamate",
       Mammalia: "Mammal",
       Crocodylomorpha: "Crocodylomorph",
+      Ediacaran: "Ediacaran",
     },
 
     archivo: {
@@ -842,40 +726,6 @@ export const translations = {
         gigante:  "Prehistoric giants (over 12 metres) are the largest animals to have ever inhabited the Earth. From titanosaur sauropods to Megalodon and Livyatan, these colossi dominated their ecosystems for millions of years and remain objects of scientific and popular fascination.",
       },
     },
-    archivoPage: { back: "Back", records: "record", recordsP: "records", noRecords: "No records for this filter", aboutDiet: "About this diet", aboutType: "About this group", aboutSize: "About this size", allSpecies: "All species", fullArchive: "Full archive", diet: "Diet", type: "Type", size: "Size", sizeSmall: "Small", sizeMedium: "Medium", sizeLarge: "Large", sizeGiant: "Giant" },
-    favoritesPage: { specimens: "specimens", filter: "Filter", all: "All", eras: "Eras", noResults: "No results", searchPlh: "SEARCH MY RECORDS..." },
-    landing_extra: { paleogeographyDesc: "All animals from the archive on the global map. Use the era cards to filter which species are shown. Click on a point to view the animal's record.", filterSize: "Size", selectEra: "Select an era", funFact: "Fun fact", filterCount: "records", timeScale: "Time scale", random: "Random", discover: "Discover", again: "Again", topFavTitle: "Top favorites", topFavEmpty: "No data yet", topFavViewAll: "View all", topFavUsers: "users", fullArchive: "Full archive", browseArchive: "Browse archive", browseOf: "Browse", paleogeography: "Paleogeography", paleogeographySub: "Prehistoric Earth map", suggestSpecies: "Suggest species", suggestSpeciesSub: "Missing something?" },
-    animalMap: { discoveryZone: "Discovery zone", viewFullMap: "View full map", noLocation: "Location not available", noCoords: "Discovery coordinates not registered", filterByEra: "Filter by era", of: "of", speciesVisible: "species visible", speciesSingular: "species", speciesPlural: "species", loadingMap: "Loading map...", findingsOnMap: "findings on map", viewRecord: "View record" },
-    timeline: { title: "Geological timeline", subtitle: "16 periods · 538 Ma – present", close: "Close", selectPeriod: "Select a period", climate: "Climate", extinction: "Extinction", repSpecies: "Representative species", records: "records", diet: "Diet", size: "Size" },
-    notes: { title: "Private note", loginPrompt: "Log in to add private notes", saved: "Saved ✓", deleted: "Deleted", error: "Error", unsaved: "Unsaved", placeholder: "Write your notes about this animal...", savedOn: "saved", save: "Save", delete: "Delete" },
-    comparador: { back: "Back", breadcrumb: "PaleoArchivo · Size comparator", title: "How much", titleAccent: "bigger", speciesA: "Species A", speciesB: "Species B", searchPlh: "Search species...", scaleCaption: "Real scale comparison · human = 1.75 m reference", noHeight: "No height data", was: "was", biggerThan: "bigger than", diffOf: "— difference of", emptyTitle: "Select two species", emptySub: "to compare their size", viewRecord: "View record" },
-    suggest: { back: "Back", breadcrumb: "PaleoArchivo · Suggest a species", title: "Suggest a", titleAccent: "species", subtitle: "Missing a species in the archive? Send us your suggestion with a scientific source.", locked: "Restricted access", lockedDesc: "You need an account to suggest species to the archive.", login: "Log in", register: "Create account", sendingAs: "Sending as", nameLabel: "Species name", namePlh: "E.g.: Therizinosaurus cheloniformis", periodLabel: "Geological period", sourceLabel: "Scientific source", optional: "optional", sourcePlh: "E.g.: Wikipedia, DOI paper, reference book...", sourceHint: "Paper, book, Wikipedia with references, or link to primary source", sending: "Sending...", submit: "Send suggestion", validation: "Name and period are required.", sendError: "Error sending. Please try again.", disclaimer: "Suggestions are reviewed manually. Not all can be added, but all are appreciated." },
-    settings: { title: "Profile Settings", interface: "Interface", dark: "Dark", light: "Light", language: "Language" },
-
-    timelineData: [
-      { era: "Paleozoic", periodos: [
-        { id: "cambrico", nombre: "Cambrian", descripcion: "An explosion of multicellular marine life. In barely 20 million years, almost all known animal phyla appear. Warm, shallow seas teem with life for the first time.", clima: "Warm, no polar ice", extinciones: "Late Cambrian extinction (~94% of marine species)" },
-        { id: "ordovicico", nombre: "Ordovician", descripcion: "Seas cover Gondwana. Explosion of marine invertebrates: bryozoans, echinoderms and corals. The first jawless vertebrates appear.", clima: "Cold at the end, glaciation in Gondwana", extinciones: "2nd mass extinction: ~85% of species" },
-        { id: "silurico", nombre: "Silurian", descripcion: "Recovery after the extinction. The first vascular plants colonise dry land. Jawed fish diversify the oceans.", clima: "Warm and stable", extinciones: "Late Silurian extinction (minor scale)" },
-        { id: "devonico", nombre: "Devonian", descripcion: "The age of fishes. Oceans are dominated by giant placoderms. On land, the first forests appear and tetrapods take their first steps.", clima: "Warm, high carbon dioxide", extinciones: "Late Devonian extinction: ~75% of species" },
-        { id: "carbonifero", nombre: "Carboniferous", descripcion: "Tropical forests of giant lycopsids cover Euramerica. Atmospheric oxygen reaches 35%, enabling enormous insects and arachnids.", clima: "Warm and humid at first, glaciation at the end", extinciones: "Late Carboniferous extinction (forest collapse)" },
-        { id: "permico", nombre: "Permian", descripcion: "Synapsids dominate the land. Pangaea is fully formed. Ends with the worst extinction in history: the Great Dying wipes out 96% of species.", clima: "Dry and extreme. Desertification of Pangaea.", extinciones: "Permo-Triassic mass extinction: 96% of species" },
-      ]},
-      { era: "Mesozoic", periodos: [
-        { id: "triasico", nombre: "Triassic", descripcion: "Slow recovery after the Great Dying. Archosaurs diversify: pterosaurs, crocodilians and the first dinosaurs. Mammals appear discreetly.", clima: "Warm and dry. No glaciers.", extinciones: "Triassic-Jurassic extinction: ~80% of species" },
-        { id: "jurasico", nombre: "Jurassic", descripcion: "Dinosaurs dominate every continent. Sauropods reach unprecedented sizes. Archaeopteryx establishes the link between dinosaurs and birds.", clima: "Warm and humid. Warm, shallow seas.", extinciones: "Late Jurassic extinction (moderate)" },
-        { id: "cretacico", nombre: "Cretaceous", descripcion: "Peak dinosaur diversity. Flowering plants transform terrestrial ecosystems. Ends with the Chicxulub impact and the K-Pg extinction.", clima: "Very warm. No polar ice. High sea level.", extinciones: "K-Pg extinction: 76% of species. End of non-avian dinosaurs." },
-      ]},
-      { era: "Cenozoic", periodos: [
-        { id: "paleoceno", nombre: "Paleocene", descripcion: "Mammals fill the ecological niches left by dinosaurs. Small and generalist at first, they diversify rapidly into new forms.", clima: "Warm and rising. Extensive tropical forests.", extinciones: "Paleocene-Eocene Thermal Maximum (PETM)" },
-        { id: "eoceno", nombre: "Eocene", descripcion: "Cetaceans return to the sea. The first horses, rhinoceroses and tapirs appear. The climate reaches its warmest point in the Cenozoic.", clima: "Thermal maximum. Tropical forests up to the Arctic.", extinciones: "Eocene-Oligocene transition: global cooling" },
-        { id: "oligoceno", nombre: "Oligocene", descripcion: "Antarctica freezes and grasslands expand globally. Mammals specialise. The largest known land mammal appears: Paraceratherium.", clima: "Progressive cooling. Ice sheet forms in Antarctica.", extinciones: "Late Oligocene extinction (moderate)" },
-        { id: "mioceno", nombre: "Miocene", descripcion: "Grasslands dominate the continents. Megalodon rules the oceans. Great African apes evolve toward lineages that include humans.", clima: "Variable. Gradual cooling with warm pulses.", extinciones: "Late Miocene extinction (moderate)" },
-        { id: "plioceno", nombre: "Pliocene", descripcion: "Global cooling forms the Arctic ice corridor. Bipedal hominids thrive in African savannahs. The Great American Interchange connects the Americas.", clima: "Cold. Onset of glacial cycles.", extinciones: "Pliocene extinction (moderate)" },
-        { id: "pleistoceno", nombre: "Pleistocene", descripcion: "Ice ages shape the continents. Megafauna dominates every ecosystem. Homo sapiens emerges in Africa and spreads across the globe.", clima: "Glacial-interglacial cycles. Up to 3 km of ice in North America.", extinciones: "Late Pleistocene megafauna extinction" },
-        { id: "holoceno", nombre: "Holocene", descripcion: "The current interglacial. Human civilisation transforms the planet. The extinction rate exceeds the geological average by 1,000 times.", clima: "Temperate and stable. Accelerated warming since 1850.", extinciones: "6th mass extinction in progress (anthropogenic)" },
-      ]},
-    ],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -895,17 +745,6 @@ export const translations = {
       subtitleDefault: "Tout sur le passé, dans votre main",
       favorites: "Mes Favoris",
       profile: "Mon Profil",
-      myProfile: "Mon profil",
-      compare: "Comparer",
-      cronologia: "Chronologie",
-      randomAnimal: "Animal aléatoire",
-      darkMode: "Mode sombre",
-      lightMode: "Mode clair",
-      fullArchive: "Archive complète",
-      paleogeography: "Paléogéographie",
-      topFavorites: "Top Favoris",
-      comparator: "Comparateur",
-      suggestSpecies: "Suggérer une espèce",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
@@ -958,11 +797,13 @@ export const translations = {
       filterDiets: "Régimes",
       filterTypes: "Types",
       clearFilters: "Effacer",
-      today: "Aujourd'hui",
       logoutTitle: "Session Fermée",
       logoutSub: "Accès restreint",
 
       eras: {
+        ediacarico: {
+          desc: "Les premiers êtres multicellulaires complexes. Dickinsonia, Charnia et l'aube de la vie animale il y a 635 millions d'années.",
+        },
         paleozoico: {
           desc: "L'origine de la vie complexe. Trilobites, forêts de fougères géantes et les premiers amphibiens.",
         },
@@ -1082,11 +923,6 @@ export const translations = {
       addedFav: "Ajouté aux favoris",
       removedFav: "Retiré des favoris",
       connectionError: "Erreur de connexion",
-      biologicalRivalry: "Rivalité biologique",
-      loginToAccess: "Se connecter",
-      compareWith: "Comparer avec une autre espèce",
-      noTitle: "Sans titre",
-      literatureEnglishOnly: "😅 Disponible en anglais uniquement, désolé.",
     },
 
     favorites: {
@@ -1108,19 +944,6 @@ export const translations = {
         language: "Langue",
         changePassword: "Changer le mot de passe",
         dangerZone: "Zone de danger",
-        stats: "Statistiques",
-        statsSubtitle: "Votre activité dans les archives",
-        history: "Historique des visites",
-        historySubtitle: "Dernières fiches consultées",
-        eraFavorite: "Ère favorite",
-        visited: "Consultées",
-        notes: "Notes",
-        favorites_label: "Favoris",
-        favsByEra: "Favoris par ère",
-        visitedByEra: "Consultées par ère",
-        emptyStats: "Explorez les archives pour voir vos statistiques.",
-        emptyHistory: "Vous n'avez encore consulté aucune fiche.",
-        showMore: "de plus",
       },
       field: {
         username: "Nom d'utilisateur",
@@ -1160,8 +983,6 @@ export const translations = {
         passwordError: "Erreur lors du changement",
         nameMismatch: "Le nom ne correspond pas",
         deleteError: "Erreur lors de la suppression",
-        uploadNotImage: "Le fichier doit être une image.",
-        uploadTooLarge: "L'image ne peut pas dépasser 3 Mo.",
       },
     },
 
@@ -1173,9 +994,6 @@ export const translations = {
       submit: "Accéder aux archives",
       noAccount: "Vous n'avez pas de compte ?",
       signUp: "S'inscrire",
-      backToHome: "← Retour à l'accueil",
-      serverError: "Erreur: Le serveur n'a pas envoyé l'ID utilisateur.",
-      connectionError: "Erreur de connexion",
     },
 
     register: {
@@ -1190,16 +1008,6 @@ export const translations = {
       submit: "S'inscrire",
       hasAccount: "Vous avez déjà un compte ?",
       signIn: "Se Connecter",
-      backToHome: "← Retour à l'accueil",
-      passwordMismatch: "ERREUR: Les mots de passe ne correspondent pas.",
-      successMsg: "ACCÈS ACCORDÉ: Chercheur enregistré.",
-      errorMsg: "Erreur d'inscription.",
-      panelTitle: "250M ans d'histoire",
-      panelSub: "Accédez à votre archive de recherche.",
-      registerPanelTitle: "Rejoignez l'archive fossile",
-      registerPanelSub: "Créez votre compte et commencez votre expédition.",
-      loginSubtitle: "Entrez vos identifiants pour continuer",
-      registerSubtitle: "Remplissez les champs pour vous inscrire",
     },
 
     toast: {
@@ -1224,6 +1032,7 @@ export const translations = {
       Squamata: "Squamate",
       Mammalia: "Mammifère",
       Crocodylomorpha: "Crocodylomorphe",
+      Ediacaran: "Édiacarien",
     },
 
     archivo: {
@@ -1263,40 +1072,6 @@ export const translations = {
         gigante:  "Les géants préhistoriques (plus de 12 mètres) sont les plus grands animaux ayant jamais peuplé la Terre. Des sauropodes titanosauridés au Megalodon et au Livyatan, ces colosses ont dominé leurs écosystèmes pendant des millions d'années et continuent de fasciner scientifiques et grand public.",
       },
     },
-    archivoPage: { back: "Retour", records: "enregistrement", recordsP: "enregistrements", noRecords: "Aucun enregistrement pour ce filtre", aboutDiet: "Sur ce régime", aboutType: "Sur ce groupe", aboutSize: "Sur cette taille", allSpecies: "Toutes les espèces", fullArchive: "Archive complète", diet: "Régime", type: "Type", size: "Taille", sizeSmall: "Petit", sizeMedium: "Moyen", sizeLarge: "Grand", sizeGiant: "Géant" },
-    favoritesPage: { specimens: "spécimens", filter: "Filtrer", all: "Tous", eras: "Ères", noResults: "Sans résultats", searchPlh: "CHERCHER DANS MES REGISTRES..." },
-    landing_extra: { paleogeographyDesc: "Tous les animaux de l'archive sur la carte mondiale. Utilisez les cartes d'ère pour filtrer les espèces affichées. Cliquez sur un point pour voir la fiche de l'animal.", filterSize: "Taille", selectEra: "Sélectionnez une ère", funFact: "Le saviez-vous", filterCount: "enregistrements", timeScale: "Échelle temporelle", random: "Aléatoire", discover: "Découvrir", again: "Encore", topFavTitle: "Top favoris", topFavEmpty: "Pas encore de données", topFavViewAll: "Voir tout", topFavUsers: "utilisateurs", fullArchive: "Archive complète", browseArchive: "Voir l'archive", browseOf: "Voir", paleogeography: "Paléogéographie", paleogeographySub: "Carte de la Terre préhistorique", suggestSpecies: "Suggérer une espèce", suggestSpeciesSub: "Il manque quelque chose?" },
-    animalMap: { discoveryZone: "Zone de découverte", viewFullMap: "Voir la carte complète", noLocation: "Emplacement non disponible", noCoords: "Coordonnées de découverte non enregistrées", filterByEra: "Filtrer par ère", of: "sur", speciesVisible: "espèces visibles", speciesSingular: "espèce", speciesPlural: "espèces", loadingMap: "Chargement de la carte...", findingsOnMap: "découvertes sur la carte", viewRecord: "Voir la fiche" },
-    timeline: { title: "Chronologie géologique", subtitle: "16 périodes · 538 Ma – présent", close: "Fermer", selectPeriod: "Sélectionnez une période", climate: "Climat", extinction: "Extinction", repSpecies: "Espèces représentatives", records: "enregistrements", diet: "Régime", size: "Taille" },
-    notes: { title: "Note privée", loginPrompt: "Connectez-vous pour ajouter des notes privées", saved: "Enregistrée ✓", deleted: "Supprimée", error: "Erreur", unsaved: "Non enregistrée", placeholder: "Écrivez vos notes sur cet animal...", savedOn: "enregistrée", save: "Enregistrer", delete: "Supprimer" },
-    comparador: { back: "Retour", breadcrumb: "PaleoArchivo · Comparateur de taille", title: "Quelle est la", titleAccent: "différence", speciesA: "Espèce A", speciesB: "Espèce B", searchPlh: "Rechercher une espèce...", scaleCaption: "Comparaison à échelle réelle · humain = 1,75 m de référence", noHeight: "Pas de données de hauteur", was: "était", biggerThan: "plus grand que", diffOf: "— différence de", emptyTitle: "Sélectionnez deux espèces", emptySub: "pour comparer leur taille", viewRecord: "Voir la fiche" },
-    suggest: { back: "Retour", breadcrumb: "PaleoArchivo · Suggérer une espèce", title: "Suggérer une", titleAccent: "espèce", subtitle: "Il manque une espèce dans les archives ? Envoyez-nous votre suggestion avec une source scientifique.", locked: "Accès restreint", lockedDesc: "Vous avez besoin d'un compte pour suggérer des espèces.", login: "Se connecter", register: "Créer un compte", sendingAs: "Envoi en tant que", nameLabel: "Nom de l'espèce", namePlh: "Ex: Therizinosaurus cheloniformis", periodLabel: "Période géologique", sourceLabel: "Source scientifique", optional: "optionnel", sourcePlh: "Ex: Wikipedia, DOI, livre de référence...", sourceHint: "Article, livre, Wikipedia avec références, ou lien vers une source primaire", sending: "Envoi...", submit: "Envoyer la suggestion", validation: "Le nom et la période sont obligatoires.", sendError: "Erreur lors de l'envoi. Veuillez réessayer.", disclaimer: "Les suggestions sont examinées manuellement. Toutes sont appréciées." },
-    settings: { title: "Paramètres du Profil", interface: "Interface", dark: "Sombre", light: "Claire", language: "Langue" },
-
-    timelineData: [
-      { era: "Paléozoïque", periodos: [
-        { id: "cambrico", nombre: "Cambrien", descripcion: "Explosion de vie marine multicellulaire. En à peine 20 millions d'années, presque tous les embranchements animaux connus apparaissent.", clima: "Chaud, sans glace polaire", extinciones: "Grande extinction du Cambrien tardif (~94 % des espèces marines)" },
-        { id: "ordovicico", nombre: "Ordovicien", descripcion: "Les mers couvrent le Gondwana. Explosion d'invertébrés marins : bryozoaires, échinodermes et coraux. Les premiers vertébrés sans mâchoire apparaissent.", clima: "Froid à la fin, glaciation au Gondwana", extinciones: "2e extinction de masse : ~85 % des espèces" },
-        { id: "silurico", nombre: "Silurien", descripcion: "Récupération après l'extinction. Les premières plantes vasculaires colonisent la terre ferme. Les poissons à mâchoires diversifient les océans.", clima: "Chaud et stable", extinciones: "Extinction du Silurien tardif (faible ampleur)" },
-        { id: "devonico", nombre: "Dévonien", descripcion: "L'âge des poissons. Les océans sont dominés par des placodermes géants. Sur terre, les premières forêts apparaissent et les tétrapodes font leurs premiers pas.", clima: "Chaud, dioxyde de carbone élevé", extinciones: "Extinction du Dévonien tardif : ~75 % des espèces" },
-        { id: "carbonifero", nombre: "Carbonifère", descripcion: "Des forêts tropicales de lycopsides géants couvrent l'Euramériique. L'oxygène atmosphérique atteint 35 %, permettant des insectes et araignées de taille démesurée.", clima: "Chaud et humide au début, glaciation à la fin", extinciones: "Extinction du Carbonifère tardif (effondrement forestier)" },
-        { id: "permico", nombre: "Permien", descripcion: "Les synapsides dominent la terre. La Pangée est entièrement formée. Se termine par la pire extinction de l'histoire : la Grande Mortification élimine 96 % des espèces.", clima: "Sec et extrême. Désertification de la Pangée.", extinciones: "Extinction Permo-Triasique : 96 % des espèces" },
-      ]},
-      { era: "Mésozoïque", periodos: [
-        { id: "triasico", nombre: "Trias", descripcion: "Lente récupération après la Grande Mortification. Les archosaures se diversifient : ptérosaures, crocodiliens et premiers dinosaures.", clima: "Chaud et sec. Sans glaciers.", extinciones: "Extinction Trias-Jurassique : ~80 % des espèces" },
-        { id: "jurasico", nombre: "Jurassique", descripcion: "Les dinosaures dominent tous les continents. Les sauropodes atteignent des tailles sans précédent. Archaeopteryx établit le lien entre dinosaures et oiseaux.", clima: "Chaud et humide. Mers chaudes et peu profondes.", extinciones: "Extinction du Jurassique tardif (modérée)" },
-        { id: "cretacico", nombre: "Crétacé", descripcion: "Pic de diversité des dinosaures. Les plantes à fleurs transforment les écosystèmes terrestres. Se termine par l'impact de Chicxulub et l'extinction K-Pg.", clima: "Très chaud. Sans glace polaire. Niveau de la mer élevé.", extinciones: "Extinction K-Pg : 76 % des espèces. Fin des dinosaures non aviens." },
-      ]},
-      { era: "Cénozoïque", periodos: [
-        { id: "paleoceno", nombre: "Paléocène", descripcion: "Les mammifères occupent les niches écologiques laissées par les dinosaures. Petits et généralistes au début, ils se diversifient rapidement en nouvelles formes.", clima: "Chaud et en hausse. Vastes forêts tropicales.", extinciones: "Maximum thermique du Paléocène-Éocène (PETM)" },
-        { id: "eoceno", nombre: "Éocène", descripcion: "Les cétacés retournent à la mer. Les premiers chevaux, rhinocéros et tapirs apparaissent. Le climat atteint son point le plus chaud du Cénozoïque.", clima: "Maximum thermique. Forêts tropicales jusqu'à l'Arctique.", extinciones: "Transition Éocène-Oligocène : refroidissement global" },
-        { id: "oligoceno", nombre: "Oligocène", descripcion: "L'Antarctique se congèle et les prairies s'étendent à l'échelle mondiale. Le plus grand mammifère terrestre connu apparaît : Paraceratherium.", clima: "Refroidissement progressif. Formation de glace en Antarctique.", extinciones: "Extinction de l'Oligocène tardif (modérée)" },
-        { id: "mioceno", nombre: "Miocène", descripcion: "Les prairies dominent les continents. Le Megalodon règne sur les océans. De grands primates africains évoluent vers des lignées incluant l'être humain.", clima: "Variable. Refroidissement graduel avec des épisodes chauds.", extinciones: "Extinction du Miocène tardif (modérée)" },
-        { id: "plioceno", nombre: "Pliocène", descripcion: "Le refroidissement mondial forme le couloir de glace arctique. Les hominidés bipèdes prospèrent dans les savanes africaines.", clima: "Froid. Début des cycles glaciaires.", extinciones: "Extinction du Pliocène (modérée)" },
-        { id: "pleistoceno", nombre: "Pléistocène", descripcion: "Les glaciations façonnent les continents. La mégafaune domine chaque écosystème. Homo sapiens émerge en Afrique et se répand sur toute la planète.", clima: "Cycles glaciaires-interglaciaires. Jusqu'à 3 km de glace en Amérique du Nord.", extinciones: "Extinction de la mégafaune du Pléistocène tardif" },
-        { id: "holoceno", nombre: "Holocène", descripcion: "L'interglaciaire actuel. La civilisation humaine transforme la planète. Le taux d'extinction dépasse 1000 fois la moyenne géologique.", clima: "Tempéré et stable. Réchauffement accéléré depuis 1850.", extinciones: "6e extinction de masse en cours (anthropique)" },
-      ]},
-    ],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -1316,17 +1091,6 @@ export const translations = {
       subtitleDefault: "Tutto sul passato, nelle tue mani",
       favorites: "I Miei Preferiti",
       profile: "Il Mio Profilo",
-      myProfile: "Il mio profilo",
-      compare: "Confronta",
-      cronologia: "Cronologia",
-      randomAnimal: "Animale casuale",
-      darkMode: "Modalità scura",
-      lightMode: "Modalità chiara",
-      fullArchive: "Archivio completo",
-      paleogeography: "Paleogeografia",
-      topFavorites: "Top Preferiti",
-      comparator: "Comparatore",
-      suggestSpecies: "Suggerisci specie",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
@@ -1379,11 +1143,13 @@ export const translations = {
       filterDiets: "Diete",
       filterTypes: "Tipi",
       clearFilters: "Cancella",
-      today: "Oggi",
       logoutTitle: "Sessione Chiusa",
       logoutSub: "Accesso limitato",
 
       eras: {
+        ediacarico: {
+          desc: "I primi esseri pluricellulari complessi. Dickinsonia, Charnia e l'alba della vita animale 635 milioni di anni fa.",
+        },
         paleozoico: {
           desc: "L'origine della vita complessa. Trilobiti, foreste di felci giganti e i primi anfibi.",
         },
@@ -1503,11 +1269,6 @@ export const translations = {
       addedFav: "Aggiunto ai preferiti",
       removedFav: "Rimosso dai preferiti",
       connectionError: "Errore di connessione",
-      biologicalRivalry: "Rivalità biologica",
-      loginToAccess: "Accedi",
-      compareWith: "Confronta con un'altra specie",
-      noTitle: "Senza titolo",
-      literatureEnglishOnly: "😅 Disponibile solo in inglese, ci dispiace.",
     },
 
     favorites: {
@@ -1529,19 +1290,6 @@ export const translations = {
         language: "Lingua",
         changePassword: "Cambia password",
         dangerZone: "Zona pericolo",
-        stats: "Statistiche",
-        statsSubtitle: "La tua attività nell'archivio",
-        history: "Cronologia visite",
-        historySubtitle: "Ultime schede visitate",
-        eraFavorite: "Era preferita",
-        visited: "Visitate",
-        notes: "Note",
-        favorites_label: "Preferiti",
-        favsByEra: "Preferiti per era",
-        visitedByEra: "Visitate per era",
-        emptyStats: "Esplora l'archivio per vedere le tue statistiche.",
-        emptyHistory: "Non hai ancora visitato nessuna scheda.",
-        showMore: "in più",
       },
       field: {
         username: "Nome utente",
@@ -1581,8 +1329,6 @@ export const translations = {
         passwordError: "Errore nel cambio",
         nameMismatch: "Il nome non corrisponde",
         deleteError: "Errore nell'eliminazione",
-        uploadNotImage: "Il file deve essere un'immagine.",
-        uploadTooLarge: "L'immagine non può superare 3 MB.",
       },
     },
 
@@ -1594,9 +1340,6 @@ export const translations = {
       submit: "Entra nell'archivio",
       noAccount: "Non hai un account?",
       signUp: "Registrati",
-      backToHome: "← Torna alla home",
-      serverError: "Errore: Il server non ha inviato l'ID utente.",
-      connectionError: "Errore di connessione",
     },
 
     register: {
@@ -1611,16 +1354,6 @@ export const translations = {
       submit: "Registrati",
       hasAccount: "Hai già un account?",
       signIn: "Accedi",
-      backToHome: "← Torna alla home",
-      passwordMismatch: "ERRORE: Le password non corrispondono.",
-      successMsg: "ACCESSO CONCESSO: Ricercatore registrato.",
-      errorMsg: "Errore di registrazione.",
-      panelTitle: "250M anni di storia",
-      panelSub: "Accedi al tuo archivio di ricerca.",
-      registerPanelTitle: "Unisciti all'archivio fossile",
-      registerPanelSub: "Crea il tuo account e inizia la tua spedizione.",
-      loginSubtitle: "Inserisci le tue credenziali per continuare",
-      registerSubtitle: "Compila i campi per registrarti",
     },
 
     toast: {
@@ -1645,6 +1378,7 @@ export const translations = {
       Squamata: "Squamato",
       Mammalia: "Mammifero",
       Crocodylomorpha: "Crocodilomorfo",
+      Ediacaran: "Ediacarano",
     },
 
     archivo: {
@@ -1684,39 +1418,5 @@ export const translations = {
         gigante:  "I giganti preistorici (oltre 12 metri) sono gli animali più grandi che abbiano mai popolato la Terra. Dai sauropodi titanosauridi al Megalodon e al Livyatan, questi colossi hanno dominato i loro ecosistemi per milioni di anni e continuano ad affascinare scienziati e appassionati.",
       },
     },
-    archivoPage: { back: "Indietro", records: "registro", recordsP: "registri", noRecords: "Nessun registro per questo filtro", aboutDiet: "Su questa dieta", aboutType: "Su questo gruppo", aboutSize: "Su questa taglia", allSpecies: "Tutte le specie", fullArchive: "Archivio completo", diet: "Dieta", type: "Tipo", size: "Dimensione", sizeSmall: "Piccolo", sizeMedium: "Medio", sizeLarge: "Grande", sizeGiant: "Gigante" },
-    favoritesPage: { specimens: "esemplari", filter: "Filtra", all: "Tutti", eras: "Ere", noResults: "Nessun risultato", searchPlh: "CERCA NEI MIEI ARCHIVI..." },
-    landing_extra: { paleogeographyDesc: "Tutti gli animali dell'archivio sulla mappa mondiale. Usa le schede delle ere per filtrare le specie visualizzate. Clicca su un punto per vedere la scheda dell'animale.", filterSize: "Dimensione", selectEra: "Seleziona un'era", funFact: "Lo sapevi", filterCount: "registri", timeScale: "Scala temporale", random: "Casuale", discover: "Scopri", again: "Di nuovo", topFavTitle: "Top preferiti", topFavEmpty: "Nessun dato ancora", topFavViewAll: "Vedi tutti", topFavUsers: "utenti", fullArchive: "Archivio completo", browseArchive: "Vedi l'archivio", browseOf: "Vedi", paleogeography: "Paleogeografia", paleogeographySub: "Mappa della Terra preistorica", suggestSpecies: "Suggerisci specie", suggestSpeciesSub: "Manca qualcosa?" },
-    animalMap: { discoveryZone: "Zona di ritrovamento", viewFullMap: "Vedi mappa completa", noLocation: "Posizione non disponibile", noCoords: "Coordinate di ritrovamento non registrate", filterByEra: "Filtra per era", of: "di", speciesVisible: "specie visibili", speciesSingular: "specie", speciesPlural: "specie", loadingMap: "Caricamento mappa...", findingsOnMap: "ritrovamenti sulla mappa", viewRecord: "Vedi scheda" },
-    timeline: { title: "Cronologia geologica", subtitle: "16 periodi · 538 Ma – presente", close: "Chiudi", selectPeriod: "Seleziona un periodo", climate: "Clima", extinction: "Estinzione", repSpecies: "Specie rappresentative", records: "registri", diet: "Dieta", size: "Dimensione" },
-    notes: { title: "Nota privata", loginPrompt: "Accedi per aggiungere note private", saved: "Salvata ✓", deleted: "Eliminata", error: "Errore", unsaved: "Non salvata", placeholder: "Scrivi le tue note su questo animale...", savedOn: "salvata", save: "Salva", delete: "Elimina" },
-    comparador: { back: "Indietro", breadcrumb: "PaleoArchivo · Comparatore di dimensioni", title: "Quanto è più", titleAccent: "grande", speciesA: "Specie A", speciesB: "Specie B", searchPlh: "Cerca specie...", scaleCaption: "Confronto in scala reale · umano = 1,75 m di riferimento", noHeight: "Nessun dato di altezza", was: "era", biggerThan: "più grande di", diffOf: "— differenza di", emptyTitle: "Seleziona due specie", emptySub: "per confrontare le loro dimensioni", viewRecord: "Vedi scheda" },
-    suggest: { back: "Indietro", breadcrumb: "PaleoArchivo · Suggerisci una specie", title: "Suggerisci una", titleAccent: "specie", subtitle: "Manca una specie nell'archivio? Invia il tuo suggerimento con una fonte scientifica.", locked: "Accesso limitato", lockedDesc: "Hai bisogno di un account per suggerire specie.", login: "Accedi", register: "Crea account", sendingAs: "Invio come", nameLabel: "Nome della specie", namePlh: "Es: Therizinosaurus cheloniformis", periodLabel: "Periodo geologico", sourceLabel: "Fonte scientifica", optional: "opzionale", sourcePlh: "Es: Wikipedia, DOI, libro di riferimento...", sourceHint: "Articolo, libro, Wikipedia con riferimenti, o link a fonte primaria", sending: "Invio...", submit: "Invia suggerimento", validation: "Il nome e il periodo sono obbligatori.", sendError: "Errore nell'invio. Riprova.", disclaimer: "I suggerimenti vengono esaminati manualmente. Non tutti possono essere aggiunti, ma tutti sono apprezzati." },
-    settings: { title: "Impostazioni Profilo", interface: "Interfaccia", dark: "Scura", light: "Chiara", language: "Lingua" },
-
-    timelineData: [
-      { era: "Paleozoico", periodos: [
-        { id: "cambrico", nombre: "Cambriano", descripcion: "Esplosione della vita marina multicellulare. In appena 20 milioni di anni compaiono quasi tutti i phyla animali conosciuti.", clima: "Caldo, senza ghiaccio polare", extinciones: "Grande estinzione del Cambriano tardivo (~94% delle specie marine)" },
-        { id: "ordovicico", nombre: "Ordoviciano", descripcion: "I mari coprono il Gondwana. Esplosione di invertebrati marini: briozoi, echinodermi e coralli. Compaiono i primi vertebrati senza mascella.", clima: "Freddo alla fine, glaciazione nel Gondwana", extinciones: "2ª estinzione di massa: ~85% delle specie" },
-        { id: "silurico", nombre: "Siluriano", descripcion: "Recupero dopo l'estinzione. Le prime piante vascolari colonizzano la terraferma. I pesci con mascelle diversificano gli oceani.", clima: "Caldo e stabile", extinciones: "Estinzione del Siluriano tardivo (scala minore)" },
-        { id: "devonico", nombre: "Devoniano", descripcion: "L'età dei pesci. Gli oceani sono dominati da placodermi giganti. Sulla terra compaiono le prime foreste e i tetrapodi muovono i primi passi.", clima: "Caldo, alta concentrazione di CO₂", extinciones: "Estinzione del Devoniano tardivo: ~75% delle specie" },
-        { id: "carbonifero", nombre: "Carbonifero", descripcion: "Foreste tropicali di licopsidi giganti coprono l'Euramerica. L'ossigeno atmosferico raggiunge il 35%, consentendo insetti e aracnidi di dimensioni enormi.", clima: "Caldo e umido all'inizio, glaciazione alla fine", extinciones: "Estinzione del Carbonifero tardivo (collasso forestale)" },
-        { id: "permico", nombre: "Permiano", descripcion: "I sinapsidi dominano la terraferma. La Pangea è completamente formata. Si conclude con la peggiore estinzione della storia: la Grande Moria elimina il 96% delle specie.", clima: "Secco ed estremo. Desertificazione della Pangea.", extinciones: "Grande estinzione Permo-Triassica: 96% delle specie" },
-      ]},
-      { era: "Mesozoico", periodos: [
-        { id: "triasico", nombre: "Triassico", descripcion: "Lenta ripresa dopo la Grande Moria. Gli arcosauri si diversificano: pterosauri, coccodrilli e i primi dinosauri. I mammiferi compaiono in modo discreto.", clima: "Caldo e secco. Senza ghiacciai.", extinciones: "Estinzione Triassico-Giurassico: ~80% delle specie" },
-        { id: "jurasico", nombre: "Giurassico", descripcion: "I dinosauri dominano tutti i continenti. I sauropodi raggiungono dimensioni senza precedenti. Archaeopteryx stabilisce il legame tra dinosauri e uccelli.", clima: "Caldo e umido. Mari caldi e bassi.", extinciones: "Estinzione del Giurassico tardivo (moderata)" },
-        { id: "cretacico", nombre: "Cretaceo", descripcion: "Picco della diversità dinosauriana. Le piante da fiore trasformano gli ecosistemi terrestri. Si conclude con l'impatto di Chicxulub e l'estinzione K-Pg.", clima: "Molto caldo. Senza ghiaccio polare. Livello del mare alto.", extinciones: "Estinzione K-Pg: 76% delle specie. Fine dei dinosauri non aviari." },
-      ]},
-      { era: "Cenozoico", periodos: [
-        { id: "paleoceno", nombre: "Paleocene", descripcion: "I mammiferi occupano le nicchie ecologiche lasciate dai dinosauri. Piccoli e generalisti all'inizio, si diversificano rapidamente in nuove forme.", clima: "Caldo e in aumento. Vaste foreste tropicali.", extinciones: "Massimo Termico Paleocene-Eocene (PETM)" },
-        { id: "eoceno", nombre: "Eocene", descripcion: "I cetacei tornano al mare. Compaiono i primi cavalli, rinoceronti e tapiri. Il clima raggiunge il punto più caldo del Cenozoico.", clima: "Massimo termico. Foreste tropicali fino all'Artico.", extinciones: "Transizione Eocene-Oligocene: raffreddamento globale" },
-        { id: "oligoceno", nombre: "Oligocene", descripcion: "L'Antartide si congela e le praterie si espandono globalmente. Compare il più grande mammifero terrestre conosciuto: Paraceratherium.", clima: "Raffreddamento progressivo. Formazione del ghiaccio in Antartide.", extinciones: "Estinzione dell'Oligocene tardivo (moderata)" },
-        { id: "mioceno", nombre: "Miocene", descripcion: "Le praterie dominano i continenti. Il Megalodon regna negli oceani. Grandi primati africani evolvono verso lignaggi che includono l'essere umano.", clima: "Variabile. Raffreddamento graduale con impulsi caldi.", extinciones: "Estinzione del Miocene tardivo (moderata)" },
-        { id: "plioceno", nombre: "Pliocene", descripcion: "Il raffreddamento globale forma il corridoio di ghiaccio artico. Gli ominidi bipedi prosperano nelle savane africane.", clima: "Freddo. Inizio dei cicli glaciali.", extinciones: "Estinzione del Pliocene (moderata)" },
-        { id: "pleistoceno", nombre: "Pleistocene", descripcion: "Le glaciazioni modellano i continenti. La megafauna domina ogni ecosistema. Homo sapiens emerge in Africa e si diffonde su tutto il pianeta.", clima: "Cicli glaciali-interglaciali. Fino a 3 km di ghiaccio in Nord America.", extinciones: "Estinzione della megafauna del Pleistocene tardivo" },
-        { id: "holoceno", nombre: "Olocene", descripcion: "L'interglaciale attuale. La civiltà umana trasforma il pianeta. Il tasso di estinzione supera di 1000 volte la media geologica.", clima: "Temperato e stabile. Riscaldamento accelerato dal 1850.", extinciones: "6ª estinzione di massa in corso (antropogenica)" },
-      ]},
-    ],
   },
 };

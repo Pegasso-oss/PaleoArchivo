@@ -676,26 +676,7 @@ const ProfilePage = () => {
                           : "border-[#2a2520] text-stone-400 hover:border-amber-600 hover:text-amber-500"}`}>
               {pr.updatePassword}
             </button>
-
-            {/* Idioma */}
-            <Divider label={pr.section?.language} isLight={isLight} />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
-                { code: "es", label: "Español",  active: "bg-red-600 text-white border-red-600"         },
-                { code: "en", label: "English",  active: "bg-stone-100 text-stone-900 border-stone-300" },
-                { code: "fr", label: "Français", active: "bg-blue-700 text-white border-blue-700"       },
-                { code: "it", label: "Italiano", active: "bg-emerald-600 text-white border-emerald-600" },
-              ].map(({ code, label, active }) => (
-                <button key={code} onClick={() => setLanguage(code)}
-                  className={`py-3 text-[11px] tracking-[0.1em] uppercase font-black rounded-xl border-2 transition-all
-                    ${language === code ? active
-                      : isLight ? "border-stone-200 text-stone-500 hover:border-stone-400"
-                                : "border-[#2a2520] text-stone-600 hover:border-stone-500"}`}>
-                  {label}
-                </button>
-              ))}
-            </div>
-
+            
             {/* Estadísticas */}
             <Divider label={pr.section?.stats || "Estadísticas"} isLight={isLight} />
             <div className="flex items-center gap-2 mb-4">

@@ -60,6 +60,7 @@ const userSchema = new mongoose.Schema({
     fuente:  { type: String, default: "" },
     foto:    { type: String, default: "" },
     fecha:   { type: Date,   default: Date.now },
+    estado:  { type: String, default: "abierto", enum: ["abierto", "en_progreso", "descartado", "cerrado"] },
   }],
   achievements: [
     {

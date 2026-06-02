@@ -7,6 +7,33 @@
 
 export const ERAS = [
   {
+  era: "Ediacárico",
+  eraColor: "#2a0a2a",
+  eraTextColor: "#d946ef",
+  periodos: [
+    {
+      id: "ediacarico",
+      nombre: "Ediacárico",
+      ma: "635 – 538 Ma",
+      inicio: 635,
+      fin: 538,
+      color: "#1a0a1a",
+      acento: "#d946ef",
+      descripcion:
+        "Los primeros organismos pluricelulares complejos colonizan el fondo marino. Seres de morfología radicalmente distinta a cualquier animal moderno: discos, frondes y tapetes que absorbían nutrientes directamente del sedimento.",
+      clima: "Glaciaciones globales (Tierra Bola de Nieve) al inicio, seguidas de calentamiento",
+      extinciones: "Extinción del límite Ediacárico-Cámbrico: desaparece casi toda la biota ediacárica",
+      animales: [
+        { nombre: "Dickinsonia",   dieta: "Absortivo",   tamano: "hasta 1.4 m" },
+        { nombre: "Kimberella",    dieta: "Detritívoro", tamano: "15 cm"       },
+        { nombre: "Charnia",       dieta: "Filtrador",   tamano: "hasta 50 cm" },
+        { nombre: "Cloudina",      dieta: "Filtrador",   tamano: "hasta 15 cm" },
+        { nombre: "Spriggina",     dieta: "Carnívoro",   tamano: "5 cm"        },
+      ],
+    },
+  ],
+},
+  {
     era: "Paleozoico",
     eraColor: "#1a3a4a",
     eraTextColor: "#7ab8cf",

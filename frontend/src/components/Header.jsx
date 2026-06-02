@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, matchPath } from "react-router-dom";
 import {
   LogIn, User, LogOut, LockOpen, AlertTriangle,
-  Sun, Moon, ChevronDown, Star, Clock, Scale, Menu, X, Map, Trophy, Lightbulb,
+  Sun, Moon, ChevronDown, Star, Clock, Scale, Menu, X, Languages,
 } from "lucide-react";
 import paleoLogo from "../assets/logo.png";
 import { allAnimals } from "../data/allData";
@@ -11,6 +11,13 @@ import { useUser } from "../context/useUser";
 import { useFavorites } from "../context/FavoritesContext";
 import { useTimeline } from "../hooks/useTimeline";
 import { useTranslation } from "../hooks/useTranslation";
+
+const LANGUAGES = [
+  { code: "es", label: "Español",  flag: "🇪🇸" },
+  { code: "en", label: "English",  flag: "🇬🇧" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "it", label: "Italiano", flag: "🇮🇹" },
+];
 
 const ROUTE_SUBTITLES = {
   "/era/paleozoico": "Paleozoico",
@@ -40,21 +47,27 @@ const ROUTE_SUBTITLES = {
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, toggleTheme, language } = useUser();
+  const { theme, toggleTheme, language, setLanguage } = useUser();
   const { clearFavorites } = useFavorites();
   const { openTimeline } = useTimeline();
   const { tSection } = useTranslation();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [avatar, setAvatar] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+
   const menuRef = useRef(null);
+  const langRef = useRef(null);
 
   const t = tSection("header");
   const isLight = theme === "light";
   const iconColor = isLight ? "text-blue-500" : "text-amber-500";
+
+  const currentLang = LANGUAGES.find((l) => l.code === language) ?? LANGUAGES[0];
 
   useEffect(() => {
     const auth = localStorage.getItem("auth");
@@ -76,10 +89,19 @@ const Header = () => {
         setIsMenuOpen(false);
         setIsDrawerOpen(false);
       }
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setIsLangOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Cambia idioma — usa setLanguage del UserContext (que ya persiste en localStorage con clave 'lang')
+  const handleSelectLanguage = (code) => {
+    setLanguage(code);
+    setIsLangOpen(false);
+  };
 
   const handleLogoutConfirm = () => {
     localStorage.removeItem("auth");
@@ -145,9 +167,10 @@ const Header = () => {
             </button>
           </div>
 
+          {/* Botones derecha */}
           <div className="flex items-center gap-2">
 
-            {/* Botón Comparador */}
+            {/* Comparador */}
             <button
               onClick={() => navigate("/comparador")}
               aria-label={t.comparator || "Comparador"}
@@ -160,7 +183,7 @@ const Header = () => {
               </span>
             </button>
 
-            {/* Botón Cronología */}
+            {/* Cronología */}
             <button
               onClick={openTimeline}
               aria-label={timelineLabel}
@@ -173,7 +196,60 @@ const Header = () => {
               </span>
             </button>
 
-            {/* Botón tema */}
+            {/* Selector de idioma — desktop */}
+            <div className="hidden md:block relative" ref={langRef}>
+              <button
+                onClick={() => setIsLangOpen((v) => !v)}
+                aria-label="Seleccionar idioma"
+                aria-expanded={isLangOpen}
+                className={`flex items-center gap-2 border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
+                  ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}
+              >
+                <Languages size={18} className={`${iconColor} md:w-6 md:h-6`} />
+                <span className={`font-mono text-[10px] uppercase tracking-widest font-bold ${iconColor}`}>
+                  {currentLang.code}
+                </span>
+                <ChevronDown
+                  size={14}
+                  className={`${iconColor} opacity-50 transition-transform ${isLangOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {isLangOpen && (
+                <div className={`absolute top-full right-0 mt-2 w-52 border rounded-xl z-[1001] overflow-hidden shadow-xl
+                  ${isLight ? "bg-white border-stone-200" : "bg-[#1a1614] border-white/10"}`}>
+                  <div className="px-3 py-2 border-b border-white/5 bg-amber-600/5">
+                    <p className="text-[9px] font-black text-amber-500 uppercase tracking-[0.25em]">
+                      Idioma / Language
+                    </p>
+                  </div>
+                  <div className="p-2 grid grid-cols-2 gap-1.5">
+                    {[
+                      { code: "es", label: "Español",  flag: "🇪🇸", active: "bg-red-600 text-white border-red-600"         },
+                      { code: "en", label: "English",  flag: "🇬🇧", active: "bg-stone-200 text-stone-900 border-stone-400" },
+                      { code: "fr", label: "Français", flag: "🇫🇷", active: "bg-blue-700 text-white border-blue-700"       },
+                      { code: "it", label: "Italiano", flag: "🇮🇹", active: "bg-emerald-600 text-white border-emerald-600" },
+                    ].map(({ code, label, flag, active }) => (
+                      <button
+                        key={code}
+                        onClick={() => handleSelectLanguage(code)}
+                        className={`flex items-center gap-2 w-full px-2.5 py-2 rounded-lg border-2 transition-all text-left
+                          ${language === code
+                            ? active
+                            : isLight
+                              ? "border-stone-200 text-stone-500 hover:border-stone-400"
+                              : "border-white/10 text-stone-400 hover:border-white/25"}`}
+                      >
+                        <span className="text-sm leading-none">{flag}</span>
+                        <span className="font-mono text-[10px] uppercase tracking-widest font-bold">{label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Tema */}
             <button onClick={toggleTheme}
               className={`hidden md:flex items-center justify-center border-2 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-lg transition-all
                 ${isLight ? "bg-white border-stone-200 hover:border-stone-400" : "bg-black/40 border-white/10 hover:border-white/25"}`}>
@@ -182,6 +258,7 @@ const Header = () => {
                 : <Sun size={18} className={`${iconColor} md:w-6 md:h-6`} />}
             </button>
 
+            {/* Usuario */}
             {isLoggedIn ? (
               <div className="relative" ref={menuRef}>
                 <button
@@ -288,7 +365,7 @@ const Header = () => {
           onClick={() => setIsDrawerOpen(false)} />
       )}
 
-      {/* Drawer */}
+      {/* Drawer móvil */}
       <div className={`lg:hidden fixed top-0 left-0 h-full w-72 z-[70] flex flex-col transition-transform duration-300 ease-in-out
         ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"}
         ${isLight ? "bg-[#f0ebe3] border-r border-stone-200" : "bg-[#0f0e0c] border-r border-[#2a2520]"}`}>
@@ -320,7 +397,9 @@ const Header = () => {
               <span className="text-base w-5 text-center">{emoji}</span>{label}
             </Link>
           ))}
+
           <div className={`my-2 h-px ${isLight ? "bg-stone-200" : "bg-[#2a2520]"}`} />
+
           <button onClick={() => {
               const random = allAnimals[Math.floor(Math.random() * allAnimals.length)];
               navigate(`/animal/${encodeURIComponent(random.nombre.toLowerCase())}`);
@@ -330,12 +409,15 @@ const Header = () => {
               ${isLight ? "text-stone-600 hover:bg-amber-50 hover:text-amber-700" : "text-[#c8b89a] hover:bg-amber-600/10 hover:text-amber-500"}`}>
             <span className="text-base w-5 text-center">🎲</span>{t.randomAnimal || "Animal sorpresa"}
           </button>
+
           <button onClick={() => { openTimeline(); setIsDrawerOpen(false); }}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl w-full text-left transition-all font-mono text-[11px] uppercase tracking-wide font-bold
               ${isLight ? "text-stone-600 hover:bg-amber-50 hover:text-amber-700" : "text-[#c8b89a] hover:bg-amber-600/10 hover:text-amber-500"}`}>
             <Clock size={15} className="shrink-0" />{timelineLabel}
           </button>
+
           <div className={`my-2 h-px ${isLight ? "bg-stone-200" : "bg-[#2a2520]"}`} />
+
           {[
             { to: "/era/paleozoico", label: "Paleozoico", color: "#6aafc5" },
             { to: "/era/mesozoico",  label: "Mesozoico",  color: "#6abf6a" },
@@ -349,13 +431,37 @@ const Header = () => {
           ))}
         </div>
 
-        <div className={`px-3 py-4 border-t ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
+        {/* Footer drawer — tema + idioma */}
+        <div className={`px-3 py-4 border-t flex flex-col gap-3 ${isLight ? "border-stone-200" : "border-[#2a2520]"}`}>
+          {/* Tema */}
           <button onClick={toggleTheme}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl w-full transition-all font-mono text-[11px] uppercase tracking-wide font-bold
               ${isLight ? "text-stone-600 hover:bg-amber-50" : "text-[#c8b89a] hover:bg-amber-600/10"}`}>
             {isLight ? <Moon size={15} /> : <Sun size={15} />}
             {isLight ? (t.darkMode || "Modo oscuro") : (t.lightMode || "Modo claro")}
           </button>
+
+          {/* Idioma — fila de banderas */}
+          <div className="flex items-center gap-2 px-2">
+            <span className={`font-mono text-[9px] uppercase tracking-widest shrink-0 ${isLight ? "text-stone-400" : "text-stone-500"}`}>
+              Lang
+            </span>
+            <div className="flex items-center gap-1">
+              {LANGUAGES.map(({ code, flag }) => (
+                <button
+                  key={code}
+                  onClick={() => { handleSelectLanguage(code); setIsDrawerOpen(false); }}
+                  aria-label={code}
+                  className={`text-xl leading-none p-1.5 rounded-lg transition-all
+                    ${code === language
+                      ? "bg-amber-500/20 ring-1 ring-amber-500/50 opacity-100"
+                      : "opacity-35 hover:opacity-80"}`}
+                >
+                  {flag}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </>

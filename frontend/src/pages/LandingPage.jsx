@@ -68,6 +68,12 @@ const getRandomFact = (list, exclude = -1) => {
 // ── Cronología del sidebar ─────────────────────────────────────────────────
 const TIMELINE_ERAS = [
   {
+  era: { es: "Ediacárico", en: "Ediacaran", fr: "Édiacarien", it: "Ediacarano" },
+  periodos: [
+    { name: { es: "Ediacárico", en: "Ediacaran", fr: "Édiacarien", it: "Ediacarano" }, ma: "635", color: "bg-fuchsia-600" },
+  ],
+},
+  {
     era: { es: "Paleozoico", en: "Paleozoic", fr: "Paléozoïque", it: "Paleozoico" },
     periodos: [
       { name: { es: "Cámbrico",    en: "Cambrian",    fr: "Cambrien",    it: "Cambriano"    }, ma: "538", color: "bg-cyan-500"   },
@@ -432,6 +438,7 @@ const LandingPage = () => {
   }, [location]);
 
   const eras = [
+    { id: "ediacarico", name: "EDIACÁRICO", age: "635 - 538 m.a.", image: "https://imgur.com/P8oGSIw.jpg", desc: lnd.eras?.ediacarico?.desc },
     { id: "paleozoico", name: "PALEOZOICO", age: "541 - 252 m.a.", image: "https://media.istockphoto.com/id/1144091536/es/foto/criaturas-del-período-cámbrico-escena-submarina-con-anomalocaris-opabinia-hallucigenia-pirania.jpg?s=612x612&w=0&k=20&c=XD683S0yCOb2WhXsT3iRx5XGVS7jCNjS3EN4SK0e7uA=", desc: lnd.eras?.paleozoico?.desc },
     { id: "mesozoico",  name: "MESOZOICO",  age: "252 - 66 m.a.",  image: "https://i.pinimg.com/736x/7e/0f/a7/7e0fa7367f9c74319d952ab3c700ba57.jpg", desc: lnd.eras?.mesozoico?.desc },
     { id: "cenozoico",  name: "CENOZOICO",  age: "66 m.a. - " + (lnd.today || "Hoy"), image: "https://i.pinimg.com/736x/fa/50/eb/fa50eb31911ad031402b4d316d3e9f80.jpg", desc: lnd.eras?.cenozoico?.desc },
@@ -705,7 +712,7 @@ const LandingPage = () => {
           </div>
 
           {/* Era Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-5 max-w-9xl">
             {eras.map((era) => (
               <EraCard key={era.id} id={era.id} name={era.name} age={era.age} image={era.image}>{era.desc}</EraCard>
             ))}

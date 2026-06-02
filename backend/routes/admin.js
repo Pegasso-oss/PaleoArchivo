@@ -156,6 +156,38 @@ router.get('/suggestions', adminAuth, async (req, res) => {
   }
 });
 
+
+// ── Actualizar estado de sugerencia ──────────────────────────────────────
+router.put('/users/:id/suggestions/:suggId', adminAuth, async (req, res) => {
+  try {
+    const { estado } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ msg: 'No encontrado' });
+    const sugg = user.suggestions.id(req.params.suggId);
+    if (!sugg) return res.status(404).json({ msg: 'Sugerencia no encontrada' });
+    sugg.estado = estado;
+    await user.save();
+    res.json(user.suggestions);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error de servidor' });
+  }
+});
+
+// ── Borrar sugerencia individual ──────────────────────────────────────────
+router.delete('/users/:id/suggestions/:suggId', adminAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ msg: 'No encontrado' });
+    user.suggestions.pull({ _id: req.params.suggId });
+    await user.save();
+    res.json(user.suggestions);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error de servidor' });
+  }
+});
+
 // ── Borrar usuario ────────────────────────────────────────────────────────
 router.delete('/users/:id', adminAuth, async (req, res) => {
   try {

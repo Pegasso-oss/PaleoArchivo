@@ -136,40 +136,55 @@ PaleoArchivo/
 - [x] Panel de administración con revisión editorial del catálogo
 - [x] APK Android v0.2 mediante Capacitor
 
-### 📋 v0.5 — Contenido expandido
-- [ ] Ampliar catálogo: objetivo 200 fichas
-- [ ] Fichas de extinción masiva: K-Pg, Permo-Triásica, Ordovícica
-- [ ] Árbol evolutivo / cladograma interactivo por grupo taxonómico
-- [ ] Escalas de tamaño visuales en cada ficha (comparación con humano)
-- [ ] Filtro por estado de extinción o calidad de conservación del fósil
+### 🎯 Próximo sprint — Calidad y gobierno editorial
 
-### 📋 v0.6 — Búsqueda y descubrimiento
-- [ ] Página de búsqueda avanzada con todos los filtros combinados
-- [ ] Modo aleatorio — botón "Animal sorpresa" accesible desde cualquier página
-- [ ] Relacionados inteligentes en cada ficha por era, dieta y tipo
+Objetivo: reforzar la base antes de ampliar el contenido. No se mezclan cambios de arquitectura con la publicación de nuevas fichas.
 
-### 📋 v0.7 — Experiencia y presentación
-- [ ] Animación de "excavación" al entrar en una ficha por primera vez
-- [ ] Modo presentación / pantalla completa para cada ficha
-- [ ] Transiciones animadas entre páginas con Framer Motion
+- [ ] Corregir por tandas los errores de lint de los flujos críticos: sesión, navegación, mapa, cronología y ficha de animal.
+- [ ] Añadir una comprobación de CI para `build` y lint, evitando que regresiones lleguen a producción.
+- [ ] Crear un validador editorial del catálogo: IDs únicos, campos obligatorios, valores de dieta/tipo, imágenes y coordenadas/fuentes cuando correspondan.
+- [ ] Mostrar los resultados del validador en el panel de administración, que seguirá siendo de revisión y no de edición.
 
-### 📋 v0.8 — Comunidad
-- [ ] Sistema de valoración por especie
-- [ ] Compartir ficha directamente a Twitter / WhatsApp
-- [ ] Ranking semanal de especies más visitadas
-- [ ] Modo trivia — preguntas sobre los animales del catálogo
+**Puerta de salida:** compilación y validación editorial verdes; los datos estáticos siguen siendo la única fuente pública de verdad.
 
-### 📋 v0.9 — Plataforma
-- [ ] Modo offline para el catálogo completo (PWA / Capacitor)
-- [ ] API pública documentada
-- [ ] Soporte de idioma PT (portugués) como quinto idioma
+### 📋 v0.6 — Contenido científico y contexto
 
-### 📋 v1.0 — Play Store
-- [ ] Onboarding / splash screen
-- [ ] Política de privacidad y términos de uso
-- [ ] Assets de Play Store (screenshots, icono, descripciones en 4 idiomas)
-- [ ] Versión firmada y optimizada para producción
-- [ ] Ficha en Google Play con categoría Educación
+- [ ] Dossiers de extinciones masivas: K-Pg, Pérmico-Triásico y Ordovícico-Silúrico, enlazados desde la cronología y las fichas.
+- [ ] Escalas visuales de tamaño en cada ficha, con una referencia humana accesible.
+- [ ] Ampliar el catálogo a 200 fichas tras definir fuentes, licencia de imágenes y cobertura por período/grupo.
+
+**Dependencia:** validador editorial. El crecimiento del catálogo no se inicia sin sus controles de calidad.
+
+### 📋 v0.7 — Descubrimiento y exploración
+
+- [ ] Búsqueda avanzada que combine todos los filtros actuales.
+- [ ] Filtros de descubrimiento por estado de extinción, conservación y región de hallazgo.
+- [ ] Animales relacionados por era, dieta, tipo y proximidad geográfica cuando haya datos suficientes.
+- [ ] Modo aleatorio disponible desde cualquier página.
+
+**Dependencia:** datos normalizados y coordenadas/fuentes validadas.
+
+### 📋 v0.8 — Clasificación evolutiva
+
+- [ ] Normalizar la taxonomía para que `tipo` deje de ser una etiqueta libre.
+- [ ] Árbol evolutivo / cladograma interactivo por grupo taxonómico.
+
+**Riesgo:** requiere revisión científica y un modelo taxonómico coherente antes de diseñar la visualización.
+
+### 📋 v0.9 — Plataforma editorial y móvil
+
+- [ ] Diseñar la migración completa del catálogo estático a API y MongoDB, con migración, permisos editoriales y plan de reversión.
+- [ ] Habilitar edición persistente desde administración solo después de esa migración.
+- [ ] Modo offline del catálogo completo (PWA / Capacitor) y preparación de publicación móvil.
+
+**Decisión de arquitectura:** este hito es independiente; no se implementará una edición parcial que diverja del catálogo público.
+
+### 📋 v1.0 — Presentación y comunidad
+
+- [ ] Modo presentación / pantalla completa y transiciones entre páginas.
+- [ ] Compartir fichas y ranking semanal de especies más visitadas.
+- [ ] Modo trivia basado en el catálogo validado.
+- [ ] Onboarding, política de privacidad, assets y versión firmada para Google Play.
 
 ---
 

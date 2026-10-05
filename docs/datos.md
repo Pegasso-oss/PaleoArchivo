@@ -51,6 +51,22 @@ En la versión actual es una herramienta de **revisión editorial**: los datos s
 
 ---
 
+## Mapa de hallazgos
+
+Las coordenadas modernas de cada ficha viven en `frontend/src/data/paleomapCoords.js`. Representan el yacimiento o la localidad fosilífera de referencia —no la posición de un espécimen individual— y el mapa las usa únicamente para situar los hallazgos en la Tierra actual.
+
+Para las fichas del Ediacárico se han usado localidades documentadas por fuentes científicas o institucionales:
+
+- **Dickinsonia, Spriggina y Tribrachidium:** Ediacara Hills / Flinders Ranges, Australia; [Departamento australiano de Cambio Climático, Energía, Medio Ambiente y Agua](https://www.dcceew.gov.au/parks-heritage/heritage/places/national/ediacara) y Botha & García-Bellido (2024), *Journal of Paleontology*, para *Tribrachidium*.
+- **Charnia:** Bradgate Park, Charnwood Forest, Reino Unido; [British Geological Survey](https://www.bgs.ac.uk/discovering-geology/maps-and-resources/office-geology/bradgate-park-leicestershire/).
+- **Kimberella y Yelovichnus:** Zimnie Gory / Yelovy Creek, costa del Mar Blanco, Rusia; Fedonkin *et al.* (2007), guía de campo de Zimnie Gory, y Popov *et al.* (2002), *Journal of Geophysical Research*.
+- **Pteridinium:** Seilacher block, Nama Group, Namibia; [IUGS Geological Heritage Site 132](https://iugs-geoheritage.org/publications-dl/IUGS-SECOND-100-SITES-WEB-BOOK.pdf).
+- **Cloudina:** Driedoornvlakte, Nama Group, Namibia; Elliott *et al.* (2024), *Journal of Paleontology*, con coordenadas de la localidad publicadas.
+
+Al añadir coordenadas, usa un yacimiento publicado y deja un comentario con la localidad. Si la identificación o la localidad de referencia es incierta, no añadas el punto hasta verificarla.
+
+---
+
 ## Lista de tipos válidos
 
 | Key | Label ES |

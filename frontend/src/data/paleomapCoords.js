@@ -6,6 +6,18 @@
  */
 
 export const ANIMAL_COORDS = {
+  // ── EDIACÁRICO ──────────────────────────────────────────────────────────────
+  // Coordenadas modernas de yacimientos representativos, no de especímenes
+  // individuales. Fuentes y criterio de selección: docs/datos.md#mapa-de-hallazgos.
+  "DICKINSONIA":      { lon: 138.97,  lat: -31.35 }, // Ediacara Hills, Flinders Ranges, Australia
+  "CHARNIA":          { lon: -1.24,   lat: 52.69  }, // Bradgate Park, Charnwood Forest, Reino Unido
+  "SPRIGGINA":        { lon: 138.97,  lat: -31.35 }, // Ediacara Hills, Flinders Ranges, Australia
+  "KIMBERELLA":       { lon: 39.7667, lat: 65.55  }, // Zimnie Gory, costa del Mar Blanco, Rusia
+  "TRIBRACHIDIUM":    { lon: 138.97,  lat: -31.35 }, // Ediacara Member, Flinders Ranges, Australia
+  "PTERIDINIUM":      { lon: 16.4997, lat: -26.7322 }, // Nama Group (Seilacher block), Namibia
+  "CLOUDINA":         { lon: 16.664167, lat: -23.860489 }, // Driedoornvlakte, Nama Group, Namibia
+  "YELOVICHNUS":      { lon: 39.705,  lat: 65.51  }, // Yelovy Creek, Zimnie Gory, Rusia
+
   // ── CÁMBRICO ────────────────────────────────────────────────────────────────
   "TRILOBITE":         { lon: 103,  lat: 25  }, // Chengjiang, Yunnan, China
   "ANOMALOCARIS":      { lon: 103,  lat: 25  }, // Chengjiang, China (también Burgess Shale)

@@ -27,6 +27,10 @@ export const translations = {
       profile: "Mi Perfil",
     },
 
+    mapEras: {
+      precambrian: "Precámbrico",
+    },
+
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
     datosCuriosos: [
       { emoji: "🦕", texto: "El Argentinosaurus pesaba más de 70 toneladas — más que 10 elefantes africanos juntos." },
@@ -402,6 +406,10 @@ export const translations = {
       profile: "My Profile",
     },
 
+    mapEras: {
+      precambrian: "Precambrian",
+    },
+
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
     datosCuriosos: [
       { emoji: "🦕", texto: "Argentinosaurus weighed over 70 tons — more than 10 African elephants combined." },
@@ -745,6 +753,10 @@ export const translations = {
       subtitleDefault: "Tout sur le passé, dans votre main",
       favorites: "Mes Favoris",
       profile: "Mon Profil",
+    },
+
+    mapEras: {
+      precambrian: "Précambrien",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
@@ -1091,6 +1103,10 @@ export const translations = {
       subtitleDefault: "Tutto sul passato, nelle tue mani",
       favorites: "I Miei Preferiti",
       profile: "Il Mio Profilo",
+    },
+
+    mapEras: {
+      precambrian: "Precambriano",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────

@@ -9,12 +9,14 @@ import { allAnimals } from "../data/allData";
 import { getHallazgosForAnimals } from "../data/paleomapCoords";
 
 const ERA_CONFIG = {
+  Precámbrico: { color: "#9b7bd6", bg: "rgba(155,123,214,0.15)", border: "rgba(155,123,214,0.5)", labelKey: "precambrian", label: "Precámbrico", ma: "635–538 Ma" },
   Paleozoico: { color: "#6aafc5", bg: "rgba(106,175,197,0.15)", border: "rgba(106,175,197,0.5)", label: "Paleozoico", ma: "538–252 Ma" },
   Mesozoico:  { color: "#6abf6a", bg: "rgba(106,191,106,0.15)", border: "rgba(106,191,106,0.5)", label: "Mesozoico",  ma: "252–66 Ma"  },
   Cenozoico:  { color: "#cf9a5a", bg: "rgba(207,154,90,0.15)",  border: "rgba(207,154,90,0.5)",  label: "Cenozoico",  ma: "66 Ma–hoy" },
 };
 
 const ERA_MAP = {
+  "Ediacárico": "Precámbrico",
   "Cámbrico": "Paleozoico", "Ordovícico": "Paleozoico", "Silúrico": "Paleozoico",
   "Devónico": "Paleozoico", "Carbonífero": "Paleozoico", "Pérmico": "Paleozoico",
   "Triásico": "Mesozoico",  "Jurásico": "Mesozoico",    "Cretácico": "Mesozoico",
@@ -216,7 +218,7 @@ function GeoMap({ geojson, puntos, isLight, onPointClick, activeCluster, svgRef,
 }
 
 // ── Tarjeta de era ────────────────────────────────────────────────────────────
-function EraCard({ era, config, count, active, onToggle, isLight, am }) {
+function EraCard({ era, config, count, active, onToggle, isLight, am, label }) {
   return (
     <button
       onClick={onToggle}
@@ -227,7 +229,7 @@ function EraCard({ era, config, count, active, onToggle, isLight, am }) {
         <div className="flex items-center gap-2">
           <span style={{ background: config.color }} className="w-2 h-2 rounded-full shrink-0" />
           <span style={{ color: active ? config.color : isLight ? "#78716c" : "#6b5e4e" }} className="font-mono text-[9px] sm:text-[11px] font-bold uppercase tracking-wide">
-            {config.label}
+            {label}
           </span>
         </div>
         <span style={{ background: active ? config.color : "transparent", borderColor: active ? config.color : isLight ? "#d5cfc8" : "#3a3028" }} className="w-4 h-4 rounded border-2 flex items-center justify-center transition-all shrink-0">
@@ -249,6 +251,7 @@ export default function PaleoMap() {
   const { theme } = useUser();
   const { tSection } = useTranslation();
   const am = tSection("animalMap");
+  const mapEras = tSection("mapEras");
   const isLight = theme === "light";
   const svgRef  = useRef(null);
   const zoomRef = useRef(null);
@@ -259,21 +262,22 @@ export default function PaleoMap() {
   const [loading, setLoading]             = useState(true);
   const [activeCluster, setActiveCluster] = useState(null);
   const [tipPos, setTipPos]               = useState({ x: 0, y: 0 });
-  const [activeEras, setActiveEras] = useState({ Paleozoico: true, Mesozoico: true, Cenozoico: true });
+  const [activeEras, setActiveEras] = useState({ Precámbrico: true, Paleozoico: true, Mesozoico: true, Cenozoico: true });
 
   const allHallazgos = React.useMemo(() => {
     const hallazgos = getHallazgosForAnimals(allAnimals);
     return hallazgos.map(h => {
       const animal = allAnimals.find(a => a.id === h.id);
-      const eraGrupo = ERA_MAP[animal?.era] || "Cenozoico";
+      const eraGrupo = ERA_MAP[animal?.era];
+      if (!eraGrupo) return null;
       return { ...h, animal, eraGrupo, eraColor: ERA_CONFIG[eraGrupo]?.color || "#cf9a5a" };
-    });
+    }).filter(Boolean);
   }, []);
 
   const puntosFiltrados = React.useMemo(() => allHallazgos.filter(p => activeEras[p.eraGrupo]), [allHallazgos, activeEras]);
 
   const countByEra = React.useMemo(() => {
-    const counts = { Paleozoico: 0, Mesozoico: 0, Cenozoico: 0 };
+    const counts = { Precámbrico: 0, Paleozoico: 0, Mesozoico: 0, Cenozoico: 0 };
     allHallazgos.forEach(p => { counts[p.eraGrupo] = (counts[p.eraGrupo] || 0) + 1; });
     return counts;
   }, [allHallazgos]);
@@ -324,9 +328,9 @@ export default function PaleoMap() {
           <span className="hidden sm:inline">{am.filterByEra || "Filtrar por era"} — </span>
           {puntosFiltrados.length} {am.of || "de"} {allHallazgos.length} {am.speciesVisible || "especies visibles"}
         </p>
-        <div className="grid grid-cols-3 sm:flex gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {Object.entries(ERA_CONFIG).map(([era, config]) => (
-            <EraCard key={era} era={era} config={config} count={countByEra[era] || 0} active={activeEras[era]} onToggle={() => toggleEra(era)} isLight={isLight} am={am} />
+            <EraCard key={era} era={era} config={config} label={mapEras[config.labelKey] || config.label} count={countByEra[era] || 0} active={activeEras[era]} onToggle={() => toggleEra(era)} isLight={isLight} am={am} />
           ))}
         </div>
       </div>

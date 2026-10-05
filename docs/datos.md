@@ -35,11 +35,19 @@ Cada animal es un objeto JavaScript dentro del array `dinosaurios` de su archivo
 ## Añadir un animal nuevo
 
 1. **Elige el archivo de periodo** (`jurasico.js`, `cretacico.js`, etc.).
-2. **Asigna un `id`** — debe ser el siguiente número correlativo al mayor existente en todo `allData.js`. El último actualmente es el **113**.
+2. **Asigna un `id`** — debe ser el siguiente número correlativo al mayor existente en los archivos de `src/data/`. No presupongas el último ID indicado en documentación antigua: compruébalo antes de añadir la ficha.
 3. **Comprueba que `dieta`** coincide exactamente con una key de `dietConfig.js` (con tilde si la tiene: `"Carnívoro"`, `"Herbívoro"`...).
 4. **Comprueba que `tipo`** está en la lista de tipos válidos (ver sección más abajo). Si es un tipo nuevo, añádelo también en `typeLabels` de `translations.js`.
 5. **Añade la imagen** — URL pública directa a un `.jpg` o `.png`.
 6. **`allData.js` no necesita tocarse** — ya importa todos los archivos de periodo con spread.
+
+---
+
+## Revisión del catálogo desde administración
+
+La pestaña **Animales** de `/admin` permite buscar las fichas publicadas, filtrarlas por período, detectar campos esenciales pendientes y abrir cada ficha en la vista pública.
+
+En la versión actual es una herramienta de **revisión editorial**: los datos siguen viviendo en los archivos de `frontend/src/data/` y se publican en la compilación del frontend. Por tanto, una edición persistente desde el panel requiere una migración previa y completa del catálogo a la API y a MongoDB; no se debe guardar una edición parcial en el panel porque no se reflejaría en las páginas públicas.
 
 ---
 

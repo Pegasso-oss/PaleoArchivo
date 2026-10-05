@@ -1,13 +1,14 @@
 // src/pages/AdminPage.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/useUser";
 import axios from "axios";
 import {
   BarChart2, Users, Trophy, Lightbulb,
   Search, Trash2, Plus, X, RefreshCw, LogOut,
-  ChevronRight, ChevronDown, Award
+  ChevronRight, ChevronDown, Award, LibraryBig, ExternalLink, ImageOff
 } from "lucide-react";
+import { allAnimals } from "../data/allData";
 
 const ADMIN_URL = import.meta.env.DEV ? "http://localhost:5000/api/admin" : "https://paleoarchivo.onrender.com/api/admin";
 
@@ -23,6 +24,7 @@ const TABS = [
   { id: "users",        label: "Usuarios",     icon: Users      },
   { id: "achievements", label: "Logros",       icon: Trophy     },
   { id: "suggestions",  label: "Sugerencias",  icon: Lightbulb  },
+  { id: "animals",      label: "Animales",     icon: LibraryBig },
 ];
 
 const adminHeaders = () => ({ "x-auth-token": localStorage.getItem("adminToken") });
@@ -505,6 +507,147 @@ function SuggestionsTab({ isLight }) {
   );
 }
 
+// ── Catálogo de animales ──────────────────────────────────────────────────
+function AnimalsTab({ isLight }) {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const [era, setEra] = useState("");
+  const [onlyIssues, setOnlyIssues] = useState(false);
+  const muted = isLight ? "text-stone-400" : "text-[#6b5e4e]";
+  const panel = isLight ? "bg-white border-stone-200" : "bg-[#0f0e0c] border-[#2a2520]";
+
+  const catalog = useMemo(() => {
+    const byName = new Map();
+    allAnimals.forEach(animal => {
+      const key = animal.nombre?.trim().toLowerCase();
+      if (key && !byName.has(key)) byName.set(key, animal);
+    });
+    return [...byName.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+  }, []);
+
+  const hasIssue = useCallback((animal) => (
+    !animal.id || !animal.nombre || !animal.era || !animal.dieta ||
+    !animal.longitud || !animal.descripcion || !animal.imagen
+  ), []);
+
+  const eras = useMemo(
+    () => [...new Set(catalog.map(animal => animal.era).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "es")),
+    [catalog]
+  );
+
+  const issues = useMemo(() => catalog.filter(hasIssue), [catalog, hasIssue]);
+  const filtered = useMemo(() => {
+    const term = query.trim().toLocaleLowerCase("es");
+    return catalog.filter(animal => {
+      const searchable = [animal.nombre, animal.subName, animal.tipo, animal.dieta, animal.era]
+        .filter(Boolean).join(" ").toLocaleLowerCase("es");
+      return (!term || searchable.includes(term)) &&
+        (!era || animal.era === era) &&
+        (!onlyIssues || hasIssue(animal));
+    });
+  }, [catalog, era, hasIssue, onlyIssues, query]);
+
+  const metricCards = [
+    { label: "Fichas únicas", value: catalog.length, color: "text-amber-500" },
+    { label: "Períodos", value: eras.length, color: "text-sky-500" },
+    { label: "Con imagen", value: catalog.length - catalog.filter(a => !a.imagen).length, color: "text-emerald-500" },
+    { label: "Por revisar", value: issues.length, color: issues.length ? "text-red-500" : "text-emerald-500" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className={`rounded-2xl border p-5 md:p-6 ${panel}`}>
+        <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5">
+          <div>
+            <div className="flex items-center gap-2 mb-2 text-amber-500">
+              <LibraryBig size={16} />
+              <span className="font-mono text-[11px] uppercase tracking-widest font-black">Control editorial</span>
+            </div>
+            <h2 className={`font-mono text-2xl font-black uppercase italic ${isLight ? "text-stone-900" : "text-[#f5e6c8]"}`}>Catálogo de animales</h2>
+            <p className={`font-mono text-[12px] leading-relaxed max-w-2xl mt-2 ${muted}`}>
+              Revisa la cobertura del archivo, localiza fichas y ábrelas en su vista pública. El catálogo actual se publica desde los archivos de datos del frontend.
+            </p>
+          </div>
+          <button onClick={() => navigate("/archivo")}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-mono text-[11px] uppercase tracking-widest font-black transition-colors">
+            Ver archivo público <ExternalLink size={13} />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+          {metricCards.map(card => (
+            <div key={card.label} className={`rounded-xl border p-4 ${isLight ? "border-stone-100 bg-stone-50" : "border-[#1a1816] bg-[#0c0b0a]"}`}>
+              <p className={`font-mono text-[10px] uppercase tracking-widest ${muted}`}>{card.label}</p>
+              <p className={`font-mono text-2xl font-black mt-1 ${card.color}`}>{card.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={`rounded-2xl border overflow-hidden ${panel}`}>
+        <div className={`p-4 md:p-5 border-b flex flex-col gap-3 ${isLight ? "border-stone-100" : "border-[#1a1816]"}`}>
+          <div className="flex flex-col md:flex-row gap-3">
+            <label className={`flex items-center gap-2 flex-1 rounded-xl border px-3 py-2.5 ${isLight ? "border-stone-200 bg-stone-50" : "border-[#2a2520] bg-[#0c0b0a]"}`}>
+              <Search size={15} className={muted} />
+              <input value={query} onChange={event => setQuery(event.target.value)}
+                placeholder="Buscar por nombre, dieta, tipo o período"
+                className={`w-full bg-transparent outline-none font-mono text-[12px] ${isLight ? "text-stone-900 placeholder:text-stone-400" : "text-[#f5e6c8] placeholder:text-[#6b5e4e]"}`} />
+            </label>
+            <select value={era} onChange={event => setEra(event.target.value)}
+              aria-label="Filtrar por período"
+              className={`rounded-xl border px-3 py-2.5 font-mono text-[12px] outline-none ${isLight ? "border-stone-200 bg-stone-50 text-stone-700" : "border-[#2a2520] bg-[#0c0b0a] text-[#f5e6c8]"}`}>
+              <option value="">Todos los períodos</option>
+              {eras.map(period => <option key={period} value={period}>{period}</option>)}
+            </select>
+          </div>
+          <label className={`flex items-center gap-2 w-fit cursor-pointer font-mono text-[11px] uppercase tracking-widest ${muted}`}>
+            <input type="checkbox" checked={onlyIssues} onChange={event => setOnlyIssues(event.target.checked)} className="accent-red-500" />
+            Mostrar solo fichas por revisar
+          </label>
+        </div>
+
+        <div className={`flex items-center justify-between px-5 py-3 border-b ${isLight ? "border-stone-100 bg-stone-50" : "border-[#1a1816] bg-[#0c0b0a]"}`}>
+          <p className={`font-mono text-[11px] uppercase tracking-widest ${muted}`}>{filtered.length} de {catalog.length} fichas</p>
+          <p className={`hidden sm:block font-mono text-[10px] uppercase tracking-widest ${muted}`}>ID · nombre · período · estado</p>
+        </div>
+
+        {filtered.length === 0 ? (
+          <p className={`px-6 py-12 text-center font-mono text-[12px] uppercase tracking-widest ${muted}`}>No hay fichas que coincidan con los filtros</p>
+        ) : (
+          <div className={isLight ? "divide-y divide-stone-100" : "divide-y divide-[#1a1816]"}>
+            {filtered.map(animal => {
+              const incomplete = hasIssue(animal);
+              return (
+                <div key={animal.id} className={`flex items-center gap-3 px-4 md:px-5 py-3 transition-colors ${isLight ? "hover:bg-stone-50" : "hover:bg-white/[0.02]"}`}>
+                  <div className={`w-10 h-10 shrink-0 rounded-lg overflow-hidden flex items-center justify-center ${isLight ? "bg-stone-100" : "bg-white/5"}`}>
+                    {animal.imagen
+                      ? <img src={animal.imagen} alt="" className="w-full h-full object-cover" loading="lazy" />
+                      : <ImageOff size={15} className={muted} />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={`font-mono text-[10px] shrink-0 ${muted}`}>#{animal.id}</span>
+                      <p className={`font-mono text-[13px] font-black uppercase truncate ${isLight ? "text-stone-800" : "text-[#f5e6c8]"}`}>{animal.nombre}</p>
+                    </div>
+                    <p className={`font-mono text-[10px] truncate mt-0.5 ${muted}`}>{animal.era || "Sin período"} · {animal.dieta || "Sin dieta"}{animal.tipo ? ` · ${animal.tipo}` : ""}</p>
+                  </div>
+                  {incomplete && <span className="hidden sm:inline-flex rounded-md bg-red-500/10 px-2 py-1 font-mono text-[9px] uppercase tracking-widest font-black text-red-400">Revisar</span>}
+                  <button onClick={() => navigate(`/animal/${encodeURIComponent(animal.nombre)}`)}
+                    aria-label={`Abrir ficha de ${animal.nombre}`}
+                    className={`p-2 rounded-lg transition-colors ${isLight ? "text-stone-400 hover:bg-amber-100 hover:text-amber-700" : "text-[#6b5e4e] hover:bg-amber-500/10 hover:text-amber-400"}`}>
+                    <ExternalLink size={15} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 
 
 
@@ -648,6 +791,7 @@ export default function AdminPage() {
           {tab === "users"        && <UsersTab isLight={isLight} onSelectUser={setSelectedUser} />}
           {tab === "achievements" && <AchievementsTab isLight={isLight} />}
           {tab === "suggestions"  && <SuggestionsTab isLight={isLight} />}
+          {tab === "animals"      && <AnimalsTab isLight={isLight} />}
         </div>
       </main>
 

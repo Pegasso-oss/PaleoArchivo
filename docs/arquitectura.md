@@ -4,11 +4,11 @@
 
 | Capa | Tecnología | Versión |
 |---|---|---|
-| Frontend | React + Vite | 18 / 5 |
+| Frontend | React + Vite | 19 / 8 |
 | Estilos | Tailwind CSS | 3 |
 | Animaciones | Framer Motion | — |
 | Iconos | Lucide React | — |
-| Routing | React Router v6 | — |
+| Routing | React Router | 7 |
 | HTTP client | Axios | — |
 | Mobile | Capacitor | — |
 | Backend | Node.js + Express | — |
@@ -23,6 +23,7 @@
 PaleoArchivo/
 ├── frontend/
 │   ├── public/
+│   │   └── achievements/            # Medallas PNG de logros
 │   └── src/
 │       ├── api/
 │       │   └── apiClient.js          # Axios centralizado con JWT automático
@@ -43,6 +44,7 @@ PaleoArchivo/
 │       │   ├── allData.js            # Agrega todos los periodos en un array
 │       │   ├── dietConfig.js         # Fuente de verdad de dietas
 │       │   ├── translations.js       # Todas las cadenas de texto en 4 idiomas
+│       │   ├── ediacarico.js
 │       │   ├── cambrico.js
 │       │   ├── ordovicico.js
 │       │   ├── silurico.js
@@ -66,17 +68,22 @@ PaleoArchivo/
 │           ├── DinoDetailPage.jsx    # Ficha completa de un animal
 │           ├── ArchivoPage.jsx       # Página de archivo por dieta/tipo/tamaño
 │           ├── FavoritesPage.jsx     # Favoritos del usuario
-│           └── ProfilePage.jsx       # Perfil y configuración del usuario
+│           ├── ProfilePage.jsx       # Perfil, historial, notas y logros
+│           ├── AdminPage.jsx         # Administración y revisión editorial
+│           └── PaleoMapPage.jsx      # Mapa paleogeográfico de hallazgos
 │
 ├── backend/
 │   ├── middleware/
 │   │   └── auth.js                   # Verificación de JWT en rutas protegidas
 │   ├── models/
-│   │   └── User.js                   # Modelo Mongoose: username, email, password, bio, avatar, favorites
+│   │   ├── User.js                   # Modelo Mongoose: username, email, password, bio, avatar, favorites
+│   │   └── Animal.js                 # Modelo preparado para una futura migración del catálogo
 │   ├── routes/
-│   │   ├── auth.js                   # POST /register, POST /login
-│   │   ├── user.js                   # GET/PUT /user/:id, DELETE /user/:id, PUT /user/:id/password
-│   │   └── favorites.js              # POST /favorites/add
+│   │   ├── auth.js                   # Registro y login
+│   │   ├── notes.js                  # Notas privadas por animal
+│   │   ├── suggestions.js            # Sugerencias de especies
+│   │   ├── achievements.js           # Comprobación y consulta de logros
+│   │   └── admin.js                  # Panel de administración protegido
 │   └── server.js                     # Entry point, CORS, rutas
 │
 └── docs/                             # Esta documentación
@@ -114,6 +121,18 @@ LandingPage
   → dropdown de resultados en tiempo real (máx. 8)
   → ArchivoShortcut aparece cuando hay filtro activo → /archivo?diet=X o ?tipo=X o ?size=X
 ```
+
+### Catálogo y revisión editorial
+
+```
+Archivos en frontend/src/data/
+  → allData.js agrega los 17 períodos y sus fichas
+  → páginas públicas consumen allAnimals
+  → /admin > Animales permite buscar, filtrar y detectar fichas incompletas
+  → no escribe en la API ni en MongoDB
+```
+
+El catálogo se publica como parte de la compilación del frontend. La edición persistente desde el panel exige una futura migración completa a una API y MongoDB; el modelo `Animal` del backend no está conectado al catálogo público actual.
 
 ### Rivalidades
 

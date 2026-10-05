@@ -1,6 +1,6 @@
 # 🦖 PaleoArchivo
 
-**PaleoArchivo** es una enciclopedia interactiva y visual sobre paleontología, que abarca desde el Cámbrico hasta el Holoceno. Un registro digital diseñado para la divulgación científica con una interfaz de vanguardia estilo "archivo de expedición científica".
+**PaleoArchivo** es una enciclopedia interactiva y visual sobre paleontología, desde el Ediacárico hasta el Holoceno. Es un registro digital diseñado para la divulgación científica con una interfaz de "archivo de expedición científica".
 
 ![Versión Móvil](https://img.shields.io/badge/Mobile-Responsive-brightgreen)
 ![Vite](https://img.shields.io/badge/Frontend-Vite-646CFF)
@@ -33,7 +33,7 @@
 * **🌍 Soporte Multi-idioma** — Interfaz traducida íntegramente al **Español, Inglés, Francés e Italiano** mediante un sistema de traducciones centralizado con hook propio (`useTranslation`).
 * **📑 Fichas Técnicas Detalladas** — Cada registro incluye nombre científico, subtítulo, descripción, dieta, tipo, era, dimensiones, método de hallazgo, material fósil, conservación, extinción y rivales biológicos.
 * **⚔️ Sistema de Rivalidades Biológicas** — Cada animal puede tener rivales con rol definido (depredador / presa / competidor), con borde de color diferenciado y sección propia en la ficha.
-* **⏳ Cronología Geológica Interactiva** — Panel deslizante desde el header con los 16 periodos agrupados por era, ficha de detalle por periodo (descripción, clima, extinción, especies representativas) y chips de animales con navegación directa a su ficha.
+* **⏳ Cronología Geológica Interactiva** — Panel deslizante desde el header con 17 períodos, incluido el Ediacárico, agrupados por era y con fichas de detalle, clima, extinción, especies representativas y navegación directa.
 * **🏆 Top Favoritos Global** — Ranking en tiempo real de las especies más guardadas por los investigadores del archivo, con medallas, filtros y navegación directa.
 * **🔐 Sistema de Usuarios Completo** — Registro, login con JWT, perfil editable con avatar personalizable (foto propia o avatares predefinidos), bio, cambio de contraseña y borrado de cuenta con confirmación doble.
 * **⭐ Sistema de Favoritos** — Guardado persistente en base de datos, filtrable por dieta y buscable en tiempo real, con página propia.
@@ -42,21 +42,25 @@
 * **💡 Dato Curioso Dinámico** — 36 datos paleontológicos en los 4 idiomas con refresh animado en la landing.
 * **🎲 Animal Sorpresa** — Widget en el sidebar que selecciona un animal aleatorio del catálogo con animación de flip y botón de descubrir.
 * **🎨 Dietas Extensibles** — Cada dieta tiene color, emoji y traducción definidos en una única fuente de verdad (`dietConfig.js`).
+* **🛠️ Administración editorial** — Panel protegido para revisar usuarios, logros, sugerencias y el catálogo; permite buscar fichas, filtrarlas por período y detectar campos esenciales pendientes antes de editar los datos fuente.
 * **📱 Totalmente Responsive** — Optimizado para móvil, tablet y escritorio. Disponible también como **APK Android** mediante Capacitor.
 
 ---
 
 ## 🗂️ Catálogo
 
-El archivo cuenta actualmente con **113 animales prehistóricos** repartidos en **16 periodos geológicos**:
+El archivo cuenta actualmente con **121 fichas únicas** repartidas en **17 períodos geológicos**:
 
 | Era | Periodos |
 |---|---|
+| Precámbrico | Ediacárico |
 | Paleozoico | Cámbrico, Ordovícico, Silúrico, Devónico, Carbonífero, Pérmico |
 | Mesozoico | Triásico, Jurásico, Cretácico |
 | Cenozoico | Paleoceno, Eoceno, Oligoceno, Mioceno, Plioceno, Pleistoceno, Holoceno |
 
 Los animales cubren una enorme diversidad de grupos: terópodos, saurópodos, mamíferos prehistóricos, peces acorazados, artrópodos marinos, cefalópodos, aves no voladoras, reptiles marinos, anfibios primitivos, sinápsidos y mucho más.
+
+El catálogo se mantiene como datos estáticos en `frontend/src/data/` y se publica con la compilación del frontend. La pestaña **Animales** de `/admin` es una herramienta de revisión editorial; no modifica fichas en producción. Una edición persistente desde administración requerirá una migración completa y separada del catálogo a la API y MongoDB.
 
 ---
 
@@ -78,7 +82,7 @@ PaleoArchivo/
 └── backend/                # Node.js + Express + MongoDB
     ├── middleware/         # auth.js — verificación JWT en rutas protegidas
     ├── models/             # User (con bio, avatar base64, favoritos)
-    └── routes/             # auth.js, user.js, favorites.js
+    └── routes/             # auth, notas, sugerencias, logros y administración
 ```
 
 ---
@@ -86,12 +90,12 @@ PaleoArchivo/
 ## 🚀 Tecnologías Utilizadas
 
 **Frontend**
-* **React 18** — Biblioteca principal para la construcción de componentes.
-* **Vite** — Build tool de alta velocidad para el desarrollo frontend.
+* **React 19** — Biblioteca principal para la construcción de componentes.
+* **Vite 8** — Build tool de alta velocidad para el desarrollo frontend.
 * **Tailwind CSS** — Framework de utilidades para el estilizado y diseño adaptativo.
 * **Framer Motion** — Motor de animaciones para transiciones y efectos de UI premium.
 * **Lucide React** — Set de iconos técnicos y minimalistas.
-* **React Router v6** — Navegación con rutas dinámicas y parámetros de búsqueda.
+* **React Router 7** — Navegación con rutas dinámicas, parámetros de búsqueda y carga diferida por página.
 * **Context API** — Gestión global de tema, idioma, usuario, favoritos y cronología.
 * **Axios** — Cliente HTTP centralizado con inyección automática de JWT.
 * **Capacitor** — Empaquetado como APK Android nativo.
@@ -112,8 +116,7 @@ PaleoArchivo/
 ## 🗺️ Roadmap
 
 ### ✅ Completado
-- [x] Catálogo con 113 animales y fichas técnicas completas
-- [x] 16 periodos geológicos cubiertos (Cámbrico → Holoceno)
+- [x] Catálogo con 121 fichas únicas y 17 períodos (Ediacárico → Holoceno)
 - [x] Sistema de usuarios con JWT (registro, login, perfil, borrado de cuenta)
 - [x] Avatar personalizable con foto propia desde dispositivo
 - [x] Favoritos persistentes en base de datos con página propia y filtros
@@ -125,22 +128,16 @@ PaleoArchivo/
 - [x] Widget "Animal Sorpresa" en sidebar con flip animado
 - [x] Top Favoritos global con ranking en tiempo real (`/top-favoritos`)
 - [x] Cronología geológica interactiva — panel deslizante desde el header
+- [x] Comparador de tamaño entre dos animales
+- [x] Mapa paleogeográfico de hallazgos, con filtros por era
+- [x] Historial de fichas visitadas y notas privadas por animal
+- [x] Logros e insignias con medallas PNG
+- [x] Estadísticas personales y sugerencias de especies
+- [x] Panel de administración con revisión editorial del catálogo
 - [x] APK Android v0.2 mediante Capacitor
 
-### 🔜 Próximo — v0.3
-- [ ] Mapa interactivo de hallazgos fósiles por animal
-- [ ] Comparador de tamaño entre dos animales — "¿cuánto más grande era X que Y?"
-- [ ] Paleogeografía — mapa de cómo era la Tierra en cada periodo (Pangea, etc.)
-
-### 📋 v0.4 — Usuarios avanzado
-- [ ] Historial de animales visitados recientemente
-- [ ] Notas privadas por animal
-- [ ] Sistema de logros/insignias: "viste 10 animales", "tienes 5 carnívoros en favoritos"
-- [ ] Estadísticas personales en el perfil: era favorita, dieta más vista, animal más visitado
-- [ ] Formulario para sugerir animales (requiere cuenta)
-
 ### 📋 v0.5 — Contenido expandido
-- [ ] Ampliar catálogo: objetivo 200 especies
+- [ ] Ampliar catálogo: objetivo 200 fichas
 - [ ] Fichas de extinción masiva: K-Pg, Permo-Triásica, Ordovícica
 - [ ] Árbol evolutivo / cladograma interactivo por grupo taxonómico
 - [ ] Escalas de tamaño visuales en cada ficha (comparación con humano)

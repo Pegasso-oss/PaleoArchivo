@@ -1,6 +1,6 @@
 /**
  * timelineData.js
- * Datos de los 16 periodos geológicos para el modal de cronología.
+ * Datos de los 17 periodos geológicos para el modal de cronología.
  * Los arrays de `animales` usan los IDs de allData.js para cruzar con imágenes si se amplía en el futuro.
  * `color` es una clase CSS definida en TimelineModal.css (o inline) que respeta el design token de PaleoArchivo.
  */

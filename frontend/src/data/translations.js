@@ -31,6 +31,15 @@ export const translations = {
       precambrian: "Precámbrico",
     },
 
+    timeline: {
+      title: "Cronología geológica",
+      subtitle: "{count} periodos · 635 Ma – presente",
+      close: "Cerrar",
+      selectPeriod: "Selecciona un periodo",
+      diet: "Dieta",
+      size: "Tamaño",
+    },
+
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
     datosCuriosos: [
       { emoji: "🦕", texto: "El Argentinosaurus pesaba más de 70 toneladas — más que 10 elefantes africanos juntos." },
@@ -410,6 +419,15 @@ export const translations = {
       precambrian: "Precambrian",
     },
 
+    timeline: {
+      title: "Geological timeline",
+      subtitle: "{count} periods · 635 Ma – present",
+      close: "Close",
+      selectPeriod: "Select a period",
+      diet: "Diet",
+      size: "Size",
+    },
+
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
     datosCuriosos: [
       { emoji: "🦕", texto: "Argentinosaurus weighed over 70 tons — more than 10 African elephants combined." },
@@ -757,6 +775,15 @@ export const translations = {
 
     mapEras: {
       precambrian: "Précambrien",
+    },
+
+    timeline: {
+      title: "Chronologie géologique",
+      subtitle: "{count} périodes · 635 Ma – présent",
+      close: "Fermer",
+      selectPeriod: "Sélectionnez une période",
+      diet: "Régime",
+      size: "Taille",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────
@@ -1107,6 +1134,15 @@ export const translations = {
 
     mapEras: {
       precambrian: "Precambriano",
+    },
+
+    timeline: {
+      title: "Cronologia geologica",
+      subtitle: "{count} periodi · 635 Ma – presente",
+      close: "Chiudi",
+      selectPeriod: "Seleziona un periodo",
+      diet: "Dieta",
+      size: "Dimensione",
     },
 
     // ── DATOS CURIOSOS ────────────────────────────────────────────────────

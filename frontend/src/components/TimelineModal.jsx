@@ -175,6 +175,9 @@ export default function TimelineModal() {
   const { tSection } = useTranslation();
   const tl = tSection("timeline");
   const erasTranslated = useErasTranslated();
+  const periodCount = ERAS.reduce((total, era) => total + era.periodos.length, 0);
+  const timelineSubtitle = (tl.subtitle || "{count} periodos · 635 Ma – presente")
+    .replace("{count}", periodCount);
   const [selectedPeriodo, setSelectedPeriodo] = useState(null);
 
   useEffect(() => {
@@ -230,7 +233,7 @@ export default function TimelineModal() {
               {tl.title || "Cronología geológica"}
             </p>
             <p className="font-mono text-[9px] uppercase tracking-widest text-[#4a3f32] mt-0.5">
-              {tl.subtitle || "16 periodos · 538 Ma – presente"}
+              {timelineSubtitle}
             </p>
           </div>
           <button

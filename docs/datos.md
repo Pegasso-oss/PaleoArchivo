@@ -67,6 +67,18 @@ Al añadir coordenadas, usa un yacimiento publicado y deja un comentario con la 
 
 ---
 
+## Validar el catálogo
+
+Antes de publicar una modificación de `src/data/`, ejecuta:
+
+```bash
+npm run validate:catalog --prefix frontend
+```
+
+El validador carga los mismos módulos de datos que utiliza Vite y comprueba IDs únicos, campos esenciales, períodos de la cronología, dietas, estado, conservación, URLs de imagen y la correspondencia/rango de las coordenadas del mapa. No hace solicitudes de red ni modifica el catálogo.
+
+---
+
 ## Lista de tipos válidos
 
 | Key | Label ES |

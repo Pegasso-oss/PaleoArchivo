@@ -182,6 +182,25 @@ export const DIET_CONFIG = {
       it: "Fotosintetico",
     },
   },
+
+  Absortivo: {
+    emoji: "🫧",
+    fill: "#a78bfa",
+    color: {
+      text:        "text-violet-500",
+      bg:          "bg-violet-500/10",
+      border:      "border-violet-500/40",
+      hoverBg:     "hover:bg-violet-500/10",
+      hoverText:   "hover:text-violet-400",
+      hoverBorder: "hover:border-violet-500/40",
+    },
+    labels: {
+      es: "Absortivo",
+      en: "Absorptive",
+      fr: "Absorptif",
+      it: "Assorbitivo",
+    },
+  },
 };
 
 // ─── Fallback para dietas desconocidas ───────────────────────────────────────

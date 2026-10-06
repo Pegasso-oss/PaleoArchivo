@@ -23,7 +23,7 @@ export const ANIMAL_COORDS = {
   "ANOMALOCARIS":      { lon: 103,  lat: 25  }, // Chengjiang, China (también Burgess Shale)
   "OPABINIA":          { lon: -116, lat: 51  }, // Burgess Shale, Columbia Británica, Canadá
   "PIKAIA":            { lon: -116, lat: 51  }, // Burgess Shale, Columbia Británica, Canadá
-  "MEGACHELICER AX":   { lon: 103,  lat: 25  }, // Chengjiang, Yunnan, China
+  "MEGACHELICERAX":    { lon: 103,  lat: 25  }, // Chengjiang, Yunnan, China
   "HALLUCIGENIA":      { lon: 103,  lat: 25  }, // Chengjiang, China (también Burgess Shale)
   "WIWAXIA":           { lon: -116, lat: 51  }, // Burgess Shale, Canadá
   "MARRELLA":          { lon: -116, lat: 51  }, // Burgess Shale, Canadá (especie tipo)
@@ -70,7 +70,7 @@ export const ANIMAL_COORDS = {
   "LYSTROSAURUS":      { lon: 26,   lat: -31 }, // Sudáfrica / India / Antártida
   "OPHIACODON":        { lon: -96,  lat: 36  }, // Texas / New Mexico, USA
   "SCUTOSAURUS":       { lon: 54,   lat: 62  }, // Rusia (cuenca del Dvina)
-  "DICYNODONT":        { lon: 25,   lat: -31 }, // Sudáfrica (Karoo)
+  "DICYNODON":         { lon: 25,   lat: -31 }, // Sudáfrica (Karoo)
 
   // ── TRIÁSICO ─────────────────────────────────────────────────────────────────
   "EORAPTOR":          { lon: -68,  lat: -30 }, // San Juan, Argentina
@@ -84,7 +84,7 @@ export const ANIMAL_COORDS = {
   "ARCHAEOPTERYX":     { lon: 11,   lat: 49  }, // Baviera, Alemania
   "ESTEGOSAURUS":      { lon: -108, lat: 39  }, // Colorado, USA
   "DILOPHOSAURUS":     { lon: -111, lat: 35  }, // Arizona, USA
-  "CHLAMYDOSELACHUSS": { lon: -10,  lat: 50  }, // Europa occidental
+  "CHLAMYDOSELACHUS":  { lon: -10,  lat: 50  }, // Europa occidental
   "DIPLODOCUS":        { lon: -107, lat: 41  }, // Wyoming, USA
   "CERATOSAURUS":      { lon: -110, lat: 39  }, // Utah / Colorado, USA
   "PLIOSAURUS":        { lon: -1,   lat: 52  }, // Oxfordshire, Reino Unido
@@ -140,7 +140,7 @@ export const ANIMAL_COORDS = {
   "MEGATHERIUM":       { lon: -65,  lat: -35 }, // Argentina / Uruguay
   "SMILODON":          { lon: -68,  lat: -35 }, // Argentina / California
   "DINOFELIS":         { lon: 37,   lat: -3  }, // África oriental / Asia
-  "PHORUSRHACUS":      { lon: -65,  lat: -35 }, // Argentina (Patagonia)
+  "PHORUSRHACOS":      { lon: -65,  lat: -35 }, // Argentina (Patagonia)
   "MACRAUCHENIA":      { lon: -68,  lat: -38 }, // Patagonia, Argentina
   "TOXODON":           { lon: -64,  lat: -34 }, // Uruguay / Argentina
   "MEGANTEREON":       { lon: 36,   lat: 2   }, // África oriental / Eurasia
@@ -162,10 +162,6 @@ export const ANIMAL_COORDS = {
   "MOA GIGANTE":       { lon: 172,  lat: -43 }, // Nueva Zelanda
   "PÁJARO ELEFANTE":   { lon: 47,   lat: -20 }, // Madagascar
   "LOBO DE FALKLAND":  { lon: -59,  lat: -51 }, // Islas Malvinas
-  "MEGACHELICERAX":        { lon: 103,  lat: 25  }, // Chengjiang, Yunnan, China
-  "DICYNODON":             { lon: 25,   lat: -31 }, // Sudáfrica (Cuenca de Karoo)
-  "CHLAMYDOSELACHUS":      { lon: -10,  lat: 50  }, // Europa occidental (fósiles)
-  "PHORUSRHACOS":          { lon: -65,  lat: -35 }, // Patagonia, Argentina
 };
 
 /**

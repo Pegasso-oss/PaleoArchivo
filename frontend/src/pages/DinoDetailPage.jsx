@@ -20,6 +20,8 @@ import { useAchievementToast } from "../hooks/useAchievementToast";
 import AnimalMap from "../components/AnimalMap";
 import AnimalNotes from "../components/AnimalNotes";
 
+const MotionDiv = motion.div;
+
 const getRivalText = (dino, rival, language) => {
   const texts = {
     es: { presa: `${rival.nombre} era una presa habitual de`, depredador: `${rival.nombre} cazaba activamente a`, competidor: `${rival.nombre} competía por los mismos recursos que` },
@@ -36,6 +38,15 @@ const RIVAL_STYLE = {
   competidor: { border: "border-amber-500/40",  bg: "bg-amber-500/5",  text: "text-amber-400",  label: { es: "RIVAL", en: "RIVAL", fr: "RIVAL", it: "RIVALE" } },
 };
 
+function getRecommendationRank(animal, currentId) {
+  const value = `${currentId}-${animal.id}-${animal.nombre}`;
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = Math.imul(hash ^ value.charCodeAt(index), 16777619);
+  }
+  return hash >>> 0;
+}
+
 const Sparkles = ({ isFav, fill }) => {
   const pts = [
     { x: -38, y: -38, d: 0 }, { x: 38, y: -38, d: 0.08 },
@@ -45,15 +56,15 @@ const Sparkles = ({ isFav, fill }) => {
   return (
     <AnimatePresence>
       {isFav && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="absolute inset-0 pointer-events-none flex items-center justify-center">
           {pts.map((s, i) => (
-            <motion.div key={i} className="absolute w-2 h-2 rounded-full" style={{ backgroundColor: fill }}
+            <MotionDiv key={i} className="absolute w-2 h-2 rounded-full" style={{ backgroundColor: fill }}
               initial={{ x: 0, y: 0, opacity: 0, scale: 0 }}
               animate={{ x: s.x, y: s.y, opacity: [0, 1, 0], scale: [0, 1.6, 0] }}
               transition={{ duration: 0.75, ease: "easeOut", delay: s.d }} />
           ))}
-        </motion.div>
+        </MotionDiv>
       )}
     </AnimatePresence>
   );
@@ -133,7 +144,10 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language, dd }) => {
         const tier2 = parsed.filter(p => hasName(p) && !hasPaleo(p));
         const tier3 = parsed.filter(p => !hasName(p) && hasPaleo(p));
 
-        setPapers([...tier1, ...tier2, ...tier3].map(({ titleLower, ...rest }) => rest));
+        setPapers([...tier1, ...tier2, ...tier3].map(({ titleLower, ...paper }) => {
+          void titleLower;
+          return paper;
+        }));
         setFetched(true);
       })
       .catch(() => { setError(true); setExpanded(false); setFetched(false); })
@@ -151,10 +165,10 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language, dd }) => {
 
       <AnimatePresence>
         {showLoginModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
             onClick={() => setShowLoginModal(false)}>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+            <MotionDiv initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
               onClick={e => e.stopPropagation()}
               className={`w-full max-w-md rounded-2xl border overflow-hidden ${isLight ? "bg-white border-stone-200" : "bg-[#131211] border-[#2a2520]"}`}>
               <div className="px-5 py-4 flex items-center gap-3 border-b"
@@ -181,8 +195,8 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language, dd }) => {
                   </Link>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </MotionDiv>
+          </MotionDiv>
         )}
       </AnimatePresence>
 
@@ -206,7 +220,7 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language, dd }) => {
 
       <AnimatePresence>
         {expanded && !loading && (
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -278,7 +292,7 @@ const PapersSection = ({ nombreAnimal, hex, isLight, language, dd }) => {
                 </div>
               )}
             </div>
-          </motion.div>
+          </MotionDiv>
         )}
       </AnimatePresence>
     </div>
@@ -311,7 +325,7 @@ const DinoDetailPage = () => {
       animalNombre: dino.nombre,
       animalEra: dino.era || "",
     }).then(res => { if (res.data.newAchievements?.length) showAchievement(res.data.newAchievements); }).catch(() => {});
-  }, [dino?.id]);
+  }, [dino, showAchievement]);
 
   const { translated: descripcionTraducida, loading: loadingDesc } = useTranslatedDescription(dino?.descripcion ?? null, language);
   const { translated: subNameTraducido } = useTranslatedSubName(dino?.subName ?? null, language);
@@ -337,7 +351,10 @@ const DinoDetailPage = () => {
       .filter(a => a.nombre.toLowerCase() !== decodeURIComponent(id).toLowerCase())
       .filter(a => !rivalIds.includes(a.id))
       .filter(a => a.dieta === dino.dieta || a.era === dino.era)
-      .sort(() => 0.5 - Math.random())
+      .sort((first, second) => (
+        getRecommendationRank(first, dino.id) - getRecommendationRank(second, dino.id)
+        || first.nombre.localeCompare(second.nombre)
+      ))
       .slice(0, 4);
   }, [id, dino]);
 
@@ -381,7 +398,7 @@ const DinoDetailPage = () => {
   ].filter(f => f.value);
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+    <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       className={`min-h-screen transition-colors duration-500 ${isLight ? "bg-[#f5f2ed] text-stone-900" : "bg-[#1d1914] text-white"}`}>
       <Toast isVisible={toast.show} message={toast.msg} type={toast.type}
         onClose={() => setToast(t => ({ ...t, show: false }))} />
@@ -415,10 +432,10 @@ const DinoDetailPage = () => {
                   </div>
                   <button onClick={handleToggleFavorite} className="relative p-2 outline-none group">
                     <Sparkles isFav={isFav} fill={hex} />
-                    <motion.div animate={{ scale: isFav ? [1, 1.5, 1] : 1, rotate: isFav ? [0, 12, -12, 0] : 0 }}>
+                    <MotionDiv animate={{ scale: isFav ? [1, 1.5, 1] : 1, rotate: isFav ? [0, 12, -12, 0] : 0 }}>
                       <Star size={30} fill={isFav ? hex : "none"} stroke={isFav ? hex : "currentColor"}
                         className={`transition-all duration-300 group-hover:scale-110 ${isFav ? "" : "opacity-25 hover:opacity-60"}`} />
-                    </motion.div>
+                    </MotionDiv>
                   </button>
                 </div>
               </div>
@@ -436,10 +453,10 @@ const DinoDetailPage = () => {
                   </div>
                   <button onClick={handleToggleFavorite} className="relative p-1.5 outline-none group">
                     <Sparkles isFav={isFav} fill={hex} />
-                    <motion.div animate={{ scale: isFav ? [1, 1.5, 1] : 1, rotate: isFav ? [0, 12, -12, 0] : 0 }}>
+                    <MotionDiv animate={{ scale: isFav ? [1, 1.5, 1] : 1, rotate: isFav ? [0, 12, -12, 0] : 0 }}>
                       <Star size={20} fill={isFav ? hex : "none"} stroke={isFav ? hex : "currentColor"}
                         className={`transition-all duration-300 ${isFav ? "" : "opacity-25"}`} />
-                    </motion.div>
+                    </MotionDiv>
                   </button>
                 </div>
               </div>
@@ -481,7 +498,7 @@ const DinoDetailPage = () => {
 
             {/* Conservación */}
             {dino.conservacion && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+              <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
                 className={`rounded-xl border overflow-hidden ${isLight ? "bg-white border-stone-100" : "bg-white/[0.04] border-white/[0.06]"}`}>
                 <div className="px-5 py-3.5 flex items-center justify-between"
                   style={{ background: `linear-gradient(90deg, ${hex}12 0%, transparent 70%)`, borderBottom: `1px solid ${hex}18` }}>
@@ -501,7 +518,7 @@ const DinoDetailPage = () => {
                 </div>
                 <div className="px-5 py-4">
                   <div className={`relative h-2 rounded-full overflow-hidden ${isLight ? "bg-stone-100" : "bg-white/[0.06]"}`}>
-                    <motion.div className="absolute inset-y-0 left-0 rounded-full" style={{ backgroundColor: hex }}
+                    <MotionDiv className="absolute inset-y-0 left-0 rounded-full" style={{ backgroundColor: hex }}
                       initial={{ width: 0 }} animate={{ width: `${conservacion}%` }}
                       transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} />
                   </div>
@@ -524,7 +541,7 @@ const DinoDetailPage = () => {
                     ))}
                   </div>
                 )}
-              </motion.div>
+              </MotionDiv>
             )}
 
             <AnimalNotes animalId={String(dino.id)} animalNombre={dino.nombre} hex={hex} />
@@ -641,7 +658,7 @@ const DinoDetailPage = () => {
         )}
 
       </div>
-    </motion.div>
+    </MotionDiv>
   );
 };
 

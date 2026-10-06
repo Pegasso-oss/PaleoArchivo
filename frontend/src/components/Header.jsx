@@ -53,9 +53,6 @@ const Header = () => {
   const { openTimeline } = useTimeline();
   const { tSection } = useTranslation();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [avatar, setAvatar] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -69,20 +66,9 @@ const Header = () => {
   const iconColor = isLight ? "text-blue-500" : "text-amber-500";
 
   const currentLang = LANGUAGES.find((l) => l.code === language) ?? LANGUAGES[0];
-
-  useEffect(() => {
-    const auth = localStorage.getItem("auth");
-    const savedName = localStorage.getItem("username");
-    const savedAvatar = localStorage.getItem("avatar");
-    if (auth === "true") {
-      setIsLoggedIn(true);
-      setUsername(savedName || "INVESTIGADOR");
-      setAvatar(savedAvatar || "");
-    } else {
-      setIsLoggedIn(false);
-      setAvatar("");
-    }
-  }, [location]);
+  const isLoggedIn = localStorage.getItem("auth") === "true";
+  const username = isLoggedIn ? (localStorage.getItem("username") || "INVESTIGADOR") : "";
+  const avatar = isLoggedIn ? (localStorage.getItem("avatar") || "") : "";
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -111,7 +97,6 @@ const Header = () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("avatar");
     clearFavorites();
-    setIsLoggedIn(false);
     setShowConfirm(false);
     setIsMenuOpen(false);
     navigate("/", { state: { logoutSuccess: true } });

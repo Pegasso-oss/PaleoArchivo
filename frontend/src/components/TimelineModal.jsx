@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { X, Clock, Thermometer, AlertTriangle } from "lucide-react";
 import { useTimeline } from "../hooks/useTimeline.jsx";
 import { useTranslation } from "../hooks/useTranslation";
@@ -7,7 +7,6 @@ import { ERAS } from "../data/timelineData";
 /* ─── Fusionar datos estáticos (animales, colores) con traducciones ──────── */
 function useErasTranslated() {
   const { tSection } = useTranslation();
-  const tl = tSection("timeline");
   const td = tSection("timelineData"); // array con eras traducidas
 
   return useMemo(() => {
@@ -179,26 +178,26 @@ export default function TimelineModal() {
   const timelineSubtitle = (tl.subtitle || "{count} periodos · 635 Ma – presente")
     .replace("{count}", periodCount);
   const [selectedPeriodo, setSelectedPeriodo] = useState(null);
+  const handleClose = useCallback(() => {
+    setSelectedPeriodo(null);
+    closeTimeline();
+  }, [closeTimeline]);
 
   useEffect(() => {
-    const handler = (e) => { if (e.key === "Escape") closeTimeline(); };
+    const handler = (e) => { if (e.key === "Escape") handleClose(); };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [closeTimeline]);
+  }, [handleClose]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
-  useEffect(() => {
-    if (!isOpen) setSelectedPeriodo(null);
-  }, [isOpen]);
-
   return (
     <>
       <div
-        onClick={closeTimeline}
+        onClick={handleClose}
         aria-hidden="true"
         style={{
           position: "fixed", inset: 0,
@@ -237,7 +236,7 @@ export default function TimelineModal() {
             </p>
           </div>
           <button
-            onClick={closeTimeline}
+            onClick={handleClose}
             aria-label={tl.close || "Cerrar"}
             className="w-7 h-7 flex items-center justify-center border border-[#2a2520] rounded text-[#6b5e4e] hover:text-[#f5e6c8] hover:border-[#4a3f32] transition-all"
           >

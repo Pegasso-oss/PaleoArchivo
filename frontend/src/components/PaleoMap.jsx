@@ -1,5 +1,5 @@
 // src/components/PaleoMap.jsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import * as d3 from "d3";
 import { X, Loader } from "lucide-react";
@@ -145,23 +145,28 @@ function GeoMap({ geojson, puntos, isLight, onPointClick, activeCluster, svgRef,
     d3.select(svgRef.current).call(zoom);
     zoomRef.current = zoom;
     d3.select(svgRef.current).call(zoom.transform, d3.zoomIdentity);
-    setZoomLevel(1);
-  }, [W, H]);
+  }, [W, H, svgRef, zoomRef]);
 
-  const proj = d3.geoNaturalEarth1().scale(W / 6.3).translate([W / 2, H / 2]);
-  if (projRef) projRef.current = proj;
-  const path = d3.geoPath().projection(proj);
-  const grat = d3.geoGraticule()();
+  const proj = useMemo(
+    () => d3.geoNaturalEarth1().scale(W / 6.3).translate([W / 2, H / 2]),
+    [W, H],
+  );
+  const path = useMemo(() => d3.geoPath().projection(proj), [proj]);
+  const grat = useMemo(() => d3.geoGraticule()(), []);
 
-  const handleZoom = (factor) => {
+  useEffect(() => {
+    if (projRef) projRef.current = proj;
+  }, [proj, projRef]);
+
+  const handleZoom = useCallback((factor) => {
     if (!svgRef.current || !zoomRef.current) return;
     d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, factor);
-  };
+  }, [svgRef, zoomRef]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     if (!svgRef.current || !zoomRef.current) return;
     d3.select(svgRef.current).transition().duration(400).call(zoomRef.current.transform, d3.zoomIdentity);
-  };
+  }, [svgRef, zoomRef]);
 
   const ocean  = isLight ? "#b8d4e8" : "#0a1a28";
   const land   = isLight ? "#c4a97a" : "#4a3a1e";
@@ -195,17 +200,21 @@ function GeoMap({ geojson, puntos, isLight, onPointClick, activeCluster, svgRef,
       </svg>
 
       <div className="absolute top-3 right-3 flex flex-col gap-1">
-        {[
-          { label: "+", fn: () => handleZoom(1.5) },
-          { label: "−", fn: () => handleZoom(1/1.5) },
-          { label: "↺", fn: handleReset, small: true },
-        ].map(({ label, fn, small }) => (
-          <button key={label} onClick={fn}
-            className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-all font-mono font-bold"
-            style={{ fontSize: small ? 10 : 16 }}>
-            {label}
-          </button>
-        ))}
+        <button onClick={() => handleZoom(1.5)} aria-label="Acercar mapa"
+          className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-all font-mono font-bold"
+          style={{ fontSize: 16 }}>
+          +
+        </button>
+        <button onClick={() => handleZoom(1 / 1.5)} aria-label="Alejar mapa"
+          className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-all font-mono font-bold"
+          style={{ fontSize: 16 }}>
+          −
+        </button>
+        <button onClick={handleReset} aria-label="Restablecer mapa"
+          className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-all font-mono font-bold"
+          style={{ fontSize: 10 }}>
+          ↺
+        </button>
       </div>
 
       {zoomLevel > 1.1 && (
@@ -218,7 +227,7 @@ function GeoMap({ geojson, puntos, isLight, onPointClick, activeCluster, svgRef,
 }
 
 // ── Tarjeta de era ────────────────────────────────────────────────────────────
-function EraCard({ era, config, count, active, onToggle, isLight, am, label }) {
+function EraCard({ config, count, active, onToggle, isLight, am, label }) {
   return (
     <button
       onClick={onToggle}
@@ -330,7 +339,7 @@ export default function PaleoMap() {
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {Object.entries(ERA_CONFIG).map(([era, config]) => (
-            <EraCard key={era} era={era} config={config} label={mapEras[config.labelKey] || config.label} count={countByEra[era] || 0} active={activeEras[era]} onToggle={() => toggleEra(era)} isLight={isLight} am={am} />
+            <EraCard key={era} config={config} label={mapEras[config.labelKey] || config.label} count={countByEra[era] || 0} active={activeEras[era]} onToggle={() => toggleEra(era)} isLight={isLight} am={am} />
           ))}
         </div>
       </div>
